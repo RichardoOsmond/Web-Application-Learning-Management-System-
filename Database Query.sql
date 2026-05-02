@@ -1,14 +1,4 @@
-﻿CREATE TABLE [dbo].[User]
-(
-	[UserID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
-    [RoleID] INT NOT NULL, 
-    [Username] NVARCHAR(50) NOT NULL, 
-    [Password] VARCHAR(255) NOT NULL, 
-    [Email] NVARCHAR(100) NOT NULL, 
-    [Last Login] DATETIME NOT NULL, 
-    [Last Logout] DATETIME NOT NULL, 
-    CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleID]) REFERENCES [Role]([RoleID]) 
-)
+﻿use [E:\GITHUBMANUALFOLDER\WAPP\APP_DATA\DATABASE1.MDF]
 
 CREATE TABLE [dbo].[Role]
 (
@@ -16,14 +6,16 @@ CREATE TABLE [dbo].[Role]
     [RoleName] VARCHAR(50) NOT NULL
 )
 
-CREATE TABLE [dbo].[ImageSubmission]
+CREATE TABLE [dbo].[User]
 (
-	[ImageID] INT NOT NULL PRIMARY KEY, 
-    [QuestionID] INT NOT NULL, 
-    [UserID] INT NOT NULL, 
-    [ImageName] NCHAR(10) NOT NULL, 
-    CONSTRAINT [FK_ImageSubmission_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID]), 
-    CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
+	[UserID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
+    [RoleID] INT NOT NULL, 
+    [Username] VARCHAR(50) NOT NULL, 
+    [Password] VARCHAR(255) NOT NULL, 
+    [Email] VARCHAR(100) NOT NULL, 
+    [Last Login] DATETIME NOT NULL, 
+    [Last Logout] DATETIME NOT NULL, 
+    CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleID]) REFERENCES [Role]([RoleID]) 
 )
 
 CREATE TABLE [dbo].[Course]
@@ -65,6 +57,33 @@ CREATE TABLE [dbo].[QuizContent]
     CONSTRAINT [FK_QuizContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
+CREATE TABLE [dbo].[Question]
+(
+    [QuestionID] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [QuizID] INT NOT NULL, 
+    [Question] VARCHAR(100) NOT NULL , 
+    [Description] VARCHAR(100) NULL, 
+    [ImageName] VARCHAR(100) NULL, 
+    [Point] INT NOT NULL, 
+    [QuestionOrder] INT NULL, 
+    [QuestionType] VARCHAR(50) NOT NULL,
+    CONSTRAINT [FK_Question_QuizContent] FOREIGN KEY ([QuizID]) REFERENCES [QuizContent]([QuizID])
+)
+
+CREATE TABLE [dbo].[ImageSubmission]
+(
+	[ImageID] INT NOT NULL PRIMARY KEY, 
+    [QuestionID] INT NOT NULL, 
+    [UserID] INT NOT NULL, 
+    [ImageName] NCHAR(10) NOT NULL, 
+    CONSTRAINT [FK_ImageSubmission_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID]), 
+    CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
+)
+
+
+
+
+
 CREATE TABLE [dbo].[MaterialContent]
 (
     [MaterialID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
@@ -75,17 +94,7 @@ CREATE TABLE [dbo].[MaterialContent]
     CONSTRAINT [FK_MaterialContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
-CREATE TABLE [dbo].[Question]
-(
-    [QuestionID] INT NOT NULL PRIMARY KEY, 
-    [ContentID] INT NOT NULL, 
-    [Question] VARCHAR(100) NOT NULL  , 
-    [Description] VARCHAR(10) NULL, 
-    [ImageName] VARCHAR(100) NULL, 
-    [Point] INT NOT NULL, 
-    [QuestionOrder] INT NULL, 
-    [QuestionType] VARCHAR(50) NOT NULL
-)
+
 
 CREATE TABLE [dbo].[Registration]
 (
@@ -106,3 +115,16 @@ CREATE TABLE [dbo].[Answer]
     [Answers] NVARCHAR(100) NOT NULL, 
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
+/*
+DROP TABLE [Answer]
+DROP TABLE [Registration]
+DROP TABLE [MaterialContent]
+DROP TABLE [ImageSubmission]
+DROP TABLE [Question]
+DROP TABLE [QuizContent]
+DROP TABLE [Content]
+DROP TABLE [Lesson]
+DROP TABLE [Course]
+DROP TABLE [User]
+DROP TABLE [Role]
+*/
