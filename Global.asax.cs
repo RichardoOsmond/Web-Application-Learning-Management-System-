@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 
-namespace ReadCardDoLearn
+namespace Wapping_time
 {
     public class Global : System.Web.HttpApplication
     {
