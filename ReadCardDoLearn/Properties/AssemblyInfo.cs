@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Wapping_time")]
+[assembly: AssemblyTitle("ReadCardDoLearn")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Wapping_time")]
+[assembly: AssemblyProduct("ReadCardDoLearn")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7de9c21e-6a39-4fcb-98ae-09729497072f")]
+[assembly: Guid("d08e283b-8e40-4641-aa2e-f9bb62c01d56")]
 
 // Version information for an assembly consists of the following four values:
 //
