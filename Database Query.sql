@@ -16,16 +16,14 @@ CREATE TABLE [dbo].[Role]
     [RoleName] VARCHAR(50) NOT NULL
 )
 
-CREATE TABLE [dbo].[Question]
+CREATE TABLE [dbo].[ImageSubmission]
 (
-    [QuestionID] INT NOT NULL PRIMARY KEY, 
-    [ContentID] INT NOT NULL, 
-    [Question] VARCHAR(100) NOT NULL  , 
-    [Description] VARCHAR(10) NULL, 
-    [ImageName] VARCHAR(100) NULL, 
-    [Point] INT NOT NULL, 
-    [QuestionOrder] INT NULL, 
-    [QuestionType] VARCHAR(50) NOT NULL
+	[ImageID] INT NOT NULL PRIMARY KEY, 
+    [QuestionID] INT NOT NULL, 
+    [UserID] INT NOT NULL, 
+    [ImageName] NCHAR(10) NOT NULL, 
+    CONSTRAINT [FK_ImageSubmission_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID]), 
+    CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
 )
 
 CREATE TABLE [dbo].[Course]
