@@ -69,8 +69,10 @@
   <ItemGroup>
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
+    <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
