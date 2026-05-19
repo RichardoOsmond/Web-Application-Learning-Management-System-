@@ -1,0 +1,85 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Assignment.master.cs" Inherits="Wapping_time.Assignment" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #321075; 
+            padding: 10px 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1abc9c;
+        }
+            
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    </head>
+    <body>
+    <form id="form1" runat="server">
+        <nav class ="navbar">
+            <div class="logo">
+                <img src="Images/logo.png" alt="Read Card Do Learn Logo" class="logo-img" />
+            </div>
+            <ul class="nav-links">
+            <li><a href="dashboard.aspx">Dashboard</a></li>
+            <li><a href="courses.aspx">Courses</a></li>
+            <li><a href="notification.aspx">Notification</a></li>
+            <li><a href="chat.aspx">Chat</a></li>
+            <li><a href="profile.aspx">Profile</a></li>
+            </ul>
+        </nav>
+
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+        <footer>
+            Copyright 2026 - Read Card Do Learn
+        </footer>
+    </form>
+</body>
+</html>
