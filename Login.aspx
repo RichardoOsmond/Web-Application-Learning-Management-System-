@@ -1,168 +1,181 @@
 ﻿<%@ Page Title="Login" Language="C#" AutoEventWireup="true" CodeBehind="login.aspx.cs" Inherits="Wapping_time.login" %>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Login – Read Card Do Learn</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Read Card Do Learn</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        html, body { height: 100%; }
-
-        .page-wrapper { display: flex; height: 100vh; }
-
-        /* ── LEFT PURPLE PANEL ─────────────────────────── */
-        .left-panel {
-            width: 32%;
-            background-color: #7248C8;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        .sidebar {
+            background-color: #7b4fe3;
+            color: white;
+            width: 35%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        .sidebar h1 {
+            font-size: 26px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            line-height: 1.4;
         }
         .logo-circle {
-            width: 130px; height: 130px;
-            background-color: rgba(255,255,255,0.2);
+            width: 140px;
+            height: 140px;
+            background: #b29de0;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 18px; overflow: hidden;
-        }
-        .logo-circle img { width: 100px; height: auto; }
-        .brand-text {
-            color: white; font-size: 22px; font-weight: bold;
-            text-align: center; line-height: 1.3;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        /* ── RIGHT PANEL ───────────────────────────────── */
-        .right-panel {
-            width: 68%;
-            background-color: #f7f4ff;
             display: flex;
-            flex-direction: column;
-            padding: 30px 50px;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: bold;
         }
-        .back-arrow {
-            font-size: 22px; color: #7248C8;
-            text-decoration: none; display: inline-block;
-            margin-bottom: 10px; width: fit-content;
-        }
-        .back-arrow:hover { color: #321075; }
-
-        .form-container {
-            flex: 1;
+        .login-section {
+            width: 65%;
+            background-color: #fcfaff;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            max-width: 420px;
-            margin: 0 auto;
-            width: 100%;
+            align-items: center;
+            position: relative;
         }
-        .form-container h2 {
-            color: #321075; font-size: 28px;
-            margin-bottom: 30px; text-align: center;
+        .back-btn {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 28px;
+            color: #7b4fe3;
+            text-decoration: none;
+            font-weight: bold;
         }
-
-        .form-row {
-            display: flex; align-items: center;
-            margin-bottom: 14px; gap: 12px;
+        .login-box {
+            width: 420px;
         }
-        .form-row label {
-            width: 90px; font-size: 14px; color: #333;
-            flex-shrink: 0; text-align: right;
+        .login-box h2 {
+            color: #3f1d82;
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 5px;
+            margin-top: 0;
         }
-        .form-row input[type="email"],
-        .form-row input[type="password"] {
-            flex: 1; padding: 8px 12px;
-            border: 1.5px solid #b39ddb;
-            border-radius: 6px; font-size: 14px;
-            background: white; transition: border 0.3s;
-        }
-        .form-row input:focus { border-color: #7248C8; outline: none; }
-
-        .validator-row { margin-left: 102px; margin-top: -8px; margin-bottom: 6px; }
-
-        /* small helper links below fields (Forgot password / Register) */
-        .helper-links {
-            display: flex;
-            justify-content: flex-end;
-            gap: 16px;
-            margin-top: 4px;
-            margin-bottom: 6px;
-        }
-        .helper-links a { font-size: 12px; color: #7248C8; text-decoration: none; }
-        .helper-links a:hover { text-decoration: underline; }
-
-        .btn-enter {
+        .error-label {
+            color: red;
             display: block;
-            margin: 18px auto 0;
-            padding: 10px 44px;
-            background-color: #c8b8f0;
-            color: #321075;
-            border: none; border-radius: 20px;
-            font-size: 15px; font-weight: bold;
-            cursor: pointer; transition: background 0.3s;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
         }
-        .btn-enter:hover { background-color: #b39ddb; }
-
-        .msg-area { text-align: center; font-size: 13px; margin-top: 14px; display: block; min-height: 18px; }
-        .msg-error { color: #c0392b; }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            color: #7b4fe3;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dcd0f7;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #eae1fc;
+        }
+        .validator-error {
+            color: red;
+            font-size: 13px;
+            display: block;
+            margin-top: 5px;
+        }
+        .links-group {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-top: -10px;
+            margin-bottom: 30px;
+        }
+        .links-group a {
+            color: #b862bc;
+            text-decoration: none;
+        }
+        .links-group a:hover {
+            text-decoration: underline;
+        }
+        .btn-submit {
+            width: 100%;
+            background-color: #c3b1e9;
+            color: #3f1d82;
+            border: 2px solid #9c84cb;
+            padding: 14px;
+            font-size: 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #b29de0;
+        }
     </style>
 </head>
 <body>
-<form id="form1" runat="server">
-    <div class="page-wrapper">
-
-        <!-- LEFT: purple logo panel -->
-        <div class="left-panel">
-            <div class="logo-circle">
-                <img src="Images/logo.png" alt="Read Card Do Learn Logo" />
+    <form id="form1" runat="server">
+        <div class="container">
+            <div class="sidebar">
+                <div class="logo-circle">R</div>
+                <h1>READ CARD<br />DO LEARN</h1>
             </div>
-            <p class="brand-text">Read Card<br />Do Learn</p>
-        </div>
 
-        <!-- RIGHT: login form -->
-        <div class="right-panel">
-            <a href="#" class="back-arrow">&#8592;</a>
+            <div class="login-section">
+                <a href="home.aspx" class="back-btn">&larr;</a>
+                
+                <div class="login-box">
+                    <h2>Login</h2>
+                    
+                    <asp:Label ID="lblMessage" runat="server" CssClass="error-label" Visible="false"></asp:Label>
 
-            <div class="form-container">
-                <h2>Login</h2>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" 
+                            ErrorMessage="Email is required." CssClass="validator-error" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </div>
 
-                <asp:Label ID="lblMessage" runat="server" Visible="false" CssClass="msg-area msg-error"></asp:Label>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" 
+                            ErrorMessage="Password is required." CssClass="validator-error" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </div>
 
-                <!-- Email -->
-                <div class="form-row">
-                    <label>Email:</label>
-                    <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" placeholder="Enter your email" />
+                    <div class="links-group">
+                        <a href="register.aspx">Don't have an account? Register One</a>
+                        <a href="forgotPassword.aspx">Forgot password?</a>
+                    </div>
+
+                    <asp:Button ID="btnLogin" runat="server" Text="Enter" CssClass="btn-submit" OnClick="btnLogin_Click" />
                 </div>
-                <div class="validator-row">
-                    <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail"
-                        ErrorMessage="Email is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
-                </div>
-
-                <!-- Password -->
-                <div class="form-row">
-                    <label>Password:</label>
-                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" placeholder="Enter your password" />
-                </div>
-                <div class="validator-row">
-                    <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
-                        ErrorMessage="Password is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
-                </div>
-
-                <!-- Helper links: Forgot Password + Register -->
-                <div class="helper-links">
-                    <a href="forgotPassword.aspx">Forgot Password?</a>
-                    <a href="register.aspx">Register</a>
-                </div>
-
-                <asp:Button ID="btnLogin" runat="server" Text="Enter"
-                    CssClass="btn-enter" OnClick="btnLogin_Click" />
             </div>
         </div>
-
-    </div>
-</form>
+    </form>
 </body>
 </html>
