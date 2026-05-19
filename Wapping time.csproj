@@ -69,7 +69,9 @@
   <ItemGroup>
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
-    <Content Include="dashboard.aspx" />
+    <Content Include="Images\CourseNextButton.png" />
+    <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
     <Content Include="Images\logo.png" />
@@ -105,12 +107,12 @@
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
     </Compile>
-    <Compile Include="dashboard.aspx.cs">
-      <DependentUpon>dashboard.aspx</DependentUpon>
+    <Compile Include="StudentDashboard.aspx.cs">
+      <DependentUpon>StudentDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="dashboard.aspx.designer.cs">
-      <DependentUpon>dashboard.aspx</DependentUpon>
+    <Compile Include="StudentDashboard.aspx.designer.cs">
+      <DependentUpon>StudentDashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
