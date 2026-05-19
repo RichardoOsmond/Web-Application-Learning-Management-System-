@@ -21,9 +21,15 @@
             padding: 10px 30px;
         }
 
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+        }
+
         .logo {
             display: flex;
             align-items: center;
+            margin-right: 20px; /* distance between logo and dashboard */
         }
 
         .logo-img {
@@ -32,9 +38,11 @@
             display: block;
         }
 
+        /* Dashboard & Courses */
         .nav-links {
             list-style: none;
             display: flex;
+            align-items: center;
         }
 
         .nav-links li {
@@ -51,25 +59,75 @@
         .nav-links a:hover {
             color: #1abc9c;
         }
+
+        /* Notification, Chat, Profile */
+        .nav-icons-group {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icons-group li {
+            margin-left: 25px; /* distance between img */
+        }
+
+        /* size img */
+        .nav-icon-img {
+            width: 28px;  /* width img */
+            height: 28px; /* height img */
+            object-fit: contain;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        /* profile icon - circle */
+        .profile-icon {
+            border-radius: 50%;
+            width: 32px; 
+            height: 32px;
+        }
+
+        .nav-icon-img:hover {
+            transform: scale(1.1); /* enlarges slightly */
+        }
             
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-    </head>
-    <body>
+</head>
+<body>
     <form id="form1" runat="server">
-        <nav class ="navbar">
-            <div class="logo">
-                <img src="Images/logo.png" alt="Read Card Do Learn Logo" class="logo-img" />
+        <nav class="navbar">
+            
+            <div class="nav-left-group">
+                <div class="logo">
+                    <img src="Images/logo.png" alt="Read Card Do Learn Logo" class="logo-img" />
+                </div>
+                <ul class="nav-links">
+                    <li><a href="dashboard.aspx">Dashboard</a></li>
+                    <li><a href="courses.aspx">Courses</a></li>
+                </ul>
             </div>
-            <ul class="nav-links">
-            <li><a href="dashboard.aspx">Dashboard</a></li>
-            <li><a href="courses.aspx">Courses</a></li>
-            <li><a href="notification.aspx">Notification</a></li>
-            <li><a href="chat.aspx">Chat</a></li>
-            <li><a href="profile.aspx">Profile</a></li>
+
+            <ul class="nav-icons-group">
+                <li>
+                    <a href="notification.aspx" title="Notification">
+                        <img src="Images/notification.png" alt="Notification" class="nav-icon-img" />
+                    </a>
+                </li>
+                <li>
+                    <a href="chat.aspx" title="Chat">
+                        <img src="Images/chat.png" alt="Chat" class="nav-icon-img" />
+                    </a>
+                </li>
+                <li>
+                    <a href="profile.aspx" title="Profile">
+                        <img src="Images/profile.png" alt="Profile" class="nav-icon-img profile-icon" />
+                    </a>
+                </li>
             </ul>
+
         </nav>
 
         <div>
