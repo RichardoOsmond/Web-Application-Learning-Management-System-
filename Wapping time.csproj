@@ -96,6 +96,8 @@
     <Compile Include="chat.aspx.designer.cs">
       <DependentUpon>chat.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ChatMessages.cs" />
+    <Compile Include="Course.cs" />
     <Compile Include="courses.aspx.cs">
       <DependentUpon>courses.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -127,6 +129,7 @@
     <Compile Include="notification.aspx.designer.cs">
       <DependentUpon>notification.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Notifications.cs" />
     <Compile Include="profile.aspx.cs">
       <DependentUpon>profile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -142,6 +145,7 @@
     <Compile Include="Site1.Master.designer.cs">
       <DependentUpon>Site1.Master</DependentUpon>
     </Compile>
+    <Compile Include="Student.cs" />
     <Compile Include="WebForm1.aspx.cs">
       <DependentUpon>WebForm1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
