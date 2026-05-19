@@ -1,13 +1,13 @@
-﻿<%@ Page Title="Login" Language="C#" AutoEventWireup="true" CodeBehind="login.aspx.cs" Inherits="Wapping_time.login" %>
+<%@ Page Title="Set Username" Language="C#" AutoEventWireup="true" CodeBehind="setUsername.aspx.cs" Inherits="Wapping_time.setUsername" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Login – Read Card Do Learn</title>
+    <title>Set Username – Read Card Do Learn</title>
     <meta charset="utf-8" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         html, body { height: 100%; background-color: #f7f4ff; overflow-x: hidden; }
-
+        
         .page-wrapper { display: flex; height: 100vh; width: 100vw; }
 
         .left-panel { width: 35%; background-color: #7248C8; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; }
@@ -20,20 +20,17 @@
         .back-arrow:hover { color: #321075; }
 
         .form-container { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 440px; margin: 0 auto; width: 100%; }
-        .form-container h2 { color: #321075; font-size: 36px; margin-bottom: 25px; text-align: center; font-weight: bold; }
+        .form-container h2 { color: #321075; font-size: 32px; margin-bottom: 10px; text-align: center; font-weight: bold; }
+        .form-subtitle { font-size: 14px; color: #666; text-align: center; margin-bottom: 25px; }
 
         .form-row { display: flex; align-items: center; margin-bottom: 14px; gap: 12px; }
-        .form-row label { width: 90px; font-size: 16px; color: #321075; flex-shrink: 0; text-align: right; font-weight: bold; }
-        .form-row input[type="email"], .form-row input[type="password"] { flex: 1; padding: 12px 15px; border: 2px solid #b39ddb; border-radius: 8px; font-size: 14px; background: white; transition: border 0.3s; }
+        .form-row label { width: 110px; font-size: 15px; color: #321075; flex-shrink: 0; text-align: right; font-weight: bold; }
+        .form-row input[type="text"] { flex: 1; padding: 12px 15px; border: 2px solid #b39ddb; border-radius: 8px; font-size: 14px; background: white; transition: border 0.3s; }
         .form-row input:focus { border-color: #7248C8; outline: none; }
 
-        .validator-row { margin-left: 102px; margin-top: -8px; margin-bottom: 6px; }
+        .validator-row { margin-left: 122px; margin-top: -8px; margin-bottom: 6px; }
 
-        .helper-links { display: flex; justify-content: space-between; margin-left: 102px; margin-top: 4px; margin-bottom: 20px; }
-        .helper-links a { font-size: 13px; color: #7248C8; text-decoration: none; font-weight: bold; }
-        .helper-links a:hover { text-decoration: underline; }
-
-        .btn-enter { display: block; width: 100%; margin-top: 10px; padding: 14px; background-color: #c8b8f0; color: #321075; border: 2px solid #9c84cb; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; text-align: center; }
+        .btn-enter { display: block; width: 100%; margin-top: 15px; padding: 14px; background-color: #c8b8f0; color: #321075; border: 2px solid #9c84cb; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; text-align: center; }
         .btn-enter:hover { background-color: #b39ddb; }
 
         .msg-area { text-align: center; font-size: 14px; margin-bottom: 15px; display: block; font-weight: bold; }
@@ -49,31 +46,19 @@
         </div>
         <div class="right-panel">
             <div class="form-container">
-                <h2>Login</h2>
+                <h2>Choose Username</h2>
+                <p class="form-subtitle">Please create a unique username for your profile display.</p>
                 <asp:Label ID="lblMessage" runat="server" Visible="false" CssClass="msg-area msg-error"></asp:Label>
 
                 <div class="form-row">
-                    <label>Email:</label>
-                    <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" placeholder="Enter your email" />
+                    <label>Username:</label>
+                    <asp:TextBox ID="txtUsername" runat="server" placeholder="e.g. robin_cahyadi" />
                 </div>
                 <div class="validator-row">
-                    <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="Email is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
+                    <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" ErrorMessage="Username is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
                 </div>
 
-                <div class="form-row">
-                    <label>Password:</label>
-                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" placeholder="Enter your password" />
-                </div>
-                <div class="validator-row">
-                    <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" ErrorMessage="Password is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
-                </div>
-
-                <div class="helper-links">
-                    <a href="register.aspx">Register An Account</a>
-                    <a href="forgotPassword.aspx">Forgot Password?</a>
-                </div>
-
-                <asp:Button ID="btnLogin" runat="server" Text="Enter" CssClass="btn-enter" OnClick="btnLogin_Click" />
+                <asp:Button ID="btnEnter" runat="server" Text="Enter" CssClass="btn-enter" OnClick="btnEnter_Click" />
             </div>
         </div>
     </div>
