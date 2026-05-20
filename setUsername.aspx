@@ -1,4 +1,4 @@
-<%@ Page Title="Set Username" Language="C#" AutoEventWireup="true" CodeBehind="setUsername.aspx.cs" Inherits="Wapping_time.setUsername" %>
+﻿<%@ Page Title="Set Username" Language="C#" AutoEventWireup="true" CodeBehind="setUsername.aspx.cs" Inherits="Wapping_time.setUsername" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -52,7 +52,7 @@
 
                 <div class="form-row">
                     <label>Username:</label>
-                    <asp:TextBox ID="txtUsername" runat="server" placeholder="e.g. robin_cahyadi" />
+                    <asp:TextBox ID="txtUsername" runat="server" placeholder="e.g. robin_kana" />
                 </div>
                 <div class="validator-row">
                     <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" ErrorMessage="Username is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />

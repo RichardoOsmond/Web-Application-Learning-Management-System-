@@ -11,5 +11,6 @@ namespace Wapping_time
         public string Email { get; set; }
         public DateTime? LastLogin { get; set; }
         public DateTime? LastLogout { get; set; }
+        public string AboutMe { get; set; }
     }
 }

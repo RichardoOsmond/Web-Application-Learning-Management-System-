@@ -1,4 +1,4 @@
-<%@ Page Title="Forgot Password" Language="C#" AutoEventWireup="true" CodeBehind="forgotPassword.aspx.cs" Inherits="Wapping_time.forgotPassword" %>
+﻿<%@ Page Title="Forgot Password" Language="C#" AutoEventWireup="true" CodeBehind="forgotPassword.aspx.cs" Inherits="Wapping_time.forgotPassword" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
