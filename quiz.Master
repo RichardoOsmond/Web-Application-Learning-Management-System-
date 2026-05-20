@@ -1,20 +1,21 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="Wapping_time.Site1" %>
-
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="quiz.Master.cs" Inherits="Wapping_time.quiz_Master" %>
 <!DOCTYPE html>
-
 <html>
 <head runat="server">
     <title></title>
+    <link href="quiz.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        <div class="quiz-header">
+            <img src="Images/logo.png" alt="Logo" class="quiz-logo" />
+        </div>
+        <div class="quiz-body">
+            <asp:ContentPlaceHolder ID="QuizContent" runat="server">
             </asp:ContentPlaceHolder>
         </div>
-        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button" />
     </form>
 </body>
 </html>

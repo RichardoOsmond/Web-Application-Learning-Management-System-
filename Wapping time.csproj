@@ -69,9 +69,12 @@
   <ItemGroup>
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
+    <Content Include="createQuiz.aspx" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="quiz.aspx" />
+    <Content Include="quiz.css" />
     <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
@@ -108,6 +111,20 @@
     </Compile>
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="createQuiz.aspx.cs">
+      <DependentUpon>createQuiz.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="createQuiz.aspx.designer.cs">
+      <DependentUpon>createQuiz.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="quiz.aspx.cs">
+      <DependentUpon>quiz.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="quiz.aspx.designer.cs">
+      <DependentUpon>quiz.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
