@@ -15,9 +15,9 @@ namespace Wapping_time
 
         public Student()
         {
-            enrolledCourses = new List<Course>;
-            notifications = new List<Notifications>;
-            chatMessages = new List<ChatMessages>;
+            enrolledCourses = new List<Course>();
+            notifications = new List<Notifications>();
+            chatMessages = new List<ChatMessages>();
 
             profileImage = "profileImage.png";
         }
