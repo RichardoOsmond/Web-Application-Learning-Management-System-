@@ -90,7 +90,35 @@
         .nav-icon-img:hover {
             transform: scale(1.1); /*enlarges slightly*/
         }
-            
+        
+        html, body, form {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form > div {
+            flex-grow: 1;
+        }
+
+        .aspNetHidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+        }
+
+        body {
+            background-color: #e6e1f2;
+        }
+
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
