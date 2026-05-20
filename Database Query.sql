@@ -115,6 +115,9 @@ CREATE TABLE [dbo].[Answer]
     [Answers] NVARCHAR(100) NOT NULL, 
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
+
+ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
+
 /*
 DROP TABLE [Answer]
 DROP TABLE [Registration]

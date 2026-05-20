@@ -159,7 +159,7 @@ namespace Wapping_time
             }
         }
 
-        // ── updatePassword() ─────────────────────────────────────────────────────
+        //update pswd
         private bool updatePassword(string newPassword)
         {
             try
