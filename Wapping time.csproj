@@ -70,9 +70,13 @@
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
     <Content Include="CSS\StudentDashboard.css" />
+    <Content Include="Database Query.sql" />
+    <Content Include="forgotPassword.aspx" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="register.aspx" />
     <Content Include="Scripts\StudentDashboard.js" />
+    <Content Include="setUsername.aspx" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
@@ -83,7 +87,6 @@
     <Content Include="notification.aspx" />
     <Content Include="profile.aspx" />
     <Content Include="Web.config" />
-    <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assignment.Master.cs">
@@ -108,6 +111,29 @@
     </Compile>
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataServices.cs" />
+    <Compile Include="forgotPassword.aspx.cs">
+      <DependentUpon>forgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="forgotPassword.aspx.designer.cs">
+      <DependentUpon>forgotPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Registration.cs" />
+    <Compile Include="setUsername.aspx.cs">
+      <DependentUpon>setUsername.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="setUsername.aspx.designer.cs">
+      <DependentUpon>setUsername.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
@@ -150,13 +176,7 @@
       <DependentUpon>quiz.Master</DependentUpon>
     </Compile>
     <Compile Include="Student.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assignment.Master" />

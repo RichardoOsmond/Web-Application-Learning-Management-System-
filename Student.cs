@@ -7,19 +7,28 @@ namespace Wapping_time
 {
     public class Student : User
     {
-        public int totalCourseCompletion { get; set; }
-        public string profileImage { get; set; } // Will probably remove this later, assuming user class have profileImage from the database table
-        public List<Course> enrolledCourses { get; set; }
-        public List<Notifications> notifications { get; set; }
-        public List<ChatMessages> chatMessages { get; set; }
+        private int TotalCourseCompletion { get; set; }
+        private string ProfileImage { get; set; } // Will probably remove this later, assuming user class have profileImage from the database table
+        private List<Registration> EnrolledCourses { get; set; }
+        private List<Notifications> Notifications { get; set; }
+        private List<ChatMessages> ChatMessages { get; set; }
 
-        public Student()
+        public Student(List<Registration> registrations, List<Notifications> notifications, List<ChatMessages> chatMessages)
         {
-            enrolledCourses = new List<Course>();
-            notifications = new List<Notifications>();
-            chatMessages = new List<ChatMessages>();
+            EnrolledCourses = registrations;
+            Notifications = notifications;
+            ChatMessages = chatMessages;
 
-            profileImage = "profileImage.png";
+            ProfileImage = "profileImage.png";
+        }
+        private int calculateTotalCourseCompletion(List<Registration> registrations)
+        {
+            int sumProgress = 0;
+            foreach (Registration registration in registrations)
+            {
+                sumProgress += registration.getProgress();
+            }
+            return sumProgress;
         }
     }
 }
