@@ -38,7 +38,7 @@
             display: block;
         }
 
-        /* Dashboard & Courses */
+        /*dashboard+courses button*/
         .nav-links {
             list-style: none;
             display: flex;
@@ -60,7 +60,7 @@
             color: #1abc9c;
         }
 
-        /* Notification, Chat, Profile */
+        /*notification, Chat, Profile */
         .nav-icons-group {
             list-style: none;
             display: flex;
@@ -68,19 +68,19 @@
         }
 
         .nav-icons-group li {
-            margin-left: 25px; /* distance between img */
+            margin-left: 25px; /*distance between img */
         }
 
-        /* size img */
+        /*size img*/
         .nav-icon-img {
-            width: 28px;  /* width img */
-            height: 28px; /* height img */
+            width: 28px;  /*width img*/
+            height: 28px; /*height img*/
             object-fit: contain;
             display: block;
             transition: transform 0.2s;
         }
 
-        /* profile icon - circle */
+        /*profile icon - circle*/
         .profile-icon {
             border-radius: 50%;
             width: 32px; 
@@ -88,7 +88,7 @@
         }
 
         .nav-icon-img:hover {
-            transform: scale(1.1); /* enlarges slightly */
+            transform: scale(1.1); /*enlarges slightly*/
         }
             
     </style>
