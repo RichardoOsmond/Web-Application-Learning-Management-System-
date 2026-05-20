@@ -17,7 +17,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #321075; 
+            background-color: #7842f5; 
             padding: 10px 30px;
         }
 
