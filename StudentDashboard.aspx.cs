@@ -23,7 +23,7 @@ namespace Wapping_time
             if (currStudent == null) { return; }
 
             // Assuming the inherited user class named the name field as name
-            lblName.Text = "Welcome, " + currStudent.name + "!";
+            lblName.Text = "Welcome, " + currStudent.Username + "!";
             loadProgressBar();
         }
         private void loadProgressBar()
