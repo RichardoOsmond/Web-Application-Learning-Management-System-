@@ -82,5 +82,8 @@ namespace Wapping_time
             pnlProgressInner.Style["width"] = totalCourseCompRate + "%";
             lblCompletionRate.Text = totalCourseCompRate + "% Complete";
         }
+        private void showNoficiation()
+        {
+        }
     }
 }
