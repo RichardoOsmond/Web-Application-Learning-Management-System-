@@ -11,7 +11,7 @@ namespace Wapping_time
 {
 
 
-    public partial class CoursePage
+    public partial class EditMaterial
     {
 
         /// <summary>
@@ -24,13 +24,40 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Repeater LessonRepeater;
 
         /// <summary>
-        /// btnMaterial control.
+        /// mAddBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMaterial;
+        protected global::System.Web.UI.WebControls.Button mAddBtn;
+
+        /// <summary>
+        /// mEditBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button mEditBtn;
+
+        /// <summary>
+        /// mDeleteBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button mDeleteBtn;
+
+        /// <summary>
+        /// mReturnBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button mReturnBtn;
 
         /// <summary>
         /// materialPanel control.
@@ -51,13 +78,40 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Repeater MaterialRepeater;
 
         /// <summary>
-        /// btnQuiz control.
+        /// qAddBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnQuiz;
+        protected global::System.Web.UI.WebControls.Button qAddBtn;
+
+        /// <summary>
+        /// qEditBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button qEditBtn;
+
+        /// <summary>
+        /// qDeleteBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button qDeleteBtn;
+
+        /// <summary>
+        /// qReturnBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button qReturnBtn;
 
         /// <summary>
         /// quizPanel control.

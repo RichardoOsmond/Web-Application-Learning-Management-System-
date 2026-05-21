@@ -67,13 +67,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddMaterialPage.aspx" />
+    <Content Include="App_Data\Database1.mdf" />
+    <Content Include="App_Data\Database1_log.ldf">
+      <DependentUpon>Database1.mdf</DependentUpon>
+    </Content>
     <Content Include="chat.aspx" />
     <Content Include="CoursePage.aspx" />
     <Content Include="courses.aspx" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
+    <Content Include="AdminEditCoursePage.aspx" />
+    <Content Include="EditMaterialPage.aspx" />
+    <Content Include="Images\arrow.png" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="Images\Math icon.png" />
+    <Content Include="random_data_inserts.sql" />
     <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
@@ -84,9 +94,17 @@
     <Content Include="Login.aspx" />
     <Content Include="notification.aspx" />
     <Content Include="profile.aspx" />
+    <Content Include="ViewMaterial.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMaterialPage.aspx.cs">
+      <DependentUpon>AddMaterialPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddMaterialPage.aspx.designer.cs">
+      <DependentUpon>AddMaterialPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Assignment.Master.cs">
       <DependentUpon>Assignment.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -116,6 +134,20 @@
     </Compile>
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminEditCoursePage.aspx.cs">
+      <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminEditCoursePage.aspx.designer.cs">
+      <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditMaterialPage.aspx.cs">
+      <DependentUpon>EditMaterialPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditMaterialPage.aspx.designer.cs">
+      <DependentUpon>EditMaterialPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
@@ -158,12 +190,23 @@
       <DependentUpon>quiz.Master</DependentUpon>
     </Compile>
     <Compile Include="Student.cs" />
+    <Compile Include="UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
+    <Compile Include="ViewMaterial.aspx.cs">
+      <DependentUpon>ViewMaterial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewMaterial.aspx.designer.cs">
+      <DependentUpon>ViewMaterial.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assignment.Master" />
     <None Include="packages.config" />
     <Content Include="quiz.Master" />
+    <Content Include="UploadHandler.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -172,7 +215,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
