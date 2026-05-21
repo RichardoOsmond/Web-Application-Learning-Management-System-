@@ -110,15 +110,40 @@ CREATE TABLE [dbo].[Registration]
 
 CREATE TABLE [dbo].[Answer]
 (
-    [AnswerID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
+    [AnswerID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
     [QuestionID] INT NOT NULL, 
     [Answers] NVARCHAR(100) NOT NULL, 
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
 
+CREATE TABLE [dbo].[Notifications]
+(
+    [NotificationID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [UserID] INT NOT NULL,
+    [Title] nvarchar(50) NOT NULL,
+    [Content] nvarchar(500) NOT NULL,
+    [CreatedTime] DATETIME NOT NULL,
+    [IsRead] BIT NOT NULL,
+    CONSTRAINT [FK_Notifications_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
+)
+
+CREATE TABLE [dbo].[ChatMessages]
+(
+    [ChatMessageID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [FromUserID] INT NOT NULL,
+    [ToUserID] INT NOT NULL,
+    [Content] nvarchar(MAX) NOT NULL,
+    [SentTime] DATETIME NOT NULL,
+    [IsRead] BIT NOT NULL,
+    CONSTRAINT [FK_ChatMessages_FromUser] FOREIGN KEY ([FromUserID]) REFERENCES [User]([UserID]),
+    CONSTRAINT [FK_ChatMessages_ToUser] FOREIGN KEY ([ToUserID]) REFERENCES [User]([UserID])
+)
+
 ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
 
 /*
+DROP TABLE [ChatMessages]
+DROP TABLE [Notifications]
 DROP TABLE [Answer]
 DROP TABLE [Registration]
 DROP TABLE [MaterialContent]

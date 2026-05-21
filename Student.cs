@@ -20,6 +20,7 @@ namespace Wapping_time
             ChatMessages = chatMessages;
 
             ProfileImage = "profileImage.png";
+            TotalCourseCompletion = calculateTotalCourseCompletion(EnrolledCourses);
         }
         private int calculateTotalCourseCompletion(List<Registration> registrations)
         {
@@ -29,6 +30,10 @@ namespace Wapping_time
                 sumProgress += registration.getProgress();
             }
             return sumProgress;
+        }
+        public int getTotalCourseCompletion()
+        {
+            return TotalCourseCompletion;
         }
     }
 }

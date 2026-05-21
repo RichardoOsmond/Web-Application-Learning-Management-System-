@@ -14,7 +14,8 @@ namespace Wapping_time
         {
             if (!IsPostBack)
             {
-                currStudent = new Student();
+                int userID = (int)Session["UserID"];
+                currStudent = DataServices.getStudentByUserID(userID);
                 renderDashboard();
             }
         }
@@ -29,7 +30,7 @@ namespace Wapping_time
         private void loadProgressBar()
         {
             if (currStudent == null) { return; }
-            int totalCourseCompRate = currStudent.totalCourseCompletion;
+            int totalCourseCompRate = currStudent.getTotalCourseCompletion();
 
             // Don't mind me, generated these encouragement messages using ChatGPT
             // Shows different messages based on student's total course progression
