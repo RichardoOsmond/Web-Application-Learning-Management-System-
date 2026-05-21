@@ -14,7 +14,8 @@ CREATE TABLE [dbo].[User]
     [Password] VARCHAR(255) NOT NULL, 
     [Email] VARCHAR(100) NOT NULL, 
     [Last Login] DATETIME NOT NULL, 
-    [Last Logout] DATETIME NOT NULL, 
+    [Last Logout] DATETIME NOT NULL,
+    [About Me] NVARCHAR(500) NULL,
     CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleID]) REFERENCES [Role]([RoleID]) 
 )
 
@@ -116,9 +117,6 @@ CREATE TABLE [dbo].[Answer]
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
 
-ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
-
-/*
 DROP TABLE [Answer]
 DROP TABLE [Registration]
 DROP TABLE [MaterialContent]
@@ -130,4 +128,3 @@ DROP TABLE [Lesson]
 DROP TABLE [Course]
 DROP TABLE [User]
 DROP TABLE [Role]
-*/

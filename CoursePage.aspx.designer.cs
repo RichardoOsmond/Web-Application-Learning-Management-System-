@@ -15,39 +15,21 @@ namespace Wapping_time
     {
 
         /// <summary>
-        /// homeworkPanel control.
+        /// materialPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel homeworkPanel;
+        protected global::System.Web.UI.WebControls.Panel materialPanel;
 
         /// <summary>
-        /// generalPanel control.
+        /// quizPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel generalPanel;
-
-        /// <summary>
-        /// testsPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel testsPanel;
-
-        /// <summary>
-        /// lessonsPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel lessonsPanel;
+        protected global::System.Web.UI.WebControls.Panel quizPanel;
     }
 }
