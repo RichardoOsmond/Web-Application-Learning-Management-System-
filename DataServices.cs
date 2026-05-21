@@ -83,6 +83,27 @@ namespace Wapping_time
         public static List<Notifications> getNotifications(int userID)
         {
             List<Notifications> notifications = new List<Notifications>();
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT * FROM Notifications WHERE UserID = @UserID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int notificationID = (int)reader["NotificationID"];
+                            int notifyUserID = (int)reader["UserID"];
+                            string title = reader["Title"].ToString();
+                            string content = reader["Content"].ToString();
+                            DateTime createdTime = (DateTime)reader["CreatedTime"];
+                            bool isRead = (bool)reader["IsRead"];
+                        }
+                    }
+                }
+            }
             return notifications;
         }
         public static List<ChatMessages> getChatMessages(int userID)
