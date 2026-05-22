@@ -13,7 +13,9 @@ namespace Wapping_time
         private List<Notifications> Notifications { get; set; }
         private List<ChatMessages> ChatMessages { get; set; }
 
-        public Student(List<Registration> registrations, List<Notifications> notifications, List<ChatMessages> chatMessages)
+        public Student(int userID, int roleID, string username, string email, DateTime lastLogin, DateTime lastLogout, string aboutMe,
+            List<Registration> registrations, List<Notifications> notifications, List<ChatMessages> chatMessages)
+            : base(userID, roleID, username, email, lastLogin, lastLogout, aboutMe)
         {
             EnrolledCourses = registrations;
             Notifications = notifications;
@@ -29,7 +31,7 @@ namespace Wapping_time
             {
                 sumProgress += registration.getProgress();
             }
-            return sumProgress;
+            return (sumProgress / registrations.Count);
         }
         public int getTotalCourseCompletion()
         {

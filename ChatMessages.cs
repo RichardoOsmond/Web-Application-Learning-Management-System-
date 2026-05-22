@@ -7,12 +7,12 @@ namespace Wapping_time
 {
     public class ChatMessages
     {
-        private int ChatMessageID { get; set; }
-        private int FromUserID { get; set; }
-        private int ToUserID { get; set; }
-        private string Content { get; set; }
-        private DateTime SentTime { get; set; }
-        private bool IsRead { get; set; }
+        public int ChatMessageID { get; private set; }
+        public int FromUserID { get; private set; }
+        public int ToUserID { get; private set; }
+        public string Content { get; private set; }
+        public DateTime SentTime { get; private set; }
+        public bool IsRead { get; private set; }
 
         // Function to set dateTime here
         public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead)

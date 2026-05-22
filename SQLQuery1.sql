@@ -1,8 +1,8 @@
-﻿use [E:\GITHUBMANUALFOLDER\WAPP\APP_DATA\DATABASE1.MDF]
+﻿use [C:\WAPP\APP_DATA\READCARDDB.MDF]
 
 CREATE TABLE [dbo].[Role]
 (
-	[RoleID] INT NOT NULL PRIMARY KEY, 
+	[RoleID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [RoleName] VARCHAR(50) NOT NULL
 )
 
@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[User]
 
 CREATE TABLE [dbo].[Course]
 (
-    [CourseID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [CourseID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [UserID] INT NOT NULL, 
     [CourseName] VARCHAR(50) NOT NULL, 
     [Description] VARCHAR(255) NOT NULL, 
@@ -72,7 +72,7 @@ CREATE TABLE [dbo].[Question]
 
 CREATE TABLE [dbo].[ImageSubmission]
 (
-	[ImageID] INT NOT NULL PRIMARY KEY, 
+	[ImageID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [QuestionID] INT NOT NULL, 
     [UserID] INT NOT NULL, 
     [ImageName] NCHAR(10) NOT NULL, 
@@ -98,7 +98,7 @@ CREATE TABLE [dbo].[MaterialContent]
 
 CREATE TABLE [dbo].[Registration]
 (
-    [RegistrationID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [RegistrationID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [UserID] INT NOT NULL, 
     [CourseID] INT NOT NULL, 
     [Result] VARCHAR(10) NOT NULL, 
@@ -140,7 +140,6 @@ CREATE TABLE [dbo].[ChatMessages]
 )
 
 ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
-
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]

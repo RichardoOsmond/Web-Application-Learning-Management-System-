@@ -67,14 +67,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\ReadCardDB.mdf" />
+    <Content Include="App_Data\ReadCardDB_log.ldf">
+      <DependentUpon>ReadCardDB.mdf</DependentUpon>
+    </Content>
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
+    <Content Include="CSS\Dashboard.css" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
     <Content Include="forgotPassword.aspx" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
     <Content Include="register.aspx" />
+    <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="setUsername.aspx" />
     <Content Include="StudentDashboard.aspx" />
@@ -190,7 +196,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>

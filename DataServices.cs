@@ -10,28 +10,27 @@ namespace Wapping_time
     {
         private static readonly string conString = System.Configuration.ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
 
-        public static User getUserByID(int userID)
+        public static User getUserByID(int UserID)
         {
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT * FROM User WHERE UserID = @userID";
+                string query = "SELECT * FROM [User] WHERE [UserID] = @userID";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@userID", userID);
+                    cmd.Parameters.AddWithValue("@userID", UserID);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            return new User
-                            {
-                                UserID = (int)reader["UserID"],
-                                RoleID = (int)reader["RoleID"],
-                                Username = reader["Username"].ToString(),
-                                Email = reader["Email"].ToString(),
-                                LastLogin = (DateTime)reader["Last Login"],
-                                LastLogout = (DateTime)reader["Last Logout"]
-                            };
+                            int userID = (int)reader["UserID"];
+                            int roleID = (int)reader["RoleID"];
+                            string username = reader["Username"].ToString();
+                            string email = reader["Email"].ToString();
+                            DateTime lastLogin = (DateTime)reader["Last Login"];
+                            DateTime lastLogout = (DateTime)reader["Last Logout"];
+                            string aboutMe = reader["AboutMe"] == DBNull.Value ? null : reader["AboutMe"].ToString();
+                            return new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
                         }
                     }
                 }
@@ -42,7 +41,7 @@ namespace Wapping_time
         {
             User user = getUserByID(userID);
             if (user == null) { return null; }
-            Student student = new Student(getEnrolledCourses(userID), getNotifications(userID), getChatMessages(userID));
+            Student student = new Student(user.UserID, user.RoleID, user.Username, user.Email, user.LastLogin, user.LastLogout, user.AboutMe, getEnrolledCourses(userID), getNotifications(userID), getChatMessages(userID));
             return student;
         }
         public static List<Registration> getEnrolledCourses(int userID)
@@ -52,7 +51,7 @@ namespace Wapping_time
             {
                 conn.Open();
                 string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
-                    "FROM Registration r INNER JOIN Course c on c.CourseID = r.CourseID WHERE r.UserID = @UserID ORDER BY c.CourseName";
+                    "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userID);
@@ -86,7 +85,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT * FROM Notifications WHERE UserID = @UserID";
+                string query = "SELECT * FROM [Notifications] WHERE [UserID] = @UserID";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userID);
@@ -114,7 +113,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT * FROM ChatMessages WHERE UserID = @UserID";
+                string query = "SELECT * FROM [ChatMessages] WHERE [ToUserID] = @UserID";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userID);
