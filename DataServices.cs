@@ -100,6 +100,8 @@ namespace Wapping_time
                             string content = reader["Content"].ToString();
                             DateTime createdTime = (DateTime)reader["CreatedTime"];
                             bool isRead = (bool)reader["IsRead"];
+                            Notifications notification = new Notifications(notificationID, notifyUserID, title, content, isRead, createdTime);
+                            notifications.Add(notification);
                         }
                     }
                 }
@@ -109,6 +111,29 @@ namespace Wapping_time
         public static List<ChatMessages> getChatMessages(int userID)
         {
             List<ChatMessages> chatMessages = new List<ChatMessages>();
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT * FROM ChatMessages WHERE UserID = @UserID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int chatMessageID = (int)reader["ChatMessageID"];
+                            int fromUserID = (int)reader["FromUserID"];
+                            int toUserID = (int)reader["ToUserID"];
+                            string content = reader["Content"].ToString();
+                            DateTime sentTime = (DateTime)reader["SentTime"];
+                            bool isRead = (bool)reader["IsRead"];
+                            ChatMessages chatMessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, sentTime);
+                            chatMessages.Add(chatMessage);
+                        }
+                    }
+                }
+            }
             return chatMessages;
         }
     }
