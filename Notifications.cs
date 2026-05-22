@@ -7,12 +7,12 @@ namespace Wapping_time
 {
     public class Notifications
     {
-        private int NotificationID { get; set; }
-        private int UserID { get; set; }
-        private string Title { get; set; }
-        private string Content { get; set; }
-        private DateTime CreatedTime { get; set; }
-        private bool IsRead { get; set; }
+        public int NotificationID { get; private set; }
+        public int UserID { get; private set; }
+        public string Title { get; private set; }
+        public string Content { get; private set; }
+        public DateTime CreatedTime { get; private set; }
+        public bool IsRead { get; private set; }
 
         public Notifications(int notifiactionID, int userID, string title, string content, bool isRead)
         {

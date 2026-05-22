@@ -4,6 +4,8 @@
 
 <html>
 <head runat="server">
+    <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/Dashboard.css") %>" />
+    <script src='<%= ResolveUrl ("~/Scripts/Dashboard.js") %>'></script>
     <title></title>
     <style>
         * {
@@ -112,7 +114,7 @@
 
             <ul class="nav-icons-group">
                 <li>
-                    <a href="notification.aspx" title="Notification">
+                    <a href="javascript:void(0)" title="Notification" onclick="toggleNotificationPanel()">
                         <img src="Images/notification.png" alt="Notification" class="nav-icon-img" />
                     </a>
                 </li>
@@ -129,6 +131,18 @@
             </ul>
 
         </nav>
+        <div id="notificationPanel" class="notification_panel">
+            <div class="notification_header">Notifications</div>
+            <asp:Repeater ID="rptNotifications" runat="server">
+                <ItemTemplate>
+                    <div class="notification_box">
+                        <strong><%# Eval("Title") %></strong>
+                        <p><%# Eval("Content") %></p>
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+            <asp:Label ID="lblNoNotifications" runat="server" Text="No Notifications" Visible="false" CssClass="notification_empty" />
+        </div>
 
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
