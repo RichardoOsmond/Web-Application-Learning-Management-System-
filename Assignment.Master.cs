@@ -11,20 +11,31 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+
+        }
+        protected void btnDashboard_Click(object sender, EventArgs e)
+        {
+            if ((int)Session["RoleID"] == 1)
             {
-                loadNotifications();
+                Response.Redirect("StudentDashboard.aspx");
+                Console.WriteLine("Hello");
+            } else
+            {
+                Response.Redirect("StudentDashboard.aspx");
+                Console.WriteLine("Hi");
             }
         }
-        private void loadNotifications()
+        protected void btnCourse_Click(object sender, EventArgs e)
         {
-            if (Session["UserID"] == null) { return; }
-            int userID = (int)Session["UserID"];
-            List<Notifications> notifications = DataServices.getNotifications(userID);
-
-            rptNotifications.DataSource = notifications;
-            rptNotifications.DataBind();
-            lblNoNotifications.Visible = (notifications.Count == 0);
+            if ((int)Session["RoleID"] == 1)
+            {
+                Response.Redirect("StudentCourse.aspx");
+                Console.WriteLine("Hello");
+            } else
+            {
+                Response.Redirect("StudentCourse.aspx");
+                Console.WriteLine("Hi");
+            }
         }
     }
 }

@@ -16,6 +16,14 @@ namespace Wapping_time
             {
                 int userID = (int)Session["UserID"];
                 currStudent = DataServices.getStudentByUserID(userID);
+                List<Notifications> notifications = currStudent.getNotifications();
+                rptNotifications.DataSource = notifications;
+                rptNotifications.DataBind();
+                lblNoNotifications.Visible = (notifications.Count == 0);
+                List<ChatMessages> chatMessages = currStudent.getChatMessages();
+                rptStudentChatMessages.DataSource = chatMessages;
+                rptStudentChatMessages.DataBind();
+                lblNoChatMessages.Visible = (chatMessages.Count == 0);
                 renderDashboard();
             }
         }
@@ -82,9 +90,6 @@ namespace Wapping_time
             // Filling the inner progress bar against the outer progress bar
             pnlProgressInner.Style["width"] = totalCourseCompRate + "%";
             lblCompletionRate.Text = totalCourseCompRate + "% Complete";
-        }
-        private void showNoficiation()
-        {
         }
     }
 }

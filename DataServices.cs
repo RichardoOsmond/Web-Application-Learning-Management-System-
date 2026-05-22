@@ -113,7 +113,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT * FROM [ChatMessages] WHERE [ToUserID] = @UserID";
+                string query = "SELECT c.ChatMessageID, c.FromUserID, c.ToUserID, c.Content, c.SentTime, c.IsRead, u.Username FROM [ChatMessages] c INNER JOIN [User] u on c.FromUserID = u.UserID WHERE c.ToUserID = @UserID";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userID);
@@ -127,7 +127,9 @@ namespace Wapping_time
                             string content = reader["Content"].ToString();
                             DateTime sentTime = (DateTime)reader["SentTime"];
                             bool isRead = (bool)reader["IsRead"];
+                            string username = reader["Username"].ToString();
                             ChatMessages chatMessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, sentTime);
+                            chatMessage.setSenderName(username);
                             chatMessages.Add(chatMessage);
                         }
                     }

@@ -37,5 +37,13 @@ namespace Wapping_time
         {
             return TotalCourseCompletion;
         }
+        public List<Notifications> getNotifications()
+        {
+            return Notifications;
+        }
+        public List<ChatMessages> getChatMessages()
+        {
+            return ChatMessages;
+        }
     }
 }

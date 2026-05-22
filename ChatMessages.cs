@@ -13,6 +13,7 @@ namespace Wapping_time
         public string Content { get; private set; }
         public DateTime SentTime { get; private set; }
         public bool IsRead { get; private set; }
+        public string SenderName { get; private set; }
 
         // Function to set dateTime here
         public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead)
@@ -36,6 +37,10 @@ namespace Wapping_time
         private DateTime setDateTime()
         {
             return DateTime.Now;
+        }
+        public void setSenderName(string username)
+        {
+            SenderName = username;
         }
     }
 }
