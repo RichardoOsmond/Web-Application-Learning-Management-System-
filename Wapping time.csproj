@@ -83,6 +83,7 @@
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="setUsername.aspx" />
+    <Content Include="StudentCourse.aspx" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
@@ -140,6 +141,13 @@
     </Compile>
     <Compile Include="setUsername.aspx.designer.cs">
       <DependentUpon>setUsername.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StudentCourse.aspx.cs">
+      <DependentUpon>StudentCourse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StudentCourse.aspx.designer.cs">
+      <DependentUpon>StudentCourse.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
