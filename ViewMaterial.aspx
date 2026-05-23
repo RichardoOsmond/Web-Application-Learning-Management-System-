@@ -86,10 +86,10 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 24px;
-            margin-left: auto;
-            margin-right: 0;
+            margin-left: 0;
+            margin-right: auto;
             display: block;
-            margin-right: 20px;
+            margin-left: 20px;
             margin-top: 20px;
             transition: background-color 0.3s, color 0.3s;
         }

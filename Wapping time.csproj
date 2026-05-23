@@ -83,7 +83,7 @@
     <Content Include="Images\arrow.png" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
-    <Content Include="Images\Math icon.png" />
+    <Content Include="Images\Course Icon\Math icon.png" />
     <Content Include="forgotPassword.aspx" />
     <Content Include="DashboardWithAdmin.aspx" />
     <Content Include="Images\CourseNextButton.png" />
@@ -150,7 +150,7 @@
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.designer.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
-    </Compile> 
+    </Compile>
     <Compile Include="DashboardWithAdmin.aspx.cs">
       <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

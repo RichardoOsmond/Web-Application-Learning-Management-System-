@@ -108,7 +108,25 @@ namespace Wapping_time
                                 File.Delete(imagePath);
                             }
                         }
-
+                        string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
+                        using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
+                        {
+                            getCardsCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
+                            using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
+                            {
+                                while (cardReader.Read())
+                                {
+                                    string imgFile = cardReader["FrontImage"].ToString();
+                                    if (!string.IsNullOrEmpty(imgFile))
+                                    {
+                                        string fullPath = Server.MapPath(imgFile);
+                                        if (File.Exists(fullPath))
+                                            File.Delete(fullPath);
+                                    }
+                                }
+                            }
+                        }
+                            
                         string deleteCardStr = @"DELETE FROM FlashCard WHERE MaterialID = @MaterialID;";
                         using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
                         {
