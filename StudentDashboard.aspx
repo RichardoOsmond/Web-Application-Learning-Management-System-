@@ -36,11 +36,13 @@
             <div class="list_courses" id="listCourses">
                 <asp:Repeater ID="rptCourses" runat="server">
                     <ItemTemplate>
-                        <div class="item">
-                            <asp:Image runat="server" ImageUrl='<%# "~/Images/" + Eval("Course.ImageName") %>' CssClass="course_image" />
-                            <div class="course_name"><%# Eval("Course.CourseName") %></div>
-                            <div class="course_desc"><%# Eval("Course.Description") %></div>
-                        </div>
+                        <a href='<%# "SelectedCoursePage.aspx?CourseID=" + Eval("Course.CourseID") %>' class="item_link">
+                            <div class="item">
+                                <asp:Image runat="server" ImageUrl='<%# "~/Images/" + Eval("Course.ImageName") %>' CssClass="course_image" />
+                                <div class="course_name"><%# Eval("Course.CourseName") %></div>
+                                <div class="course_desc"><%# Eval("Course.Description") %></div>
+                            </div>
+                        </a>
                     </ItemTemplate>
                 </asp:Repeater>
             </div>

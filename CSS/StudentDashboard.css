@@ -31,6 +31,12 @@ body {
     text-align: center;
 }
 
+.item_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .notification_box {
     background-color: #F6CEFC;
     color: #FFFFFF;
