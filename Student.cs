@@ -45,5 +45,9 @@ namespace Wapping_time
         {
             return ChatMessages;
         }
+        public List<Registration> getEnrolledCourses()
+        {
+            return EnrolledCourses;
+        }
     }
 }

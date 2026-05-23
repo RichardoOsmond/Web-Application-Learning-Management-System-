@@ -7,12 +7,12 @@ namespace Wapping_time
 {
     public class Registration
     {
-        private int RegistrationID;
-        private int UserID;
-        private string Result;
-        private DateTime RegistrationDate;
-        private int Progress = 0;
-        private Course Course;
+        public int RegistrationID { get; private set; }
+        public int UserID { get; private set; }
+        public string Result { get; private set; }
+        public DateTime RegistrationDate { get; private set; }
+        public int Progress {get; private set; }
+        public Course Course { get; private set; }
 
         // Constructor for new registrations
         public Registration(int registrationID, int userID, string result, Course course)

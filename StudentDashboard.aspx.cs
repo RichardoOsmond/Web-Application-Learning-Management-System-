@@ -24,6 +24,9 @@ namespace Wapping_time
                 rptStudentChatMessages.DataSource = chatMessages;
                 rptStudentChatMessages.DataBind();
                 lblNoChatMessages.Visible = (chatMessages.Count == 0);
+                List<Registration> enrolledCourses = currStudent.getEnrolledCourses();
+                rptCourses.DataSource = enrolledCourses;
+                rptCourses.DataBind();
                 renderDashboard();
             }
         }

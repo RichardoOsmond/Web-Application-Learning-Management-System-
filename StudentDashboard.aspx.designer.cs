@@ -60,31 +60,13 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Label lblName;
 
         /// <summary>
-        /// pnlCourse control.
+        /// rptCourses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlCourse;
-
-        /// <summary>
-        /// btnPrevCourse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btnPrevCourse;
-
-        /// <summary>
-        /// btnNextCourse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btnNextCourse;
+        protected global::System.Web.UI.WebControls.Repeater rptCourses;
 
         /// <summary>
         /// lblProgress control.

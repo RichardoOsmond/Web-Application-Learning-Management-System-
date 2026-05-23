@@ -140,6 +140,7 @@ CREATE TABLE [dbo].[ChatMessages]
 )
 
 ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
+ALTER TABLE [dbo].[Course] ADD ImageName VARCHAR(100) NULL;
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]
