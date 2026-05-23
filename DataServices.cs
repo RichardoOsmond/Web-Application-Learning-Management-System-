@@ -29,7 +29,7 @@ namespace Wapping_time
                             string email = reader["Email"].ToString();
                             DateTime lastLogin = (DateTime)reader["Last Login"];
                             DateTime lastLogout = (DateTime)reader["Last Logout"];
-                            string aboutMe = reader["AboutMe"] == DBNull.Value ? null : reader["AboutMe"].ToString();
+                            string aboutMe = reader["About Me"] == DBNull.Value ? null : reader["About Me"].ToString();
                             return new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
                         }
                     }
@@ -50,7 +50,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.ImageName, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
+                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
                     "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -67,7 +67,7 @@ namespace Wapping_time
                             int courseID = (int)reader["CourseID"];
                             int courseUserID = (int)reader["CourseCreatorID"];
                             string courseName = reader["CourseName"].ToString();
-                            string imageName = reader["ImageName"].ToString();
+                            string imageName = reader["CourseImage"].ToString();
                             string description = reader["Description"].ToString();
                             DateTime courseCreationDate = (DateTime)reader["CourseCreatedDate"];
 

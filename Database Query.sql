@@ -87,7 +87,7 @@ CREATE TABLE [dbo].[MaterialContent]
     [MaterialID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [ContentID] INT NOT NULL, 
     [Name] VARCHAR(50) NOT NULL, 
-    [Description] VARCHAR(255) NOT NULL
+    [Description] VARCHAR(MAX) NOT NULL
     CONSTRAINT [FK_MaterialContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
