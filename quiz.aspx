@@ -11,15 +11,6 @@
         <br />
     </asp:Panel>
     <br />
-    <asp:Panel ID="pnlRightSide" runat="server" CssClass="quiz-right-panel">
-        <asp:Panel ID="pnlNavGrid" runat="server" CssClass="quiz-nav-grid">
-        </asp:Panel>
-        <br />
-        <asp:Label ID="lblFinished" runat="server" Text="Finished?" CssClass="quiz-finished-label"></asp:Label>
-        <br />
-        <asp:Button ID="btnYes" runat="server" Text="Yes" CssClass="quiz-btn-save" />
-        &nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btnNo" runat="server" Text="No" CssClass="quiz-btn-clear" />
-    </asp:Panel>
+    <asp:Button ID="btnSubmit" runat="server" Text="Submit Quiz" CssClass="quiz-btn-save" />
     <br />
 </asp:Content>

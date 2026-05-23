@@ -15,15 +15,6 @@ namespace Wapping_time
     {
 
         /// <summary>
-        /// lblCreateQuiz control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCreateQuiz;
-
-        /// <summary>
         /// pnlCreateQuiz control.
         /// </summary>
         /// <remarks>
@@ -31,6 +22,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlCreateQuiz;
+
+        /// <summary>
+        /// lblCreateQuiz control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCreateQuiz;
 
         /// <summary>
         /// lblInstruction control.
@@ -103,24 +103,6 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTimeLimitHint;
-
-        /// <summary>
-        /// lblPassingScore control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPassingScore;
-
-        /// <summary>
-        /// txtPassingScore control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPassingScore;
 
         /// <summary>
         /// lblMaxAttempts control.
@@ -319,6 +301,24 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddQuestion;
+
+        /// <summary>
+        /// pnlQuestionList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlQuestionList;
+
+        /// <summary>
+        /// lblQuestionList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblQuestionList;
 
         /// <summary>
         /// gvQuestions control.

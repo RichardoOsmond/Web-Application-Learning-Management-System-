@@ -76,7 +76,6 @@
     <Content Include="quiz.aspx" />
     <Content Include="quiz.css" />
     <Content Include="Scripts\StudentDashboard.js" />
-    <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
     <Content Include="Images\logo.png" />
@@ -86,7 +85,6 @@
     <Content Include="notification.aspx" />
     <Content Include="profile.aspx" />
     <Content Include="Web.config" />
-    <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assignment.Master.cs">
@@ -126,13 +124,6 @@
     <Compile Include="quiz.aspx.designer.cs">
       <DependentUpon>quiz.aspx</DependentUpon>
     </Compile>
-    <Compile Include="StudentDashboard.aspx.cs">
-      <DependentUpon>StudentDashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="StudentDashboard.aspx.designer.cs">
-      <DependentUpon>StudentDashboard.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -165,14 +156,6 @@
     </Compile>
     <Compile Include="quiz.Master.designer.cs">
       <DependentUpon>quiz.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Student.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

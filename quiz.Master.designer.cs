@@ -11,7 +11,7 @@ namespace Wapping_time
 {
 
 
-    public partial class quiz_Master
+    public partial class Site1
     {
 
         /// <summary>
