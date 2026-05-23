@@ -67,18 +67,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AddMaterialPage.aspx" />
+    <Content Include="MaterialPage.aspx" />
     <Content Include="App_Data\Database1.mdf" />
     <Content Include="App_Data\Database1_log.ldf">
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
     <Content Include="chat.aspx" />
-    <Content Include="CoursePage.aspx" />
+    <Content Include="SelectedCoursePage.aspx" />
     <Content Include="courses.aspx" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
     <Content Include="AdminEditCoursePage.aspx" />
-    <Content Include="EditMaterialPage.aspx" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
@@ -98,12 +97,12 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddMaterialPage.aspx.cs">
-      <DependentUpon>AddMaterialPage.aspx</DependentUpon>
+    <Compile Include="MaterialPage.aspx.cs">
+      <DependentUpon>MaterialPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AddMaterialPage.aspx.designer.cs">
-      <DependentUpon>AddMaterialPage.aspx</DependentUpon>
+    <Compile Include="MaterialPage.aspx.designer.cs">
+      <DependentUpon>MaterialPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Assignment.Master.cs">
       <DependentUpon>Assignment.Master</DependentUpon>
@@ -121,12 +120,12 @@
     </Compile>
     <Compile Include="ChatMessages.cs" />
     <Compile Include="Course.cs" />
-    <Compile Include="CoursePage.aspx.cs">
-      <DependentUpon>CoursePage.aspx</DependentUpon>
+    <Compile Include="SelectedCoursePage.aspx.cs">
+      <DependentUpon>SelectedCoursePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CoursePage.aspx.designer.cs">
-      <DependentUpon>CoursePage.aspx</DependentUpon>
+    <Compile Include="SelectedCoursePage.aspx.designer.cs">
+      <DependentUpon>SelectedCoursePage.aspx</DependentUpon>
     </Compile>
     <Compile Include="courses.aspx.cs">
       <DependentUpon>courses.aspx</DependentUpon>
@@ -141,13 +140,6 @@
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.designer.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="EditMaterialPage.aspx.cs">
-      <DependentUpon>EditMaterialPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="EditMaterialPage.aspx.designer.cs">
-      <DependentUpon>EditMaterialPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
@@ -215,6 +207,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\English Image\Material\" />
+    <Folder Include="Images\English Image\Quiz\" />
+    <Folder Include="Images\Math Image\Material\" />
+    <Folder Include="Images\Math Image\Quiz\" />
+    <Folder Include="Images\Science Image\Material\" />
+    <Folder Include="Images\Science Image\Quiz\" />
+    <Folder Include="Images\Social Study Image\Material\" />
+    <Folder Include="Images\Social Study Image\Quiz\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>

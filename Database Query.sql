@@ -1,5 +1,4 @@
-﻿use [E:\GITHUBMANUALFOLDER\WAPP\APP_DATA\DATABASE1.MDF]
-
+﻿
 CREATE TABLE [dbo].[Role]
 (
 	[RoleID] INT NOT NULL PRIMARY KEY, 
@@ -23,7 +22,7 @@ CREATE TABLE [dbo].[Course]
 (
     [CourseID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [UserID] INT NOT NULL, 
-    [CourseName] VARCHAR(10) NOT NULL, 
+    [CourseName] VARCHAR(15) NOT NULL, 
     [Description] VARCHAR(255) NOT NULL, 
     [CourseCreatedDate] DATE NOT NULL, 
     CONSTRAINT [FK_Course_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
@@ -81,21 +80,24 @@ CREATE TABLE [dbo].[ImageSubmission]
     CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
 )
 
-
-
-
-
 CREATE TABLE [dbo].[MaterialContent]
 (
     [MaterialID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [ContentID] INT NOT NULL, 
     [Name] VARCHAR(50) NOT NULL, 
-    [Description] VARCHAR(255) NOT NULL, 
-    [ImageName] varchar(50) NOT NULL, 
+    [Description] VARCHAR(255) NOT NULL
     CONSTRAINT [FK_MaterialContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
-
+CREATE TABLE [dbo].[Flashcard] 
+(
+    FlashcardID INT PRIMARY KEY IDENTITY (1, 1),
+    MaterialID INT NOT NULL,
+    FrontImage VARCHAR(100),
+    BackText NVARCHAR(500),
+    CardOrder INT,
+    CONSTRAINT FK_Flashcard_Material FOREIGN KEY (MaterialID) REFERENCES MaterialContent(MaterialID)
+)
 
 CREATE TABLE [dbo].[Registration]
 (
@@ -117,14 +119,15 @@ CREATE TABLE [dbo].[Answer]
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
 
-DROP TABLE [Answer]
-DROP TABLE [Registration]
-DROP TABLE [MaterialContent]
-DROP TABLE [ImageSubmission]
-DROP TABLE [Question]
-DROP TABLE [QuizContent]
-DROP TABLE [Content]
-DROP TABLE [Lesson]
-DROP TABLE [Course]
-DROP TABLE [User]
-DROP TABLE [Role]
+--DROP TABLE [Answer]
+--DROP TABLE [Registration]
+--DROP TABLE [Flashcard]
+--DROP TABLE [MaterialContent]
+--DROP TABLE [ImageSubmission]
+--DROP TABLE [Question]
+--DROP TABLE [QuizContent]
+--DROP TABLE [Content]
+--DROP TABLE [Lesson]
+--DROP TABLE [Course]
+--DROP TABLE [User]
+--DROP TABLE [Role]

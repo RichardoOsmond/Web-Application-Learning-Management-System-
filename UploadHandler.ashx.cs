@@ -14,11 +14,12 @@ namespace Wapping_time
             {
                 HttpPostedFile file = context.Request.Files[0];
                 string fileName = "img_" + Guid.NewGuid().ToString().Substring(0, 8) + Path.GetExtension(file.FileName);
-                string savePath = context.Server.MapPath("~/Images/" + fileName);
+                string folder = context.Request.QueryString["folder"] ?? "General";
+                string savePath = context.Server.MapPath("~/Images/" + folder + "/" + fileName);
 
                 file.SaveAs(savePath);
 
-                string relativeUrl = "/Images/" + fileName;
+                string relativeUrl = "/Images/" + folder + "/" + fileName;
                 context.Response.Write("{\"location\": \"" + relativeUrl + "\"}");
             }
             else

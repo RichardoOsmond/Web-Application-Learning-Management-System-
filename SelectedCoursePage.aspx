@@ -1,10 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="CoursePage.aspx.cs" Inherits="Wapping_time.CoursePage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="SelectedCoursePage.aspx.cs" Inherits="Wapping_time.CoursePage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         .course-container {
             display: flex;
             gap: 20px;
             padding: 30px;
+            justify-content: center;
         }
 
         .left-column {
@@ -13,13 +14,13 @@
         }
 
         .left-column-center {
-            width: 100%;
-            justify-content: center;
+            width: 600px;
             display: flex;
+
         }
 
         .lesson-list-big {
-            width: 600px;
+            width: 650px;
             background-color: #d6c8f5;
             border-radius: 15px;
             padding: 20px;
@@ -164,7 +165,6 @@
         function moveLessonToLeft() {
             var leftCol = document.querySelector('.left-column');
             var middleCol = document.querySelector('.middle-column');
-            var rightCol = document.querySelector('.right-column');
             var lessonList = document.querySelector('.lesson-list-big');
 
             leftCol.classList.remove('left-column-center');
@@ -177,7 +177,6 @@
             });
 
             middleCol.classList.remove('hidden');
-            rightCol.classList.remove('hidden');
         }
 
         window.addEventListener('DOMContentLoaded', function () {
@@ -242,7 +241,7 @@
             </div>
         </div>
 
-        <div class="right-column hidden">
+        <div class="right-column">
             <div class="course-image">
                 <img src="Images/Math icon.png" alt="Course Image" />
             </div>

@@ -141,6 +141,19 @@
             gap: 10px;
         }
 
+        .save-order-btn {
+            display: block;
+            margin-left: auto;
+            margin-top: 10px;
+        }
+
+        .material-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 0;
+        }
+
         .hidden {
             display: none;
         }
@@ -164,10 +177,42 @@
             document.getElementById('quizSection').classList.remove('hidden');
             document.getElementById('materialSection').classList.add('hidden');
         }
+
+        function enableSort() {
+            var numbers = document.querySelectorAll('.item-number');
+            numbers.forEach(function (n) {
+                n.style.display = 'inline';
+            });
+
+            var list = document.querySelector('[id$="materialPanel"]');
+            var sortable = new Sortable(list, {
+                animation: 150,
+                onEnd: function (evt) {
+                    var items = document.querySelectorAll('.material-item');
+                    var order = [];
+                    items.forEach(function (item) {
+                        order.push(item.getAttribute('data-id'));
+                    });
+                    document.querySelector('[id$="hdnOrder"]').value = order.join(',');
+                }
+            });
+            document.querySelector('[id$="saveOrderBtn"]').style.display = 'block';
+        }
+
+        function cancelSort() {
+            var numbers = document.querySelectorAll('.item-number');
+            numbers.forEach(function (n) {
+                n.style.display = 'none';
+            });
+            document.querySelector('[id$="saveOrderBtn"]').style.display = 'none';
+        }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:HiddenField ID="hdnOrder" runat="server" />
+
         <div class="course-container" id="courseContainer">
         <div class="left-column">
             <div class="lesson-list">
@@ -191,19 +236,24 @@
                     <asp:Button ID="mAddBtn" runat="server" Text="Add Material" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="mEditBtn" runat="server" Text="Edit Selected Material" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="mDeleteBtn" runat="server" Text="Delete Selected Material" CssClass="section-btn" OnClick="varBtn_Click"/>
+                    <asp:Button ID="mEditOrderBtn" runat="server" Text="Edit Order" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="mReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
                 </h2>
                 <asp:Panel ID="materialPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="MaterialRepeater" runat="server" OnItemCommand="selectMaterial">
                         <ItemTemplate>
-                            <asp:LinkButton ID="MaterialLink" runat="server"
-                                CommandArgument='<%# Eval("MaterialID") %>'
-                                CssClass='<%# (int)Eval("MaterialID") == selectedMaterialID ? "active" : "" %>'>
-                                <%# Eval("Name") %>
-                            </asp:LinkButton>
+                            <div class="material-item" data-id='<%# Eval("MaterialID") %>'>
+                                <span class="item-number hidden"><%# Container.ItemIndex + 1 %>.</span>
+                                <asp:LinkButton ID="MaterialLink" runat="server"
+                                    CommandArgument='<%# Eval("MaterialID") %>'
+                                    CssClass='<%# (int)Eval("MaterialID") == selectedMaterialID ? "active" : "" %>'>
+                                    <%# Eval("Name") %>
+                                </asp:LinkButton>
+                            </div>
                         </ItemTemplate>
                     </asp:Repeater>
                 </asp:Panel>
+                <asp:Button ID="saveOrderBtn" runat="server" Text= "Save Order" CssClass="section-btn save-order-btn" OnClick="saveOrderBtn_Click" style="display:none" />
             </div>
             <div class="section hidden" id="quizSection">
                 <h2 class="section-title">

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -54,7 +52,7 @@ namespace Wapping_time
 
             if (action == "Return")
             {
-                Response.Redirect("CoursePage.aspx");
+                Response.Redirect("SelectedCoursePage.aspx");
             }
 
             switch (action)
@@ -62,7 +60,7 @@ namespace Wapping_time
                 case "Add":
                     if (section == 'm')
                     {
-                        Response.Redirect("AddMaterialPage.aspx?LessonID=" + selectedLessonID);
+                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Add");
                     }
                     else if (section == 'q')
                     {
@@ -72,7 +70,8 @@ namespace Wapping_time
                 case "Edit":
                     if (section == 'm')
                     {
-                        Response.Redirect("EditMaterialPage.aspx?LessonID=" + selectedLessonID);
+                        if (selectedMaterialID == 0) return;
+                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Edit&MaterialID=" + selectedMaterialID);
                     }
                     else if (section == 'q')
                     {
@@ -80,14 +79,38 @@ namespace Wapping_time
                     }
                     break;
                 case "Delete":
-                    int materialID = -1;
+                    if (selectedMaterialID <= 0) break;
                     int contentID = -1;
 
                     using (SqlConnection conn = new SqlConnection(connString))
                     {
                         conn.Open();
 
-                        string join = @"SELECT m.MaterialID, m.ContentID
+                        // Get the description (HTML) to find embedded images
+                        string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
+                        SqlCommand getCmd = new SqlCommand(getQuery, conn);
+                        getCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
+                        string html = getCmd.ExecuteScalar().ToString();
+
+                        // image paths from HTML and delete files
+                        var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
+                        foreach (System.Text.RegularExpressions.Match match in matches)
+                        {
+                            string imagePath = Server.MapPath(match.Groups[1].Value);
+                            if (File.Exists(imagePath))
+                            {
+                                File.Delete(imagePath);
+                            }
+                        }
+
+                        string deleteCardStr = @"DELETE FROM FlashCard WHERE MaterialID = @MaterialID;";
+                        using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
+                        {
+                            delCardCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
+                            delCardCmd.ExecuteNonQuery();
+                        }
+
+                        string join = @"SELECT m.ContentID
                                         FROM MaterialContent m 
                                         JOIN Content c ON m.ContentID = c.ContentID
                                         WHERE m.MaterialID = @MaterialID";
@@ -99,20 +122,19 @@ namespace Wapping_time
                             {
                                 if (reader.Read())
                                 {
-                                    materialID = Convert.ToInt32(reader["MaterialID"]);
                                     contentID = Convert.ToInt32(reader["ContentID"]);
                                 }
                             }
                         }
 
-                        if (materialID > -1 && contentID > -1)
+                        if (contentID > -1)
                         {
                             string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
                                 DELETE FROM Content WHERE ContentID = @ContentID;";
 
                             using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
                             {
-                                delCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                                delCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
                                 delCmd.Parameters.AddWithValue("@ContentID", contentID);
 
                                 delCmd.ExecuteNonQuery();
@@ -120,8 +142,11 @@ namespace Wapping_time
                         }
                     }
 
-                LoadContent(selectedLessonID, selectedType);
-                break;
+                    LoadContent(selectedLessonID, selectedType);
+                    break;
+                case "EditOrder":
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort();", true);
+                    break;
             }
         }
 
@@ -186,6 +211,27 @@ namespace Wapping_time
         protected void selectMaterial(object source, RepeaterCommandEventArgs e)
         {
             selectedMaterialID = int.Parse(e.CommandArgument.ToString());
+            LoadContent(selectedLessonID, selectedType);
+        }
+
+        protected void saveOrderBtn_Click(object sender, EventArgs e)
+        {
+            string[] ids = hdnOrder.Value.Split(',');
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(ids[i])) continue;
+
+                    string query = "UPDATE Content SET Position = @Position WHERE ContentID = (SELECT ContentID FROM MaterialContent WHERE MaterialID = @MaterialID)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Position", i + 1);
+                    cmd.Parameters.AddWithValue("@MaterialID", int.Parse(ids[i]));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideNumbers", "cancelSort();", true);
             LoadContent(selectedLessonID, selectedType);
         }
     }
