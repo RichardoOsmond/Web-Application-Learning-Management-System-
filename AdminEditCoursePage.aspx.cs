@@ -27,14 +27,20 @@ namespace Wapping_time
             get { return ViewState["selectedType"] != null ? (string)ViewState["selectedType"] : ""; }
             set { ViewState["selectedType"] = value; }
         }
+        protected int selectedCourseID
+        {
+            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
+            set { ViewState["selectedCourseID"] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
                 selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
                 selectedType = Request.QueryString["type"];
-                LoadLessons(1);
+                LoadLessons(selectedCourseID);
                 LoadContent(selectedLessonID, selectedType);
             }
 
@@ -64,7 +70,7 @@ namespace Wapping_time
                     }
                     else if (section == 'q')
                     {
-
+                        //"MaterialPage.aspx?CourseID=" + selectedCourseID + "&LessonID=" + selectedLessonID + "&Mode=Add"
                     }
                     break;
                 case "Edit":

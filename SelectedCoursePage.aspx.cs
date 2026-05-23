@@ -19,13 +19,17 @@ namespace Wapping_time
             get { return ViewState["selectedLessonID"] != null ? (int)ViewState["selectedLessonID"] : -1; }
             set { ViewState["selectedLessonID"] = value; }
         }
+        protected int selectedCourseID
+        {
+            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
+            set { ViewState["selectedCourseID"] = value; }
+        }
         private string roleName = "";
         protected void Page_Load(object sender, EventArgs e)
         {
-            //roleName = Session["RoleName"].ToString();
-            //roleName = "Student";
-            roleName = "Admin";
-            if(roleName == "Admin")
+            roleName = Session["RoleName"].ToString();
+            selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
+            if (roleName == "Admin")
             {
                 btnMaterial.Visible = true;
                 btnQuiz.Visible = true;
@@ -33,8 +37,7 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
-                LoadLessons(1);
-                LoadContent(0);
+                LoadLessons(selectedLessonID);
             }
         }
 
