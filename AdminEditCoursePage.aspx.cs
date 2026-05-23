@@ -58,7 +58,7 @@ namespace Wapping_time
 
             if (action == "Return")
             {
-                Response.Redirect("SelectedCoursePage.aspx");
+                Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
             }
 
             switch (action)
@@ -66,7 +66,7 @@ namespace Wapping_time
                 case "Add":
                     if (section == 'm')
                     {
-                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Add");
+                        Response.Redirect($"MaterialPage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&Mode=Add");
                     }
                     else if (section == 'q')
                     {
@@ -77,7 +77,7 @@ namespace Wapping_time
                     if (section == 'm')
                     {
                         if (selectedMaterialID == 0) return;
-                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Edit&MaterialID=" + selectedMaterialID);
+                        Response.Redirect($"MaterialPage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&Mode=Edit&MaterialID={selectedMaterialID}");
                     }
                     else if (section == 'q')
                     {

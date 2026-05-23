@@ -78,9 +78,25 @@
             margin: 0;
             color: white;
         }
+        .return-btn{
+            background-color: #7842f5;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: auto;
+            margin-right: 0;
+            display: block;
+            margin-right: 20px;
+            margin-top: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:Button ID="returnBtn" runat="server" Text="Return" CssClass="return-btn" OnClick="returnBtn_Click" />
     <div class="material-container">
         <h1><asp:Label ID="lblName" runat="server" /></h1>
         <asp:Literal ID="backText" runat="server" />

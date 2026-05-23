@@ -131,11 +131,11 @@ VALUES
 (48, 'Social Science History Quiz', '20', 60, 3)
 
 INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [Last Logout], [About Me]) VALUES
-(2, 'Jin', '123qwe', '123@a.com',  GETDATE(), GETDATE(), 'I love something?!')
+(1, 'Jin', '123qwe', '123@a.com',  GETDATE(), GETDATE(), 'I love something?!')
 
 INSERT INTO [Registration] ([UserID], [CourseID], [Result], [RegistrationDate], [Progress]) VALUES
     (11, 1, 'InProgress', GETDATE(), 60)
 
-
 select * from [User]
+select * from [Role]
 select * from [Course]

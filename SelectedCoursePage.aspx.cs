@@ -37,7 +37,9 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
-                LoadLessons(selectedLessonID);
+                if (Request.QueryString["LessonID"] != null) selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
+                LoadLessons(selectedCourseID);
+                LoadContent(selectedLessonID);
             }
         }
 
@@ -97,11 +99,11 @@ namespace Wapping_time
 
         protected void btnMaterial_Click(object sender, EventArgs e)
         {
-            Response.Redirect("AdminEditCoursePage.aspx?LessonID=" + +selectedLessonID + "&type=material");
+            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=material");
         }
         protected void btnQuiz_Click(object sender, EventArgs e)
         {
-            Response.Redirect("AdminEditCoursePage.aspx?LessonID=" + selectedLessonID + "&type=quiz");
+            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=quiz");
         }
     }
 }

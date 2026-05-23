@@ -221,7 +221,7 @@
                 <asp:Panel ID="materialPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="MaterialRepeater" runat="server">
                         <ItemTemplate>
-                            <a href='ViewMaterial.aspx?MaterialID=<%# Eval("MaterialID") %>'><%# Eval("Name") %></a>
+                            <a href='ViewMaterial.aspx?MaterialID=<%# Eval("MaterialID") %>&CourseID=<%# selectedCourseID %>&LessonID=<%# selectedLessonID %>'><%# Eval("Name") %></a>
                         </ItemTemplate>
                     </asp:Repeater>
                 </asp:Panel>

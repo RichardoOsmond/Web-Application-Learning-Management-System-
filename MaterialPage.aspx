@@ -257,7 +257,7 @@
         }
 
         .selected-card .flashcard-front {
-            border: 3px solid white;
+            border: 15px solid #f400ff;
             border-radius: 10px;
             box-sizing: border-box;
         }
@@ -276,7 +276,7 @@
     </style>
 
     <script type="text/javascript">
-        var selectedMode = '<%=selectedMode%>';
+        var cardEditMode = <%=cardEditMode.ToString().ToLower()%>;;
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" referrerpolicy="origin"></script>
 
@@ -316,19 +316,20 @@
 
             // Grab the HTML elements using their class names
             var nameInput = document.querySelector('.name-input');
-            var saveButton = document.querySelector('[id$="btnSave"]');
+            var saveButton = document.querySelector('[id$="btnSave"], [id$="btnExitNSave"]');
             var cardTextInput = document.querySelector('.card-text-input')
             var addCardButton = document.querySelector('[id$="btnAddCard"]')
             var cardImageUpload = document.querySelector('[id$="cardImageUpload"]');
 
 
             function toggleButtonState() {
+                console.log("text:", cardTextInput.value, "files:", cardImageUpload.files.length, "cardEditMode:", cardEditMode);
                 if (nameInput.value.trim() === "") {
                     saveButton.disabled = true;  // Gray out if empty
                 } else {
                     saveButton.disabled = false; // Light it up if there is text
                 }
-                if (cardTextInput.value.trim() === "" || (cardImageUpload.files.length === 0 && selectedMode !== "Edit")) {
+                if (cardTextInput.value.trim() === "" || (cardImageUpload.files.length === 0 && cardEditMode !== true)) {
                     addCardButton.disabled = true;
                 } else {
                     addCardButton.disabled = false;
@@ -399,7 +400,7 @@
         <asp:TextBox ID="txtMaterialContent" runat="server" TextMode="MultiLine" CssClass="tinymce-editor" Rows="15" Width="100%"></asp:TextBox>
     </div>
 
-    <div class="flashcard-zone-wrapper <%= CurrentMode == "Add" ? "locked" : "" %>">
+    <div class="flashcard-zone-wrapper <%= LockCardMode == "Add" ? "locked" : "" %>">
     
         <div class="flashcard-overlay">
             <div class="overlay-msg-box">
@@ -421,7 +422,7 @@
                     <asp:Repeater ID="FlashcardRepeater" runat="server" OnItemCommand="selectFlashCard">
                         <ItemTemplate>
                             <div class="flashcard-preview <%# selectedFlashcardID > 0 && (int)Eval("FlashcardID") == selectedFlashcardID ? "selected-card" : "" %>">
-                                <div class="flashcard <%# ViewState["CardEditMode"] != null && (bool)ViewState["CardEditMode"] ? "no-flip" : "" %>" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard <%# cardEditMode ? "no-flip" : "" %>" onclick="this.classList.toggle('flipped')">
                                     <div class="flashcard-inner">
                                         <div class="flashcard-front">
                                             <img src='<%# Eval("FrontImage") %>' alt="Card Image" />
