@@ -14,7 +14,19 @@ namespace Wapping_time
         {
             if (!IsPostBack)
             {
-                currStudent = new Student();
+                int userID = (int)Session["UserID"];
+                currStudent = DataServices.getStudentByUserID(userID);
+                List<Notifications> notifications = currStudent.getNotifications();
+                rptNotifications.DataSource = notifications;
+                rptNotifications.DataBind();
+                lblNoNotifications.Visible = (notifications.Count == 0);
+                List<ChatMessages> chatMessages = currStudent.getChatMessages();
+                rptStudentChatMessages.DataSource = chatMessages;
+                rptStudentChatMessages.DataBind();
+                lblNoChatMessages.Visible = (chatMessages.Count == 0);
+                List<Registration> enrolledCourses = currStudent.getEnrolledCourses();
+                rptCourses.DataSource = enrolledCourses;
+                rptCourses.DataBind();
                 renderDashboard();
             }
         }
@@ -23,13 +35,13 @@ namespace Wapping_time
             if (currStudent == null) { return; }
 
             // Assuming the inherited user class named the name field as name
-            //lblName.Text = "Welcome, " + currStudent.name + "!";
+            lblName.Text = "Welcome, " + currStudent.Username + "!";
             loadProgressBar();
         }
         private void loadProgressBar()
         {
             if (currStudent == null) { return; }
-            int totalCourseCompRate = currStudent.totalCourseCompletion;
+            int totalCourseCompRate = currStudent.getTotalCourseCompletion();
 
             // Don't mind me, generated these encouragement messages using ChatGPT
             // Shows different messages based on student's total course progression
@@ -81,9 +93,6 @@ namespace Wapping_time
             // Filling the inner progress bar against the outer progress bar
             pnlProgressInner.Style["width"] = totalCourseCompRate + "%";
             lblCompletionRate.Text = totalCourseCompRate + "% Complete";
-        }
-        private void showNoficiation()
-        {
         }
     }
 }

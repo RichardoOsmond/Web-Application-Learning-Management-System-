@@ -7,19 +7,47 @@ namespace Wapping_time
 {
     public class Student : User
     {
-        public int totalCourseCompletion { get; set; }
-        public string profileImage { get; set; } // Will probably remove this later, assuming user class have profileImage from the database table
-        public List<Course> enrolledCourses { get; set; }
-        public List<Notifications> notifications { get; set; }
-        public List<ChatMessages> chatMessages { get; set; }
+        private int TotalCourseCompletion { get; set; }
+        private string ProfileImage { get; set; } // Will probably remove this later, assuming user class have profileImage from the database table
+        private List<Registration> EnrolledCourses { get; set; }
+        private List<Notifications> Notifications { get; set; }
+        private List<ChatMessages> ChatMessages { get; set; }
 
-        public Student()
+        public Student(int userID, int roleID, string username, string email, DateTime lastLogin, DateTime lastLogout, string aboutMe,
+            List<Registration> registrations, List<Notifications> notifications, List<ChatMessages> chatMessages)
+            : base(userID, roleID, username, email, lastLogin, lastLogout, aboutMe)
         {
-            enrolledCourses = new List<Course>();
-            notifications = new List<Notifications>();
-            chatMessages = new List<ChatMessages>();
+            EnrolledCourses = registrations;
+            Notifications = notifications;
+            ChatMessages = chatMessages;
 
-            profileImage = "profileImage.png";
+            ProfileImage = "profileImage.png";
+            TotalCourseCompletion = calculateTotalCourseCompletion(EnrolledCourses);
+        }
+        private int calculateTotalCourseCompletion(List<Registration> registrations)
+        {
+            int sumProgress = 0;
+            foreach (Registration registration in registrations)
+            {
+                sumProgress += registration.getProgress();
+            }
+            return (sumProgress / registrations.Count);
+        }
+        public int getTotalCourseCompletion()
+        {
+            return TotalCourseCompletion;
+        }
+        public List<Notifications> getNotifications()
+        {
+            return Notifications;
+        }
+        public List<ChatMessages> getChatMessages()
+        {
+            return ChatMessages;
+        }
+        public List<Registration> getEnrolledCourses()
+        {
+            return EnrolledCourses;
         }
     }
 }

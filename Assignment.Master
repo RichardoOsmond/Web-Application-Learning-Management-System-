@@ -4,6 +4,8 @@
 
 <html>
 <head runat="server">
+    <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/Dashboard.css") %>" />
+    <script src='<%= ResolveUrl ("~/Scripts/Dashboard.js") %>'></script>
     <title></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +26,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: #7842f5; 
-            padding: 10px 30px;
+            padding: 5px 30px;
         }
 
         .nav-left-group {
@@ -39,7 +41,7 @@
         }
 
         .logo-img {
-            height: 50px;
+            height: 40px;
             width: auto;
             display: block;
         }
@@ -139,19 +141,19 @@
                     <img src="Images/logo.png" alt="Read Card Do Learn Logo" class="logo-img" />
                 </div>
                 <ul class="nav-links">
-                    <li><a href="dashboard.aspx">Dashboard</a></li>
-                    <li><a href="courses.aspx">Courses</a></li>
+                    <li><asp:LinkButton runat="server" OnClick="btnDashboard_Click" Text="Dashboard" /></li>
+                    <li><asp:LinkButton runat="server" OnClick="btnCourse_Click" Text="Course" /></li>
                 </ul>
             </div>
 
             <ul class="nav-icons-group">
                 <li>
-                    <a href="notification.aspx" title="Notification">
+                    <a href="javascript:void(0)" title="Notification" onclick="toggleNotificationPanel()">
                         <img src="Images/notification.png" alt="Notification" class="nav-icon-img" />
                     </a>
                 </li>
                 <li>
-                    <a href="chat.aspx" title="Chat">
+                    <a href="javascript:void(0)" title="Chat" onclick="toggleChatPanel()">
                         <img src="Images/chat.png" alt="Chat" class="nav-icon-img" />
                     </a>
                 </li>
@@ -161,7 +163,7 @@
                     </a>
                 </li>
             </ul>
-
+             
         </nav>
 
         <div>

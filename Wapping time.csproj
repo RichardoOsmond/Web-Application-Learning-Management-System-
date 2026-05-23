@@ -46,6 +46,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -68,13 +69,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MaterialPage.aspx" />
-    <Content Include="App_Data\Database1.mdf" />
-    <Content Include="App_Data\Database1_log.ldf">
-      <DependentUpon>Database1.mdf</DependentUpon>
+    <Content Include="App_Data\ReadCardDB.mdf" />
+    <Content Include="App_Data\ReadCardDB_log.ldf">
+      <DependentUpon>ReadCardDB.mdf</DependentUpon>
     </Content>
     <Content Include="chat.aspx" />
     <Content Include="SelectedCoursePage.aspx" />
     <Content Include="courses.aspx" />
+    <Content Include="CSS\Dashboard.css" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
     <Content Include="AdminEditCoursePage.aspx" />
@@ -82,8 +84,16 @@
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
     <Content Include="Images\Math icon.png" />
-    <Content Include="random_data_inserts.sql" />
+    <Content Include="forgotPassword.aspx" />
+    <Content Include="DashboardWithAdmin.aspx" />
+    <Content Include="Images\CourseNextButton.png" />
+    <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="Images\penguin.png" />
+    <Content Include="register.aspx" />
+    <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\StudentDashboard.js" />
+    <Content Include="setUsername.aspx" />
+    <Content Include="StudentCourse.aspx" />
     <Content Include="StudentDashboard.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\chat.png" />
@@ -140,6 +150,42 @@
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.designer.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
+    <Compile Include="DashboardWithAdmin.aspx.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DashboardWithAdmin.aspx.designer.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataServices.cs" />
+    <Compile Include="forgotPassword.aspx.cs">
+      <DependentUpon>forgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="forgotPassword.aspx.designer.cs">
+      <DependentUpon>forgotPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Registration.cs" />
+    <Compile Include="setUsername.aspx.cs">
+      <DependentUpon>setUsername.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="setUsername.aspx.designer.cs">
+      <DependentUpon>setUsername.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StudentCourse.aspx.cs">
+      <DependentUpon>StudentCourse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StudentCourse.aspx.designer.cs">
+      <DependentUpon>StudentCourse.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
@@ -193,6 +239,7 @@
     <Compile Include="ViewMaterial.aspx.designer.cs">
       <DependentUpon>ViewMaterial.aspx</DependentUpon>
     </Compile>
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assignment.Master" />

@@ -13,5 +13,29 @@ namespace Wapping_time
         {
 
         }
+        protected void btnDashboard_Click(object sender, EventArgs e)
+        {
+            if ((int)Session["RoleID"] == 1)
+            {
+                Response.Redirect("StudentDashboard.aspx");
+                Console.WriteLine("Hello");
+            } else
+            {
+                Response.Redirect("StudentDashboard.aspx");
+                Console.WriteLine("Hi");
+            }
+        }
+        protected void btnCourse_Click(object sender, EventArgs e)
+        {
+            if ((int)Session["RoleID"] == 1)
+            {
+                Response.Redirect("StudentCourse.aspx");
+                Console.WriteLine("Hello");
+            } else
+            {
+                Response.Redirect("StudentCourse.aspx");
+                Console.WriteLine("Hi");
+            }
+        }
     }
 }

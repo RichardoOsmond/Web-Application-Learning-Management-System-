@@ -1,7 +1,8 @@
-﻿
+﻿use [C:\WAPP\APP_DATA\READCARDDB.MDF]
+
 CREATE TABLE [dbo].[Role]
 (
-	[RoleID] INT NOT NULL PRIMARY KEY, 
+	[RoleID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [RoleName] VARCHAR(50) NOT NULL
 )
 
@@ -13,20 +14,17 @@ CREATE TABLE [dbo].[User]
     [Password] VARCHAR(255) NOT NULL, 
     [Email] VARCHAR(100) NOT NULL, 
     [Last Login] DATETIME NOT NULL, 
-    [Last Logout] DATETIME NOT NULL,
-    [About Me] NVARCHAR(500) NULL,
+    [Last Logout] DATETIME NOT NULL, 
     CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleID]) REFERENCES [Role]([RoleID]) 
 )
 
 CREATE TABLE [dbo].[Course]
 (
-    [CourseID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [CourseID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [UserID] INT NOT NULL, 
-    [CourseName] VARCHAR(15) NOT NULL, 
+    [CourseName] VARCHAR(50) NOT NULL, 
     [Description] VARCHAR(255) NOT NULL, 
     [CourseCreatedDate] DATE NOT NULL, 
-    [CourseImage] VARCHAR(255),
-    [CourseCategory] VARCHAR(100) NOT NULL
     CONSTRAINT [FK_Course_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
 )
 
@@ -74,7 +72,7 @@ CREATE TABLE [dbo].[Question]
 
 CREATE TABLE [dbo].[ImageSubmission]
 (
-	[ImageID] INT NOT NULL PRIMARY KEY, 
+	[ImageID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [QuestionID] INT NOT NULL, 
     [UserID] INT NOT NULL, 
     [ImageName] NCHAR(10) NOT NULL, 
@@ -82,28 +80,25 @@ CREATE TABLE [dbo].[ImageSubmission]
     CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
 )
 
+
+
+
+
 CREATE TABLE [dbo].[MaterialContent]
 (
     [MaterialID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [ContentID] INT NOT NULL, 
     [Name] VARCHAR(50) NOT NULL, 
-    [Description] VARCHAR(255) NOT NULL
+    [Description] VARCHAR(255) NOT NULL, 
+    [ImageName] varchar(50) NOT NULL, 
     CONSTRAINT [FK_MaterialContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
-CREATE TABLE [dbo].[Flashcard] 
-(
-    FlashcardID INT PRIMARY KEY IDENTITY (1, 1),
-    MaterialID INT NOT NULL,
-    FrontImage VARCHAR(100),
-    BackText NVARCHAR(500),
-    CardOrder INT,
-    CONSTRAINT FK_Flashcard_Material FOREIGN KEY (MaterialID) REFERENCES MaterialContent(MaterialID)
-)
+
 
 CREATE TABLE [dbo].[Registration]
 (
-    [RegistrationID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [RegistrationID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
     [UserID] INT NOT NULL, 
     [CourseID] INT NOT NULL, 
     [Result] VARCHAR(10) NOT NULL, 
@@ -144,12 +139,13 @@ CREATE TABLE [dbo].[ChatMessages]
     CONSTRAINT [FK_ChatMessages_ToUser] FOREIGN KEY ([ToUserID]) REFERENCES [User]([UserID])
 )
 
+ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
+ALTER TABLE [dbo].[Course] ADD ImageName VARCHAR(100) NULL;
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]
 DROP TABLE [Answer]
 DROP TABLE [Registration]
-DROP TABLE [Flashcard]
 DROP TABLE [MaterialContent]
 DROP TABLE [ImageSubmission]
 DROP TABLE [Question]
