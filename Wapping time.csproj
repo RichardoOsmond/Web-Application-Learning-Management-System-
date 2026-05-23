@@ -154,8 +154,10 @@
       <DependentUpon>createQuiz.aspx</DependentUpon>
     </Compile>
     <Compile Include="quiz.aspx.cs">
-      <DependentUpon>quiz.aspx</DependentUpon>
-    <Compile Include="AdminEditCoursePage.aspx.cs">
+  <DependentUpon>quiz.aspx</DependentUpon>
+  <SubType>ASPXCodeBehind</SubType>
+</Compile>
+<Compile Include="AdminEditCoursePage.aspx.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -200,10 +202,17 @@
       <DependentUpon>StudentCourse.aspx</DependentUpon>
     </Compile>
     <Compile Include="StudentDashboard.aspx.cs">
-      <DependentUpon>StudentDashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="quiz.aspx.designer.cs">
+  <DependentUpon>StudentDashboard.aspx</DependentUpon>
+  <SubType>ASPXCodeBehind</SubType>
+</Compile>
+<Compile Include="StudentDashboard.aspx.designer.cs">
+  <DependentUpon>StudentDashboard.aspx</DependentUpon>
+</Compile>
+<Compile Include="quiz.aspx.cs">
+  <DependentUpon>quiz.aspx</DependentUpon>
+  <SubType>ASPXCodeBehind</SubType>
+</Compile>
+<Compile Include="quiz.aspx.designer.cs">
       <DependentUpon>quiz.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
