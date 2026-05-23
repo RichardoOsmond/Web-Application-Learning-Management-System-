@@ -26,7 +26,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: #7842f5; 
-            padding: 10px 30px;
+            padding: 5px 30px;
         }
 
         .nav-left-group {
@@ -41,7 +41,7 @@
         }
 
         .logo-img {
-            height: 50px;
+            height: 40px;
             width: auto;
             display: block;
         }

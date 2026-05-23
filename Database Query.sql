@@ -141,6 +141,12 @@ CREATE TABLE [dbo].[ChatMessages]
 
 ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
 
+ALTER TABLE Course
+ADD CourseImage VARCHAR(255),
+CourseCategory VARCHAR(100) NOT NULL;
+
+
+
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]

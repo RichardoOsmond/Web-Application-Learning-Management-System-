@@ -46,6 +46,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -77,8 +78,10 @@
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
     <Content Include="forgotPassword.aspx" />
+    <Content Include="DashboardWithAdmin.aspx" />
     <Content Include="Images\CourseNextButton.png" />
     <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="Images\penguin.png" />
     <Content Include="register.aspx" />
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\StudentDashboard.js" />
@@ -118,6 +121,13 @@
     </Compile>
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DashboardWithAdmin.aspx.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DashboardWithAdmin.aspx.designer.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataServices.cs" />
     <Compile Include="forgotPassword.aspx.cs">

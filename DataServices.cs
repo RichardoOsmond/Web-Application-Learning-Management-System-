@@ -80,6 +80,74 @@ namespace Wapping_time
             }
             return registeredCourses;
         }
+
+        public static List<Course> loadAllCreatedCourse(int loggedInUser)
+        {
+            List<Course> listOfCourses = new List<Course>();
+            String query = "Select * FROM course where UserID = @UserID";
+
+            //establish connection
+            using (SqlConnection conn = new SqlConnection(conString)) 
+            {
+                //using command
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("UserID", loggedInUser);
+                    //read the result
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int courseID = (int)reader["CourseID"];
+                            int userID = (int)reader["UserID"];
+                            String courseName = (String)reader["CourseName"];
+                            String description = (String)reader["Description"];
+                            String imageUrl = (String)reader["CourseImage"];
+                            DateTime courseCreatedDate = (DateTime)reader["CourseCreatedDate"];
+
+                            Course course = new Course(courseID, loggedInUser, courseName, description, imageUrl,courseCreatedDate);
+                            listOfCourses.Add(course);
+                        }
+                    }
+                }
+            }
+
+            return listOfCourses;
+        }
+
+        public static List<Course> createNewCourse(int loggedInUser)
+        {
+            List<Course> listOfCourses = new List<Course>();
+            String query = "Select * FROM course where UserID = @UserID";
+
+            //establish connection
+            using (SqlConnection conn = new SqlConnection(conString)) 
+            {
+                //using command
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("UserID", loggedInUser);
+                    //read the result
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int courseID = (int)reader["CourseID"];
+                            int userID = (int)reader["UserID"];
+                            String courseName = (String)reader["CourseName"];
+                            String description = (String)reader["Description"];
+                            String imageUrl = (String)reader["CourseImage"];
+                            DateTime courseCreatedDate = (DateTime)reader["CourseCreatedDate"];
+
+                            Course course = new Course(courseID, loggedInUser, courseName, description, imageUrl, courseCreatedDate);
+                            listOfCourses.Add(course);
+                        }
+                    }
+                }
+            }
+
+            return listOfCourses;
+        }
         public static List<Notifications> getNotifications(int userID)
         {
             List<Notifications> notifications = new List<Notifications>();
