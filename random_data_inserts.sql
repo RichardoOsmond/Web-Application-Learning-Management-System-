@@ -3,12 +3,12 @@
 INSERT INTO [User] (RoleID, Username, Password, Email, [Last Login], [Last Logout]) 
 VALUES (1, 'admin', 'admin123', 'admin@rcdl.com', GETDATE(), GETDATE())
 
-INSERT INTO Course (UserID, CourseName, Description, CourseCreatedDate)
+INSERT INTO Course (UserID, CourseName, Description, CourseCreatedDate, CourseCategory)
 VALUES 
-(1, 'Math', 'Learn the fundamentals of mathematics', GETDATE()),
-(1, 'English', 'Explore grammar, writing and literature', GETDATE()),
-(1, 'Science', 'Discover the world through science', GETDATE()),
-(1, 'Social Science', 'Social Science is great', GETDATE())
+(1, 'Math', 'Learn the fundamentals of mathematics', GETDATE(), ''),
+(1, 'English', 'Explore grammar, writing and literature', GETDATE(), ''),
+(1, 'Science', 'Discover the world through science', GETDATE(), ''),
+(1, 'Social Science', 'Social Science is great', GETDATE(), '')
 
 INSERT INTO Lesson (CourseID, LessonOrder, LessonName)
 VALUES
@@ -130,6 +130,6 @@ VALUES
 (46, 'Social Science Quiz', '20', 60, 3),
 (48, 'Social Science History Quiz', '20', 60, 3)
 
-select * from MaterialContent m join Content c on m.ContentID = c.ContentID;
-Delete FROM [MaterialContent] where ImageName = 'materialName';
+INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [Last Logout], [About Me]) VALUES
+(2, 'Jin', '123', '123',  GETDATE(), GETDATE(), 'I love something?!')
 

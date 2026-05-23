@@ -21,7 +21,7 @@ GO
 --   6 = Sarah Miller (student, messages teachers)
 --   7 = David Chen (student)
 -- NOTE: passwords are plain placeholders — hash before any real use.
-INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [Last Logout], [AboutMe]) VALUES
+INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [Last Logout], [About Me]) VALUES
     (1, 'student1',         'changeme', 'student1@example.com',  GETDATE(), GETDATE(), 'I love learning new things!'),
     (2, 'teacher_julian',   'changeme', 'julian@example.com',    GETDATE(), GETDATE(), 'Mathematics professor.'),
     (2, 'teacher_yumnu',    'changeme', 'yumnu@example.com',     GETDATE(), GETDATE(), 'English teacher.'),

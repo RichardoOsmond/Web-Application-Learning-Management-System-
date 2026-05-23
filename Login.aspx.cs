@@ -115,23 +115,5 @@ namespace Wapping_time
             lblMessage.Text = msg;
             lblMessage.Visible = true;
         }
-
-        private void GetRoleName()
-        {
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-                string nameQuery = "SELECT r.RoleName FROM Role r JOIN [User] u ON r.RoleID = u.RoleID WHERE u.UserID = @UserID";
-                SqlCommand cmd = new SqlCommand(nameQuery, conn);
-                cmd.Parameters.AddWithValue("@UserID", Session["UserID"]);
-                SqlDataReader userIDReader = cmd.ExecuteReader();
-
-                if (userIDReader.Read())
-                {
-                    string roleName = userIDReader["RoleName"].ToString();
-                    Session["RoleName"] = roleName;
-                }
-            }
-        }
     }
 }
