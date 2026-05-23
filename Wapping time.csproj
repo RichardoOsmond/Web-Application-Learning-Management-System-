@@ -68,15 +68,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MaterialPage.aspx" />
     <Content Include="App_Data\ReadCardDB.mdf" />
     <Content Include="App_Data\ReadCardDB_log.ldf">
       <DependentUpon>ReadCardDB.mdf</DependentUpon>
     </Content>
     <Content Include="chat.aspx" />
+    <Content Include="SelectedCoursePage.aspx" />
     <Content Include="courses.aspx" />
     <Content Include="CSS\Dashboard.css" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
+    <Content Include="AdminEditCoursePage.aspx" />
+    <Content Include="Images\arrow.png" />
+    <Content Include="Images\CourseNextButton.png" />
+    <Content Include="Images\CoursePrevButton.png" />
+    <Content Include="Images\Math icon.png" />
     <Content Include="forgotPassword.aspx" />
     <Content Include="DashboardWithAdmin.aspx" />
     <Content Include="Images\CourseNextButton.png" />
@@ -96,9 +103,17 @@
     <Content Include="Login.aspx" />
     <Content Include="notification.aspx" />
     <Content Include="profile.aspx" />
+    <Content Include="ViewMaterial.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MaterialPage.aspx.cs">
+      <DependentUpon>MaterialPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MaterialPage.aspx.designer.cs">
+      <DependentUpon>MaterialPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Assignment.Master.cs">
       <DependentUpon>Assignment.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -115,6 +130,13 @@
     </Compile>
     <Compile Include="ChatMessages.cs" />
     <Compile Include="Course.cs" />
+    <Compile Include="SelectedCoursePage.aspx.cs">
+      <DependentUpon>SelectedCoursePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SelectedCoursePage.aspx.designer.cs">
+      <DependentUpon>SelectedCoursePage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="courses.aspx.cs">
       <DependentUpon>courses.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -122,6 +144,12 @@
     <Compile Include="courses.aspx.designer.cs">
       <DependentUpon>courses.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminEditCoursePage.aspx.cs">
+      <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminEditCoursePage.aspx.designer.cs">
+      <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
     <Compile Include="DashboardWithAdmin.aspx.cs">
       <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -200,12 +228,24 @@
       <DependentUpon>quiz.Master</DependentUpon>
     </Compile>
     <Compile Include="Student.cs" />
+    <Compile Include="UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs" />
+    <Compile Include="ViewMaterial.aspx.cs">
+      <DependentUpon>ViewMaterial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewMaterial.aspx.designer.cs">
+      <DependentUpon>ViewMaterial.aspx</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assignment.Master" />
     <None Include="packages.config" />
     <Content Include="quiz.Master" />
+    <Content Include="UploadHandler.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -214,6 +254,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\English Image\Material\" />
+    <Folder Include="Images\English Image\Quiz\" />
+    <Folder Include="Images\Math Image\Material\" />
+    <Folder Include="Images\Math Image\Quiz\" />
+    <Folder Include="Images\Science Image\Material\" />
+    <Folder Include="Images\Science Image\Quiz\" />
+    <Folder Include="Images\Social Study Image\Material\" />
+    <Folder Include="Images\Social Study Image\Quiz\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
