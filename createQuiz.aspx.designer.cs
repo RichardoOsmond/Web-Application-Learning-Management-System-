@@ -51,13 +51,13 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Label lblCourse;
 
         /// <summary>
-        /// ddlCourse control.
+        /// lblCourseName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCourse;
+        protected global::System.Web.UI.WebControls.Label lblCourseName;
 
         /// <summary>
         /// lblQuizName control.
@@ -105,6 +105,33 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Label lblTimeLimitHint;
 
         /// <summary>
+        /// lblPassingScore0 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPassingScore0;
+
+        /// <summary>
+        /// txtPassingScore control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPassingScore;
+
+        /// <summary>
+        /// lblTimeLimitHint2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeLimitHint2;
+
+        /// <summary>
         /// lblMaxAttempts control.
         /// </summary>
         /// <remarks>
@@ -121,6 +148,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMaxAttempts;
+
+        /// <summary>
+        /// lblTimeLimitHint0 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeLimitHint0;
 
         /// <summary>
         /// btnSave control.
@@ -292,6 +328,33 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rbAnswer3;
+
+        /// <summary>
+        /// lblPoints control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPoints;
+
+        /// <summary>
+        /// txtPoints control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPoints;
+
+        /// <summary>
+        /// lblTimeLimitHint1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeLimitHint1;
 
         /// <summary>
         /// btnAddQuestion control.

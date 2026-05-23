@@ -67,6 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\READCARDDB.mdf" />
+    <Content Include="App_Data\READCARDDB_log.ldf">
+      <DependentUpon>READCARDDB.mdf</DependentUpon>
+    </Content>
     <Content Include="chat.aspx" />
     <Content Include="courses.aspx" />
     <Content Include="createQuiz.aspx" />
@@ -170,7 +174,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
