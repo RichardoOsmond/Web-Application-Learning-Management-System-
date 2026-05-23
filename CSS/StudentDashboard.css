@@ -4,6 +4,39 @@ body {
     color: #663399;
 }
 
+.welcome_message {
+    position: relative;
+    font-weight: bold;
+    font-size: 3rem;
+    display: inline-block;
+    margin-top: 3%;
+    margin-left: 3%
+}
+
+.progress_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px auto;
+    gap: 10px;
+    width: 100%;
+}
+
+.progress_bar {
+    width: 1000px;
+}
+
+.progress_message {
+    font-size: 18px;
+    text-align: center;
+}
+
+.item_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .notification_box {
     background-color: #F6CEFC;
     color: #FFFFFF;
@@ -13,10 +46,183 @@ body {
     padding: 0.75rem 1rem;
     margin: 0.5rem 0;
     max-width: 85%;
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1;
 }
 
+    .notification_box strong {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .notification_box p {
+        margin: 0;
+    }
+
 .notification_panel {
+    position: absolute;
+    top: 65px;
+    right: 80px;
+    width: 340px;
+    max-height: 420px;
+    overflow-y: auto;
     background-color: #B388FF;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+    .notification_panel.is-open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+.notification_header {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 4px 8px 8px;
+}
+
+.notification_empty {
+    color: #FFFFFF;
+    padding: 12px;
+    display: block;
+    text-align: center;
+}
+
+.student_chat_panel {
+    position: absolute;
+    top: 65px;
+    right: 30px;
+    width: 340px;
+    max-height: 420px;
+    overflow-y: auto;
+    background-color: #B388FF;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.student_chat_panel.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.chat_header {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 4px 8px 8px;
+}
+
+.chat_message_box {
+    background-color: #F6CEFC;
+    color: #663399;
+    border-radius: 10px 10px 10px 2px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+
+.chat_sender {
+    display: block;
+    margin-bottom: 4px;
+    color: #4A148C;
+}
+
+.chat_content {
+    margin: 0;
+}
+
+.chat_empty {
+    color: #FFFFFF;
+    padding: 12px;
+    display: block;
+    text-align: center;
+}
+
+.course_panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px auto;
+    max-width: 1000px;
+    background-color: #F6CEFC;
+}
+
+.carousel_button {
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #663399;
+    border-radius: 50%;
+    background-color: #663399;
+    color: #ff4cd8;
+    font-weight: bold;
+    font-size: large;
+    transition: 0.5s;
+}
+
+.carousel_button:hover {
+    background-color: #ff4cd8;
+    color: #663399;
+}
+
+.carousel {
+    width: 800px;
+    overflow: hidden;
+}
+
+.list_courses {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.item {
+    width: 400px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.course_image {
+    width: 350px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.course_name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #663399;
+    margin-top: 10px;
+}
+
+.course_desc {
+    font-size: 14px;
+    color: #663399;
+    padding: 1rem;
+    position: relative;
+    align-content: center;
+    justify-content: center;
 }

@@ -20,18 +20,38 @@ namespace Wapping_time
 
             string email = txtEmail.Text.Trim();
             string password = txtPassword.Text.Trim();
-
             int userId = ExecuteLoginCheck(email, password);
 
             if (userId > 0)
             {
                 Session["UserID"] = userId;
                 Session["Email"]  = email;
+                GetRoleName();
                 Response.Redirect("StudentDashboard.aspx");
             }
             else
             {
                 ShowError("Invalid email or password.");
+            }
+        }
+
+        private void GetRoleName()
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                string nameQuery = "SELECT r.RoleID, r.RoleName FROM Role r JOIN [User] u ON r.RoleID = u.RoleID WHERE u.UserID = @UserID";
+                SqlCommand cmd = new SqlCommand(nameQuery, conn);
+                cmd.Parameters.AddWithValue("@UserID", Session["UserID"]);
+
+                SqlDataReader userIDReader = cmd.ExecuteReader();
+                if (userIDReader.Read())
+                {
+                    int roleID = (int)userIDReader["RoleID"];
+                    string roleName = userIDReader["RoleName"].ToString();
+                    Session["RoleID"] = roleID;
+                    Session["RoleName"] = roleName;
+                }
             }
         }
 

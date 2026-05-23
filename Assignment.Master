@@ -4,13 +4,21 @@
 
 <html>
 <head runat="server">
+    <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/Dashboard.css") %>" />
+    <script src='<%= ResolveUrl ("~/Scripts/Dashboard.js") %>'></script>
     <title></title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cause:wght@100..900&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: "Cause";
+            font-size: 18px;
         }
 
         .navbar {
@@ -18,7 +26,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: #7842f5; 
-            padding: 10px 30px;
+            padding: 5px 30px;
         }
 
         .nav-left-group {
@@ -33,7 +41,7 @@
         }
 
         .logo-img {
-            height: 50px;
+            height: 40px;
             width: auto;
             display: block;
         }
@@ -90,7 +98,35 @@
         .nav-icon-img:hover {
             transform: scale(1.1); /*enlarges slightly*/
         }
-            
+        
+        html, body, form {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form > div {
+            flex-grow: 1;
+        }
+
+        .aspNetHidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+        }
+
+        body {
+            background-color: #e6e1f2;
+        }
+
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -105,19 +141,19 @@
                     <img src="Images/logo.png" alt="Read Card Do Learn Logo" class="logo-img" />
                 </div>
                 <ul class="nav-links">
-                    <li><a href="dashboard.aspx">Dashboard</a></li>
-                    <li><a href="courses.aspx">Courses</a></li>
+                    <li><asp:LinkButton runat="server" OnClick="btnDashboard_Click" Text="Dashboard" /></li>
+                    <li><asp:LinkButton runat="server" OnClick="btnCourse_Click" Text="Course" /></li>
                 </ul>
             </div>
 
             <ul class="nav-icons-group">
                 <li>
-                    <a href="notification.aspx" title="Notification">
+                    <a href="javascript:void(0)" title="Notification" onclick="toggleNotificationPanel()">
                         <img src="Images/notification.png" alt="Notification" class="nav-icon-img" />
                     </a>
                 </li>
                 <li>
-                    <a href="chat.aspx" title="Chat">
+                    <a href="javascript:void(0)" title="Chat" onclick="toggleChatPanel()">
                         <img src="Images/chat.png" alt="Chat" class="nav-icon-img" />
                     </a>
                 </li>
@@ -127,7 +163,7 @@
                     </a>
                 </li>
             </ul>
-
+             
         </nav>
 
         <div>

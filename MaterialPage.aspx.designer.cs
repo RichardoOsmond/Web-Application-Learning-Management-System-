@@ -11,111 +11,124 @@ namespace Wapping_time
 {
 
 
-    public partial class StudentDashboard
+    public partial class AddMaterialPage
     {
 
         /// <summary>
-        /// rptNotifications control.
+        /// hdnUploadPath control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptNotifications;
+        protected global::System.Web.UI.WebControls.HiddenField hdnUploadPath;
 
         /// <summary>
-        /// lblNoNotifications control.
+        /// lblMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoNotifications;
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
-        /// rptStudentChatMessages control.
+        /// materialLbl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptStudentChatMessages;
+        protected global::System.Web.UI.WebControls.TextBox materialLbl;
 
         /// <summary>
-        /// lblNoChatMessages control.
+        /// txtMaterialContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoChatMessages;
+        protected global::System.Web.UI.WebControls.TextBox txtMaterialContent;
 
         /// <summary>
-        /// lblName control.
+        /// flashcardSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblName;
+        protected global::System.Web.UI.WebControls.Panel flashcardSection;
 
         /// <summary>
-        /// rptCourses control.
+        /// btnEditCards control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCourses;
+        protected global::System.Web.UI.WebControls.Button btnEditCards;
 
         /// <summary>
-        /// lblProgress control.
+        /// btnDoneCards control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProgress;
+        protected global::System.Web.UI.WebControls.Button btnDoneCards;
 
         /// <summary>
-        /// pnlProgressOuter control.
+        /// FlashcardRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProgressOuter;
+        protected global::System.Web.UI.WebControls.Repeater FlashcardRepeater;
 
         /// <summary>
-        /// pnlProgressInner control.
+        /// cardImageUpload control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProgressInner;
+        protected global::System.Web.UI.WebControls.FileUpload cardImageUpload;
 
         /// <summary>
-        /// lblCompletionRate control.
+        /// cardBackText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCompletionRate;
+        protected global::System.Web.UI.WebControls.TextBox cardBackText;
 
         /// <summary>
-        /// Master property.
+        /// btnAddCard control.
         /// </summary>
         /// <remarks>
-        /// Auto-generated property.
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        public new Wapping_time.Assignment Master
-        {
-            get
-            {
-                return ((Wapping_time.Assignment)(base.Master));
-            }
-        }
+        protected global::System.Web.UI.WebControls.Button btnAddCard;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
+
+        /// <summary>
+        /// btnExitNSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExitNSave;
     }
 }

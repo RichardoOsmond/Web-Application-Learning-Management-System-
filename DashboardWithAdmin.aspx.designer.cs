@@ -11,111 +11,124 @@ namespace Wapping_time
 {
 
 
-    public partial class StudentDashboard
+    public partial class DashboardWithAdmin
     {
 
         /// <summary>
-        /// rptNotifications control.
+        /// createCourseButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptNotifications;
+        protected global::System.Web.UI.WebControls.LinkButton createCourseButton;
 
         /// <summary>
-        /// lblNoNotifications control.
+        /// Chart1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoNotifications;
+        protected global::System.Web.UI.DataVisualization.Charting.Chart Chart1;
 
         /// <summary>
-        /// rptStudentChatMessages control.
+        /// courseLbl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptStudentChatMessages;
+        protected global::System.Web.UI.WebControls.Label courseLbl;
 
         /// <summary>
-        /// lblNoChatMessages control.
+        /// viewAllCourseBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoChatMessages;
+        protected global::System.Web.UI.WebControls.Button viewAllCourseBtn;
 
         /// <summary>
-        /// lblName control.
+        /// noCourseMsg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblName;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl noCourseMsg;
 
         /// <summary>
-        /// rptCourses control.
+        /// CourseRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCourses;
+        protected global::System.Web.UI.WebControls.Repeater CourseRepeater;
 
         /// <summary>
-        /// lblProgress control.
+        /// SqlDataSource1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProgress;
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
 
         /// <summary>
-        /// pnlProgressOuter control.
+        /// courseFileUpload control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProgressOuter;
+        protected global::System.Web.UI.WebControls.FileUpload courseFileUpload;
 
         /// <summary>
-        /// pnlProgressInner control.
+        /// courseNameTxt control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProgressInner;
+        protected global::System.Web.UI.WebControls.TextBox courseNameTxt;
 
         /// <summary>
-        /// lblCompletionRate control.
+        /// CategoryDDL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCompletionRate;
+        protected global::System.Web.UI.WebControls.DropDownList CategoryDDL;
 
         /// <summary>
-        /// Master property.
+        /// descriptionTxt control.
         /// </summary>
         /// <remarks>
-        /// Auto-generated property.
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        public new Wapping_time.Assignment Master
-        {
-            get
-            {
-                return ((Wapping_time.Assignment)(base.Master));
-            }
-        }
+        protected global::System.Web.UI.WebControls.TextBox descriptionTxt;
+
+        /// <summary>
+        /// saveCourseBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button saveCourseBtn;
+
+        /// <summary>
+        /// cancelBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button cancelBtn;
     }
 }
