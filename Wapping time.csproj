@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.designer.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
+    </Compile> 
     <Compile Include="DashboardWithAdmin.aspx.cs">
       <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -231,7 +232,6 @@
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="User.cs" />
     <Compile Include="ViewMaterial.aspx.cs">
       <DependentUpon>ViewMaterial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
