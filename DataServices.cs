@@ -50,7 +50,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
+                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.ImageName, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
                     "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -67,10 +67,11 @@ namespace Wapping_time
                             int courseID = (int)reader["CourseID"];
                             int courseUserID = (int)reader["CourseCreatorID"];
                             string courseName = reader["CourseName"].ToString();
+                            string imageName = reader["ImageName"].ToString();
                             string description = reader["Description"].ToString();
                             DateTime courseCreationDate = (DateTime)reader["CourseCreatedDate"];
 
-                            Course course = new Course(courseID, courseUserID, courseName, description, courseCreationDate);
+                            Course course = new Course(courseID, courseUserID, courseName, description, imageName, courseCreationDate);
                             Registration registration = new Registration(registrationID, registrationUseriD, result, progress, course, registrationDate);
                             registeredCourses.Add(registration);
                         }
