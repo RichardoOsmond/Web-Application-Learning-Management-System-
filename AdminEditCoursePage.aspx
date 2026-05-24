@@ -264,9 +264,13 @@
                     <asp:Button ID="qReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
                 </h2>
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
-                    <asp:Repeater ID="QuizRepeater" runat="server">
+                    <asp:Repeater ID="QuizRepeater" runat="server" OnItemCommand="selectQuiz">
     <ItemTemplate>
-        <a href="#"><%# Eval("Name") %></a>
+        <asp:LinkButton ID="QuizLink" runat="server"
+            CommandArgument='<%# Eval("QuizID") %>'
+            CssClass='<%# (int)Eval("QuizID") == selectedQuizID ? "active" : "" %>'>
+            <%# Eval("Name") %>
+        </asp:LinkButton>
     </ItemTemplate>
 </asp:Repeater>
                 </asp:Panel>

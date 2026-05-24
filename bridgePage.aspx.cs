@@ -280,6 +280,20 @@ namespace Wapping_time
             LoadAdminView(quizID);
         }
 
+        protected void btnReturn_Click(object sender, EventArgs e)
+        {
+            if (Request.QueryString["CourseID"] != null && Request.QueryString["LessonID"] != null)
+            {
+                string courseID = Request.QueryString["CourseID"];
+                string lessonID = Request.QueryString["LessonID"];
+                Response.Redirect($"SelectedCoursePage.aspx?CourseID={courseID}&LessonID={lessonID}");
+            }
+            else
+            {
+                Response.Redirect("StudentDashboard.aspx");
+            }
+        }
+
         protected void gvStudentAttempts_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "ReviewAttempt")

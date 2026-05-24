@@ -372,5 +372,11 @@ namespace Wapping_time
             lblQuestionInstruction.Text = "Question added successfully.";
             lblQuestionInstruction.ForeColor = System.Drawing.Color.Green;
         }
+        protected void btnReturn_Click(object sender, EventArgs e)
+        {
+            string courseID = Request.QueryString["CourseID"];
+            string lessonID = Request.QueryString["LessonID"];
+            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={courseID}&LessonID={lessonID}&type=quiz");
+        }
     }
 }

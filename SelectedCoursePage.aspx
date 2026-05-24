@@ -212,6 +212,7 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    
     <div class="course-container" id="courseContainer">
         <div class="left-column left-column-center">
             <div class="lesson-list-big">
@@ -250,7 +251,7 @@
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="QuizRepeater" runat="server">
     <ItemTemplate>
-        <a href='bridgePage.aspx?QuizID=<%# Eval("QuizID") %>'><%# Eval("Name") %></a>
+        <a href='bridgePage.aspx?QuizID=<%# Eval("QuizID") %>&CourseID=<%# selectedCourseID %>&LessonID=<%# selectedLessonID %>'><%# Eval("Name") %></a>
     </ItemTemplate>
 </asp:Repeater>
                 </asp:Panel>

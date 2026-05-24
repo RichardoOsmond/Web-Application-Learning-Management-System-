@@ -75,7 +75,7 @@ namespace Wapping_time
                     }
                     else if (section == 'q')
                     {
-                        //"MaterialPage.aspx?CourseID=" + selectedCourseID + "&LessonID=" + selectedLessonID + "&Mode=Add"
+                        Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}");
                     }
                     break;
                 case "Edit":
@@ -91,8 +91,65 @@ namespace Wapping_time
                     }
                     break;
                 case "Delete":
+                    if (section == 'q')
+                    {
+                        if (selectedQuizID == 0) return;
+
+                        using (SqlConnection conn = new SqlConnection(connString))
+                        {
+                            conn.Open();
+
+                            // block deletion if attempts exist
+                            string checkAttempts = "SELECT COUNT(*) FROM QuizAttempt WHERE QuizID = @QuizID";
+                            SqlCommand checkCmd = new SqlCommand(checkAttempts, conn);
+                            checkCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                            int attemptCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                            if (attemptCount > 0)
+                            {
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "deleteError",
+                                    "alert('Cannot delete this quiz. Students have already attempted it. Close the quiz instead.');", true);
+                                return;
+                            }
+
+                            // get contentID before deleting
+                            string getContent = "SELECT ContentID FROM QuizContent WHERE QuizID = @QuizID";
+                            SqlCommand getContentCmd = new SqlCommand(getContent, conn);
+                            getContentCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                            int contentID = Convert.ToInt32(getContentCmd.ExecuteScalar());
+
+                            // delete answers
+                            string deleteAnswers = @"DELETE FROM Answer WHERE QuestionID IN 
+                                     (SELECT QuestionID FROM Question WHERE QuizID = @QuizID)";
+                            SqlCommand deleteAnswersCmd = new SqlCommand(deleteAnswers, conn);
+                            deleteAnswersCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                            deleteAnswersCmd.ExecuteNonQuery();
+
+                            // delete questions
+                            string deleteQuestions = "DELETE FROM Question WHERE QuizID = @QuizID";
+                            SqlCommand deleteQuestionsCmd = new SqlCommand(deleteQuestions, conn);
+                            deleteQuestionsCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                            deleteQuestionsCmd.ExecuteNonQuery();
+
+                            // delete quiz
+                            string deleteQuiz = "DELETE FROM QuizContent WHERE QuizID = @QuizID";
+                            SqlCommand deleteQuizCmd = new SqlCommand(deleteQuiz, conn);
+                            deleteQuizCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                            deleteQuizCmd.ExecuteNonQuery();
+
+                            // delete content row
+                            string deleteContent = "DELETE FROM Content WHERE ContentID = @ContentID";
+                            SqlCommand deleteContentCmd = new SqlCommand(deleteContent, conn);
+                            deleteContentCmd.Parameters.AddWithValue("@ContentID", contentID);
+                            deleteContentCmd.ExecuteNonQuery();
+                        }
+
+                        selectedQuizID = 0;
+                        LoadContent(selectedLessonID, selectedType);
+                        return;
+                    }
                     if (selectedMaterialID <= 0) break;
-                    int contentID = -1;
+                    int materialContentID = -1;
 
                     using (SqlConnection conn = new SqlConnection(connString))
                     {
@@ -152,12 +209,12 @@ namespace Wapping_time
                             {
                                 if (reader.Read())
                                 {
-                                    contentID = Convert.ToInt32(reader["ContentID"]);
+                                    materialContentID = Convert.ToInt32(reader["ContentID"]);
                                 }
                             }
                         }
 
-                        if (contentID > -1)
+                        if (materialContentID > -1)
                         {
                             string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
                                 DELETE FROM Content WHERE ContentID = @ContentID;";
@@ -165,7 +222,7 @@ namespace Wapping_time
                             using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
                             {
                                 delCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-                                delCmd.Parameters.AddWithValue("@ContentID", contentID);
+                                delCmd.Parameters.AddWithValue("@ContentID", materialContentID);
 
                                 delCmd.ExecuteNonQuery();
                             }

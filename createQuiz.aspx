@@ -20,6 +20,7 @@
         <asp:Label ID="lblTimeLimitHint0" runat="server" CssClass="quiz-hint-label" Text="Format: Int value (eg: 1, 3, 10)"></asp:Label>
         <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="quiz-btn-save" OnClick="btnSave_Click" />
         <asp:Button ID="btnClear" runat="server" Text="Clear" CssClass="quiz-btn-clear" OnClick="btnClear_Click" />
+        <asp:Button ID="btnReturn" runat="server" Text="Return" CssClass="quiz-btn-clear" OnClick="btnReturn_Click" />
     </asp:Panel>
     <asp:Panel ID="pnlAddQuestion" runat="server" CssClass="quiz-form-panel">
         <asp:Label ID="lblAddingFor" runat="server" Text="" CssClass="quiz-instruction"></asp:Label>
