@@ -59,11 +59,11 @@ namespace Wapping_time
             //    Session["Username"] = "student";
             //}
 
-            if (Request.QueryString["CourseID"] == null)
-            {
-                Response.Redirect("SelectedCoursePage.aspx?CourseID=1&LessonID=1");
-                return;
-            }
+            //if (Request.QueryString["CourseID"] == null)
+            //{
+            //    Response.Redirect("SelectedCoursePage.aspx?CourseID=1&LessonID=1");
+            //    return;
+            //}
 
             roleName = Session["RoleName"].ToString();
             selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
