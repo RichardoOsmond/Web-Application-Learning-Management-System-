@@ -21,6 +21,7 @@ namespace Wapping_time
             } else
             {
                 Response.Redirect("DashboardWithAdmin.aspx");
+                Console.WriteLine("Hi");
             }
         }
         protected void btnCourse_Click(object sender, EventArgs e)
@@ -30,7 +31,8 @@ namespace Wapping_time
                 Response.Redirect("StudentCourse.aspx");
             } else
             {
-                Response.Redirect("AdminCourse.aspx");
+                Response.Redirect("Courses.aspx");
+                Console.WriteLine("Hi");
             }
         }
     }

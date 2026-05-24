@@ -11,89 +11,98 @@ namespace Wapping_time
 {
 
 
-    public partial class DashboardWithAdmin
+    public partial class courses
     {
 
         /// <summary>
-        /// createCourseButton control.
+        /// SeacrhTB control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton createCourseButton;
+        protected global::System.Web.UI.WebControls.TextBox SeacrhTB;
 
         /// <summary>
-        /// Chart1 control.
+        /// SearchButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.DataVisualization.Charting.Chart Chart1;
+        protected global::System.Web.UI.WebControls.Button SearchButton;
 
         /// <summary>
-        /// TopExtracurricularRepeater control.
+        /// allBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater TopExtracurricularRepeater;
+        protected global::System.Web.UI.WebControls.Button allBtn;
 
         /// <summary>
-        /// noTopCoursesMsg control.
+        /// scienceBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label noTopCoursesMsg;
+        protected global::System.Web.UI.WebControls.Button scienceBtn;
 
         /// <summary>
-        /// courseLbl control.
+        /// socialBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label courseLbl;
+        protected global::System.Web.UI.WebControls.Button socialBtn;
 
         /// <summary>
-        /// viewAllCourseBtn control.
+        /// extracurricularBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button viewAllCourseBtn;
+        protected global::System.Web.UI.WebControls.Button extracurricularBtn;
 
         /// <summary>
-        /// noCourseMsg control.
+        /// HiddenCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl noCourseMsg;
+        protected global::System.Web.UI.WebControls.HiddenField HiddenCategory;
 
         /// <summary>
-        /// CourseRepeater control.
+        /// courseRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater CourseRepeater;
+        protected global::System.Web.UI.WebControls.Repeater courseRepeater;
 
         /// <summary>
-        /// createCourseModal control.
+        /// SqlDataSource1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl createCourseModal;
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
+
+        /// <summary>
+        /// editCourseModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl editCourseModal;
 
         /// <summary>
         /// hiddenCourseIDs control.
@@ -103,15 +112,6 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hiddenCourseIDs;
-
-        /// <summary>
-        /// modalTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modalTitle;
 
         /// <summary>
         /// courseFileUpload control.
@@ -213,15 +213,6 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Button cancelBtn;
 
         /// <summary>
-        /// SqlDataSource1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
-
-        /// <summary>
         /// SqlDataSource2 control.
         /// </summary>
         /// <remarks>
@@ -229,23 +220,5 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource2;
-
-        /// <summary>
-        /// topExtracurricular control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource topExtracurricular;
-
-        /// <summary>
-        /// courseCreationTrend control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource courseCreationTrend;
     }
 }

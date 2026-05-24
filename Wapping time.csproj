@@ -87,8 +87,7 @@
     <Content Include="Scripts\SelectedCoursePage.js" />
     <Content Include="Scripts\StudentCourse.js" />
     <Content Include="SelectedCoursePage.aspx" />
-    <Content Include="courses.aspx" />
-    <Content Include="createQuiz.aspx" />
+    <Content Include="Courses.aspx" />
     <Content Include="CSS\Dashboard.css" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
@@ -164,13 +163,6 @@
     <Compile Include="SelectedCoursePage.aspx.designer.cs">
       <DependentUpon>SelectedCoursePage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Courses.aspx.cs">
-      <DependentUpon>Courses.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Courses.aspx.designer.cs">
-      <DependentUpon>Courses.aspx</DependentUpon>
-    </Compile>
     <Compile Include="createQuiz.aspx.cs">
       <DependentUpon>createQuiz.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -180,10 +172,17 @@
     </Compile>
     <Compile Include="quiz.aspx.cs">
       <DependentUpon>quiz.aspx</DependentUpon>
+    </Compile>  
+    <Compile Include="Courses.aspx.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="quiz.aspx.designer.cs">
-      <DependentUpon>quiz.aspx</DependentUpon>
+    <Compile Include="Courses.aspx.designer.cs">
+      <DependentUpon>Courses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DashboardWithAdmin.aspx.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
@@ -191,13 +190,6 @@
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.designer.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="DashboardWithAdmin.aspx.cs">
-      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DashboardWithAdmin.aspx.designer.cs">
-      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataServices.cs" />
     <Compile Include="forgotPassword.aspx.cs">
