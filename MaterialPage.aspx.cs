@@ -51,11 +51,27 @@ namespace Wapping_time
             if (Session["UserID"] == null)
                 Response.Redirect("login.aspx");
 
-            hdnUploadPath.Value = "Math Image/Material";
             selectedMode = Request.QueryString["Mode"];
             if (!IsPostBack)
             {
                 selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
+
+                // Get course name and create folders
+                string courseName = "";
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT CourseName FROM Course WHERE CourseID = @CourseID", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CourseID", selectedCourseID);
+                        courseName = cmd.ExecuteScalar().ToString();
+                    }
+                }
+                // Create folders and set upload path
+                string baseFolder = Server.MapPath("~/Images/" + courseName + " Image/");
+                Directory.CreateDirectory(baseFolder + "Material/");
+                Directory.CreateDirectory(baseFolder + "Quiz/");
+                hdnUploadPath.Value = courseName + " Image/Material";
 
                 if (selectedMode == "Edit")
                 {
