@@ -144,6 +144,14 @@ CREATE TABLE [dbo].[ChatMessages]
     CONSTRAINT [FK_ChatMessages_ToUser] FOREIGN KEY ([ToUserID]) REFERENCES [User]([UserID])
 )
 
+ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
+
+ALTER TABLE Course
+ADD CourseImage VARCHAR(255),
+CourseCategory VARCHAR(100) NOT NULL;
+
+
+
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]
