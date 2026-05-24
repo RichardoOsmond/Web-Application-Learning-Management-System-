@@ -14,7 +14,7 @@
             <ItemTemplate>
                 <a href='<%# "SelectedCoursePage.aspx?CourseID=" + Eval("Course.CourseID") %>' class="item_link">
                     <div class="course_container" id="listCourses">
-                        <asp:Image runat="server" ImageUrl='<%# "~/Images/" + Eval("Course.ImageName") %>' CssClass="course_image" />
+                        <asp:Image runat="server" ImageUrl='<%# "~/Images/Course Icon/" + Eval("Course.ImageName") %>' CssClass="course_image" />
                         <div class="course_information">
                             <asp:Label ID="lblCourseName" CssClass="course_name" runat="server"><%# Eval("Course.CourseName") %></asp:Label>
                             <asp:Label ID="lblCourseCreator" CssClass="course_creator" runat="server"><%# "Created by: " + Eval("Course.CreatorName") %></asp:Label>

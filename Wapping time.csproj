@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\StudentCourse.css" />
+    <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="MaterialPage.aspx" />
     <Content Include="App_Data\ReadCardDB.mdf" />
     <Content Include="App_Data\ReadCardDB_log.ldf">
