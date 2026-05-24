@@ -16,6 +16,14 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //Session["UserID"] = 2;
+            //Session["RoleID"] = 2;
+            //Session["Username"] = "student";
+
+            Session["UserID"] = 1;
+            Session["RoleID"] = 1;
+            Session["Username"] = "admin";
+
             if (!IsPostBack)
             {
                 if (Request.QueryString["CourseID"] == null || Request.QueryString["LessonID"] == null)
