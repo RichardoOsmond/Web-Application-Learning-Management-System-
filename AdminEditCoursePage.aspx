@@ -265,10 +265,10 @@
                 </h2>
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="QuizRepeater" runat="server">
-                        <ItemTemplate>
-                            <a href="#"><%# Eval("Name") %></a>
-                        </ItemTemplate>
-                    </asp:Repeater>
+    <ItemTemplate>
+        <a href="#"><%# Eval("Name") %></a>
+    </ItemTemplate>
+</asp:Repeater>
                 </asp:Panel>
             </div>
         </div>

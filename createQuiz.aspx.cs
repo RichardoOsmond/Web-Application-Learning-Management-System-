@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Wapping_time
 {
@@ -16,13 +13,11 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserID"] = 2;
-            Session["RoleID"] = 2;
-            Session["Username"] = "student";
-
-            //Session["UserID"] = 1;
-            //Session["RoleID"] = 1;
-            //Session["Username"] = "admin";
+            if (Session["UserID"] == null)
+            {
+                Response.Redirect("login.aspx");
+                return;
+            }
 
             if (!IsPostBack)
             {
@@ -38,19 +33,36 @@ namespace Wapping_time
 
                 LoadCourseName(courseID);
 
-                int contentID = GetContentID(lessonID);
-                ViewState["ContentID"] = contentID;
-
                 if (Request.QueryString["QuizID"] != null)
                 {
+                    // edit mode — load existing quiz, lock panel
                     int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                     LoadQuiz(quizID);
                     LoadQuestions(quizID);
                     lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text;
+                    LockCreatePanel();
+                }
+                else
+                {
+                    // create mode — new Content row
+                    int contentID = GetContentID(lessonID);
+                    ViewState["ContentID"] = contentID;
                 }
             }
         }
 
+        // disable create panel after save or in edit mode
+        private void LockCreatePanel()
+        {
+            txtQuizName.Enabled = false;
+            txtTimeLimit.Enabled = false;
+            txtPassingScore.Enabled = false;
+            txtMaxAttempts.Enabled = false;
+            btnSave.Enabled = false;
+            btnClear.Enabled = false;
+        }
+
+        // load course name into label
         private void LoadCourseName(int courseID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -61,25 +73,26 @@ namespace Wapping_time
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
-                {
                     lblCourseName.Text = reader["CourseName"].ToString();
-                }
                 reader.Close();
             }
         }
+
+        // always insert new Content row for each new quiz
         private int GetContentID(int lessonID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                string insertQuery = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz'); SELECT SCOPE_IDENTITY()";
-                SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
-                insertCmd.Parameters.AddWithValue("@LessonID", lessonID);
-                object newID = insertCmd.ExecuteScalar();
+                string query = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz'); SELECT SCOPE_IDENTITY()";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@LessonID", lessonID);
+                object newID = cmd.ExecuteScalar();
                 return Convert.ToInt32(newID);
             }
         }
 
+        // load existing quiz fields for edit mode
         private void LoadQuiz(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -92,12 +105,10 @@ namespace Wapping_time
                 if (reader.Read())
                 {
                     txtQuizName.Text = reader["Name"].ToString();
-
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
                     int hours = totalSeconds / 3600;
                     int minutes = (totalSeconds % 3600) / 60;
                     txtTimeLimit.Text = hours.ToString("D2") + minutes.ToString("D2");
-
                     txtPassingScore.Text = reader["PassingScores"].ToString();
                     txtMaxAttempts.Text = reader["MaxAttempts"].ToString();
                 }
@@ -105,6 +116,7 @@ namespace Wapping_time
             }
         }
 
+        // bind questions grid
         private void LoadQuestions(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -125,19 +137,15 @@ namespace Wapping_time
             }
         }
 
+        // parse hhmm input to total seconds, returns -1 if invalid
         private int ParseTimeLimit(string input)
         {
             input = input.Replace(":", "").Trim();
             input = input.PadLeft(4, '0');
-
             int hours = Convert.ToInt32(input.Substring(0, 2));
             int minutes = Convert.ToInt32(input.Substring(2, 2));
-
             if (minutes > 59)
-            {
                 return -1;
-            }
-
             return (hours * 3600) + (minutes * 60);
         }
 
@@ -194,12 +202,12 @@ namespace Wapping_time
                 lblInstruction.ForeColor = System.Drawing.Color.Red;
                 return;
             }
+
             int contentID = Convert.ToInt32(ViewState["ContentID"]);
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
                 if (Request.QueryString["QuizID"] != null)
                 {
                     int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
@@ -214,6 +222,7 @@ namespace Wapping_time
                     lblInstruction.Text = "Quiz updated successfully.";
                     lblInstruction.ForeColor = System.Drawing.Color.Green;
                     lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text.Trim();
+                    LockCreatePanel();
                 }
                 else
                 {
@@ -229,6 +238,7 @@ namespace Wapping_time
                     lblInstruction.Text = "Quiz created successfully. You can now add questions.";
                     lblInstruction.ForeColor = System.Drawing.Color.Green;
                     lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text.Trim();
+                    LockCreatePanel();
                 }
             }
         }
@@ -291,7 +301,6 @@ namespace Wapping_time
                     lblQuestionInstruction.ForeColor = System.Drawing.Color.Red;
                     return;
                 }
-
                 if (!rbAnswer1.Checked && !rbAnswer2.Checked && !rbAnswer3.Checked)
                 {
                     lblQuestionInstruction.Text = "Please select the correct answer.";
@@ -311,12 +320,12 @@ namespace Wapping_time
                 lblQuestionInstruction.ForeColor = System.Drawing.Color.Red;
                 return;
             }
+
             string questionType = ddlQuestionType.SelectedValue;
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
                 SqlCommand orderCmd = new SqlCommand("SELECT ISNULL(MAX(QuestionOrder), 0) + 1 FROM Question WHERE QuizID = @QuizID", conn);
                 orderCmd.Parameters.AddWithValue("@QuizID", quizID);
                 int questionOrder = Convert.ToInt32(orderCmd.ExecuteScalar());
@@ -334,7 +343,6 @@ namespace Wapping_time
                 {
                     string[] answers = { txtAnswer1.Text.Trim(), txtAnswer2.Text.Trim(), txtAnswer3.Text.Trim() };
                     bool[] correct = { rbAnswer1.Checked, rbAnswer2.Checked, rbAnswer3.Checked };
-
                     for (int i = 0; i < answers.Length; i++)
                     {
                         string answerQuery = "INSERT INTO Answer ([QuestionID], [Answers], [CorrectOrNot]) VALUES (@QuestionID, @Answers, @CorrectOrNot)";

@@ -13,11 +13,6 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // TEMP TEST - remove before final submission
-            Session["UserID"] = 1;
-            Session["RoleID"] = 2;
-            Session["Username"] = "student";
-
             if (Session["UserID"] == null)
             {
                 Response.Redirect("login.aspx");
@@ -26,22 +21,20 @@ namespace Wapping_time
 
             if (Request.QueryString["QuizID"] == null || Request.QueryString["QuizAttemptID"] == null)
             {
-                Response.Redirect("quiz.aspx?QuizID=3&QuizAttemptID=1");
+                Response.Redirect("StudentDashboard.aspx");
                 return;
             }
 
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
 
             if (!IsPostBack)
-            {
                 LoadTitle(quizID);
-            }
 
             bool isReview = Request.QueryString["Mode"] == "Review";
 
             if (isReview)
             {
-                hfTimeLimit.Value = "0"; // ADD THIS LINE
+                hfTimeLimit.Value = "0";
                 btnSubmit.Visible = false;
                 btnBack.Visible = true;
                 int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
@@ -53,8 +46,7 @@ namespace Wapping_time
             }
         }
 
-        // ─── LOAD TITLE ───────────────────────────────────────────
-
+        // load title + set timer
         private void LoadTitle(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -73,21 +65,15 @@ namespace Wapping_time
                 if (reader.Read())
                 {
                     lblCourseQuizTitle.Text = reader["CourseName"].ToString() + " — " + reader["Name"].ToString();
-
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
-                    hfTimeLimit.Value = totalSeconds.ToString(); // ADD THIS LINE
-
-                    int hours = totalSeconds / 3600;
-                    int minutes = (totalSeconds % 3600) / 60;
-                    string timeDisplay = hours > 0 ? hours + "h " + minutes + "m" : minutes + "m";
+                    hfTimeLimit.Value = totalSeconds.ToString();
                     lblInstruction.Text = "Answer all questions and click Submit when done.";
                 }
                 reader.Close();
             }
         }
 
-        // ─── LOAD QUESTIONS ───────────────────────────────────────
-
+        // build question controls for attempt mode
         private void LoadQuestions(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -101,9 +87,7 @@ namespace Wapping_time
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
-
                 int questionNumber = 1;
-
                 while (reader.Read())
                 {
                     int questionID = Convert.ToInt32(reader["QuestionID"]);
@@ -150,14 +134,12 @@ namespace Wapping_time
             }
         }
 
-        // ─── LOAD QUESTIONS REVIEW ────────────────────────────────
-
+        // build question controls for review mode, pre-filled + colored
         private void LoadQuestionsReview(int quizID, int quizAttemptID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
                 string questionQuery = @"
                     SELECT q.QuestionID, q.Question, q.QuestionType, q.Point,
                            sa.Answer, sa.Status
@@ -170,12 +152,9 @@ namespace Wapping_time
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 cmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
                 SqlDataReader reader = cmd.ExecuteReader();
-
                 DataTable dtQuestions = new DataTable();
                 dtQuestions.Load(reader);
-
                 int questionNumber = 1;
-
                 foreach (DataRow row in dtQuestions.Rows)
                 {
                     int questionID = Convert.ToInt32(row["QuestionID"]);
@@ -186,24 +165,23 @@ namespace Wapping_time
                     string status = row["Status"] == DBNull.Value ? "" : row["Status"].ToString();
 
                     Panel pnlQuestion = new Panel();
+                    pnlQuestion.CssClass = "quiz-mcq-panel";
                     if (status == "Correct")
                     {
-                        pnlQuestion.CssClass = "quiz-mcq-panel";
                         pnlQuestion.Style["background-color"] = "#eaffea";
                         pnlQuestion.Style["border-left"] = "4px solid #4caf50";
                     }
                     else if (status == "Incorrect")
                     {
-                        pnlQuestion.CssClass = "quiz-mcq-panel";
                         pnlQuestion.Style["background-color"] = "#fff0f0";
                         pnlQuestion.Style["border-left"] = "4px solid #f44336";
                     }
                     else
                     {
-                        pnlQuestion.CssClass = "quiz-mcq-panel";
                         pnlQuestion.Style["background-color"] = "#fffbe6";
                         pnlQuestion.Style["border-left"] = "4px solid #ffc107";
                     }
+                    pnlQuestion.Style["margin-bottom"] = "16px";
 
                     Label lblQuestion = new Label();
                     lblQuestion.CssClass = "quiz-field-label";
@@ -220,13 +198,10 @@ namespace Wapping_time
                         rbl.Style["width"] = "auto";
                         rbl.Enabled = false;
                         LoadAnswersIntoRBL(questionID, rbl);
-
                         ListItem selected = rbl.Items.FindByValue(studentAnswer);
                         if (selected != null)
                             selected.Selected = true;
-
                         pnlQuestion.Controls.Add(rbl);
-
                         if (status == "Incorrect")
                         {
                             string correctAnswer = GetCorrectAnswer(questionID);
@@ -257,8 +232,7 @@ namespace Wapping_time
             }
         }
 
-        // ─── LOAD ANSWERS INTO RBL ────────────────────────────────
-
+        // load answers into a RadioButtonList
         private void LoadAnswersIntoRBL(int questionID, RadioButtonList rbl)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -279,13 +253,12 @@ namespace Wapping_time
             }
         }
 
-        // ─── SUBMIT ───────────────────────────────────────────────
-
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
             int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
 
+            // guard against resubmission
             using (SqlConnection checkConn = new SqlConnection(connStr))
             {
                 string checkQuery = "SELECT COUNT(*) FROM StudentAnswer WHERE QuizAttemptID = @QuizAttemptID";
@@ -306,7 +279,6 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
                 string questionQuery = @"
                     SELECT QuestionID, QuestionType, Point
                     FROM Question
@@ -315,7 +287,6 @@ namespace Wapping_time
                 SqlCommand questionCmd = new SqlCommand(questionQuery, conn);
                 questionCmd.Parameters.AddWithValue("@QuizID", quizID);
                 SqlDataReader questionReader = questionCmd.ExecuteReader();
-
                 DataTable dtQuestions = new DataTable();
                 dtQuestions.Load(questionReader);
 
@@ -325,7 +296,6 @@ namespace Wapping_time
                     string questionType = row["QuestionType"].ToString();
                     int points = Convert.ToInt32(row["Point"]);
                     totalPoints += points;
-
                     string studentAnswer = "";
                     string status = "";
 
@@ -333,7 +303,6 @@ namespace Wapping_time
                     {
                         RadioButtonList rbl = (RadioButtonList)pnlMain.FindControl("rbl_" + questionID);
                         studentAnswer = rbl != null && rbl.SelectedItem != null ? rbl.SelectedItem.Value : "";
-
                         string correctAnswer = GetCorrectAnswer(questionID, conn);
                         if (studentAnswer == correctAnswer)
                         {
@@ -364,12 +333,9 @@ namespace Wapping_time
                 }
 
                 decimal scorePercent = totalPoints > 0 ? (totalScore / totalPoints) * 100 : 0;
-
-                SqlCommand passingCmd = new SqlCommand(
-                    "SELECT PassingScores FROM QuizContent WHERE QuizID = @QuizID", conn);
+                SqlCommand passingCmd = new SqlCommand("SELECT PassingScores FROM QuizContent WHERE QuizID = @QuizID", conn);
                 passingCmd.Parameters.AddWithValue("@QuizID", quizID);
                 int passingScore = Convert.ToInt32(passingCmd.ExecuteScalar());
-
                 bool isPassed = scorePercent >= passingScore;
 
                 string updateAttempt = @"
@@ -386,9 +352,7 @@ namespace Wapping_time
             Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
         }
 
-        // ─── GET CORRECT ANSWER ───────────────────────────────────
-
-        // used in btnSubmit_Click with existing open connection
+        // overload for btnSubmit — reuses open connection
         private string GetCorrectAnswer(int questionID, SqlConnection conn)
         {
             string query = "SELECT Answers FROM Answer WHERE QuestionID = @QuestionID AND CorrectOrNot = 1";
@@ -398,7 +362,7 @@ namespace Wapping_time
             return result != null ? result.ToString() : "";
         }
 
-        // used in LoadQuestionsReview with its own connection
+        // overload for review — opens its own connection
         private string GetCorrectAnswer(int questionID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -411,8 +375,6 @@ namespace Wapping_time
                 return result != null ? result.ToString() : "";
             }
         }
-
-        // ─── BACK BUTTON ──────────────────────────────────────────
 
         protected void btnBack_Click(object sender, EventArgs e)
         {

@@ -43,6 +43,20 @@ namespace Wapping_time
         private string roleName = "";
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["RoleName"] == null)
+            {
+                Session["UserID"] = 1;
+                Session["RoleID"] = 1;
+                Session["RoleName"] = "Admin";
+                Session["Username"] = "admin";
+            }
+
+            if (Request.QueryString["CourseID"] == null)
+            {
+                Response.Redirect("SelectedCoursePage.aspx?CourseID=1&LessonID=1");
+                return;
+            }
+
             roleName = Session["RoleName"].ToString();
             selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
             using (SqlConnection conn = new SqlConnection(connString))
@@ -110,10 +124,10 @@ namespace Wapping_time
                 MaterialRepeater.DataBind();
 
                 // Load quizzes
-                string quizQuery = @"SELECT c.ContentID, q.Name FROM Content c 
-                                JOIN QuizContent q ON c.ContentID = q.ContentID 
-                                WHERE c.LessonID = @LessonID AND c.Type = 'Quiz'
-                                ORDER BY c.Position";
+                string quizQuery = @"SELECT c.ContentID, q.QuizID, q.Name FROM Content c 
+                JOIN QuizContent q ON c.ContentID = q.ContentID 
+                WHERE c.LessonID = @LessonID AND c.Type = 'Quiz'
+                ORDER BY c.Position";
                 SqlDataAdapter quizAdapter = new SqlDataAdapter(quizQuery, conn);
                 quizAdapter.SelectCommand.Parameters.AddWithValue("@LessonID", lessonID);
                 DataTable quizTable = new DataTable();

@@ -18,11 +18,9 @@
         <asp:Label ID="lblMaxAttempts" runat="server" CssClass="quiz-field-label" Text="Max Attempts:"></asp:Label>
         <asp:TextBox ID="txtMaxAttempts" runat="server" CssClass="quiz-field-input"></asp:TextBox>
         <asp:Label ID="lblTimeLimitHint0" runat="server" CssClass="quiz-hint-label" Text="Format: Int value (eg: 1, 3, 10)"></asp:Label>
-        <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="quiz-btn-save" onclick="btnSave_Click" />
-        &nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btnClear" runat="server" CssClass="quiz-btn-clear" Text="Clear" onclick="btnClear_Click" />
+        <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="quiz-btn-save" OnClick="btnSave_Click" />
+        <asp:Button ID="btnClear" runat="server" Text="Clear" CssClass="quiz-btn-clear" OnClick="btnClear_Click" />
     </asp:Panel>
-
     <asp:Panel ID="pnlAddQuestion" runat="server" CssClass="quiz-form-panel">
         <asp:Label ID="lblAddingFor" runat="server" Text="" CssClass="quiz-instruction"></asp:Label>
         <asp:Label ID="lblAddQuestion" runat="server" Text="Add Questions" CssClass="quiz-page-title"></asp:Label>
@@ -48,9 +46,8 @@
         <asp:Label ID="lblPoints" runat="server" Text="Points:" CssClass="quiz-field-label"></asp:Label>
         <asp:TextBox ID="txtPoints" runat="server" CssClass="quiz-field-input"></asp:TextBox>
         <asp:Label ID="lblTimeLimitHint1" runat="server" CssClass="quiz-hint-label" Text="Format: Int value (eg: 1, 3, 10)"></asp:Label>
-        <asp:Button ID="btnAddQuestion" runat="server" Text="Add Question" CssClass="quiz-btn-save" onclick="btnAddQuestion_Click" />
+        <asp:Button ID="btnAddQuestion" runat="server" Text="Add Question" CssClass="quiz-btn-save" OnClick="btnAddQuestion_Click" />
     </asp:Panel>
-
     <asp:Panel ID="pnlQuestionList" runat="server" CssClass="quiz-form-panel quiz-grid-panel">
         <asp:Label ID="lblQuestionList" runat="server" Text="Questions Added" CssClass="quiz-page-title"></asp:Label>
         <asp:GridView ID="gvQuestions" runat="server" CssClass="quiz-grid">
