@@ -29,7 +29,7 @@ namespace Wapping_time
                             string email = reader["Email"].ToString();
                             DateTime lastLogin = (DateTime)reader["Last Login"];
                             DateTime lastLogout = (DateTime)reader["Last Logout"];
-                            string aboutMe = reader["About Me"] == DBNull.Value ? null : reader["About Me"].ToString();
+                            string aboutMe = reader["AboutMe"] == DBNull.Value ? null : reader["AboutMe"].ToString();
                             return new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
                         }
                     }

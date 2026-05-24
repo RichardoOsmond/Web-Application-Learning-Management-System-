@@ -1,5 +1,3 @@
-﻿use [C:\WAPP\APP_DATA\READCARDDB.MDF]
-
 CREATE TABLE [dbo].[Role]
 (
 	[RoleID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
@@ -61,28 +59,13 @@ CREATE TABLE [dbo].[Question]
 (
     [QuestionID] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [QuizID] INT NOT NULL, 
-    [Question] VARCHAR(100) NOT NULL , 
+    [Question] VARCHAR(100) NOT NULL, 
     [Description] VARCHAR(100) NULL, 
-    [ImageName] VARCHAR(100) NULL, 
     [Point] INT NOT NULL, 
     [QuestionOrder] INT NULL, 
     [QuestionType] VARCHAR(50) NOT NULL,
     CONSTRAINT [FK_Question_QuizContent] FOREIGN KEY ([QuizID]) REFERENCES [QuizContent]([QuizID])
 )
-
-CREATE TABLE [dbo].[ImageSubmission]
-(
-	[ImageID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
-    [QuestionID] INT NOT NULL, 
-    [UserID] INT NOT NULL, 
-    [ImageName] NCHAR(10) NOT NULL, 
-    CONSTRAINT [FK_ImageSubmission_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID]), 
-    CONSTRAINT [FK_ImageSubmission_User] FOREIGN KEY ([UserID]) REFERENCES [User]([UserID])
-)
-
-
-
-
 
 CREATE TABLE [dbo].[MaterialContent]
 (
@@ -93,8 +76,6 @@ CREATE TABLE [dbo].[MaterialContent]
     [ImageName] varchar(50) NOT NULL, 
     CONSTRAINT [FK_MaterialContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
-
-
 
 CREATE TABLE [dbo].[Registration]
 (
@@ -139,15 +120,41 @@ CREATE TABLE [dbo].[ChatMessages]
     CONSTRAINT [FK_ChatMessages_ToUser] FOREIGN KEY ([ToUserID]) REFERENCES [User]([UserID])
 )
 
+CREATE TABLE [dbo].[QuizAttempt]
+(
+    [QuizAttemptID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [RegistrationID] INT NOT NULL,
+    [QuizID] INT NOT NULL,
+    [Score] DECIMAL(5,2) NOT NULL,
+    [AttemptNumber] INT NOT NULL,
+    [DateTaken] DATETIME NOT NULL,
+    [IsPassed] BIT NOT NULL,
+    CONSTRAINT [FK_QuizAttempt_Registration] FOREIGN KEY ([RegistrationID]) REFERENCES [Registration]([RegistrationID]),
+    CONSTRAINT [FK_QuizAttempt_QuizContent] FOREIGN KEY ([QuizID]) REFERENCES [QuizContent]([QuizID])
+)
+
+CREATE TABLE [dbo].[StudentAnswer]
+(
+    [StudentAnswerID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [QuizAttemptID] INT NOT NULL,
+    [QuestionID] INT NOT NULL,
+    [Answer] NVARCHAR(MAX) NOT NULL,
+    [Status] NVARCHAR(20) NOT NULL,
+    CONSTRAINT [FK_StudentAnswer_QuizAttempt] FOREIGN KEY ([QuizAttemptID]) REFERENCES [QuizAttempt]([QuizAttemptID]),
+    CONSTRAINT [FK_StudentAnswer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
+)
+
 ALTER TABLE [dbo].[User] ADD AboutMe NVARCHAR(500) NULL;
 ALTER TABLE [dbo].[Course] ADD ImageName VARCHAR(100) NULL;
+
 /*
+DROP TABLE [StudentAnswer]
+DROP TABLE [QuizAttempt]
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]
 DROP TABLE [Answer]
 DROP TABLE [Registration]
 DROP TABLE [MaterialContent]
-DROP TABLE [ImageSubmission]
 DROP TABLE [Question]
 DROP TABLE [QuizContent]
 DROP TABLE [Content]
