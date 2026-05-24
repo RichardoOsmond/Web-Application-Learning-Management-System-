@@ -35,6 +35,11 @@ namespace Wapping_time
             get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
             set { ViewState["selectedCourseID"] = value; }
         }
+        protected int selectedQuizID
+        {
+            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
+            set { ViewState["selectedCourseID"] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -96,17 +101,6 @@ namespace Wapping_time
                     {
 
                     }
-                    break;
-                case "Delete":
-                    if (selectedMaterialID <= 0) break;
-
-                    using (SqlConnection conn = new SqlConnection(connString))
-                    {
-                        conn.Open();
-                        DeleteMaterial(selectedMaterialID, conn);
-                    }
-
-                    LoadContent(selectedLessonID, selectedType);
                     break;
                 case "EditOrder":
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort();", true);
@@ -289,7 +283,7 @@ namespace Wapping_time
                 lessonNameTxt.Text = "";
                 LoadLessons(selectedCourseID);
             }
-            else if (hdnModalMode.Value == "Delete")
+            else if (hdnModalMode.Value == "DeleteL")
             {
                 if (selectedLessonID == 0) return;
                 using (SqlConnection conn = new SqlConnection(connString))
@@ -320,6 +314,29 @@ namespace Wapping_time
                     }
                 }
                 selectedLessonID = 0;
+            }
+            else if (hdnModalMode.Value == "DeleteM")
+            {
+                if (selectedLessonID == 0) return;
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    DeleteMaterial(selectedMaterialID, conn);
+                }
+                LoadContent(selectedLessonID, selectedType);
+                selectedMaterialID = 0;
+            }
+            else if (hdnModalMode.Value == "DeleteQ")
+            {
+                if (selectedQuizID == 0) return;
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    //Should run DeleteQuiz
+                    //DeleteMaterial(selectedMaterialID, conn);
+                }
+                LoadContent(selectedLessonID, selectedType);
+                selectedQuizID = 0;
             }
             LoadLessons(selectedCourseID);
         }

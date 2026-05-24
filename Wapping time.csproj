@@ -69,7 +69,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminCourse.aspx" />
+    <Content Include="CSS\AdminEditCoursePage.css" />
+    <Content Include="CSS\MaterialPage.css" />
+    <Content Include="CSS\SelectedCoursePage.css" />
     <Content Include="CSS\StudentCourse.css" />
+    <Content Include="CSS\ViewMaterial.css" />
     <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="MaterialPage.aspx" />
     <Content Include="App_Data\READCARDDB.mdf" />
@@ -78,6 +82,9 @@
     </Content>
     <Content Include="bridgePage.aspx" />
     <Content Include="chat.aspx" />
+    <Content Include="Scripts\AdminEditCoursePage.js" />
+    <Content Include="Scripts\MaterialPage.js" />
+    <Content Include="Scripts\SelectedCoursePage.js" />
     <Content Include="Scripts\StudentCourse.js" />
     <Content Include="SelectedCoursePage.aspx" />
     <Content Include="courses.aspx" />

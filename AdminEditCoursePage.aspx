@@ -1,304 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="AdminEditCoursePage.aspx.cs" Inherits="Wapping_time.EditMaterial" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style>
-        .lesson-list {
-            background-color: #d6c8f5;
-            border-radius: 15px;
-            padding: 15px;
-            width: 100%;
-            flex: 1;
-        }
+    <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/AdminEditCoursePage.css") %>" />
+    <script src='<%= ResolveUrl ("~/Scripts/AdminEditCoursePage.js") %>'></script>
 
-        .lesson-list h3 {
-            font-size: 30px;
-        }
-
-        .lesson-list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .lesson-link {
-            display: block;
-            padding: 8px;
-            text-decoration: none;
-            color: #5a2d9c;
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-        }
-
-        .lesson-link.active {
-            font-weight: bold;
-            color: #7842f5;
-        }
-
-        .course-container {
-            display: flex;
-            gap: 20px;
-            padding: 30px;
-            align-items: stretch;
-        }
-
-        .left-column {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .middle-column {
-            flex: 1;
-        }
-
-        .middle-column h2 {
-            font-size: 32px;
-        }
-
-        .section-title {
-            padding: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-panel a {
-            display: block;
-            padding: 8px;
-            text-decoration: none;
-            color: #5a2d9c;
-        }
-
-        .section-panel a.active {
-            font-weight: bold;
-            color: #7842f5;
-        }
-
-        .arrow-icon {
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            transition: transform 0.3s;
-        }
-
-        .section-btn {
-            background-color: #7842f5;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            margin-left: auto;
-        }
-
-        .section-btn:hover {
-            background-color: #5a2d9c;
-        }
-
-        .section-btn:disabled {
-            background-color: #cccccc !important;
-            color: #666666 !important;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .section-panel::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .section-panel::-webkit-scrollbar-track {
-            background: #c4b5f0;
-            border-radius: 10px;
-        }
-
-        .section-panel::-webkit-scrollbar-thumb {
-            background: #7842f5;
-            border-radius: 10px;
-        }
-
-        .section-panel::-webkit-scrollbar-thumb:hover {
-            background: #5a2d9c;
-        }
-
-        .section-panel {
-            background-color: #d6c8f5;
-            border-radius: 10px;
-            overflow: hidden;
-            max-height: 0;
-            padding: 0 15px;
-            transition: max-height 0.5s ease, padding 0.5s ease;
-        }
-
-        .section-panel.open {
-            max-height: 200px;
-            height: 200px;
-            padding: 15px;
-            overflow-y: scroll;
-        }
-
-        .arrow-rotate {
-            transform: rotate(90deg);
-        }
-
-        .right-column {
-            width: 350px;
-            flex-shrink: 0;
-            text-align: center;
-        }
-
-        .course-image img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .section-title {
-            padding: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .save-order-btn {
-            display: block;
-            margin-left: auto;
-            margin-top: 10px;
-        }
-
-        .material-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 0;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        .modal-box {
-            background: #d6c8f5;
-            padding: 30px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 400px;
-            min-height: 200px
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 195px;
-            margin-top: 40px;
-        }
-
-        .modal-buttons button, .modal-buttons input[type="submit"] {
-            background-color: #7842f5;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-
-        .modal-box h2{
-            font-size: 30px;
-        }
-
-        .modal-box .name-input {
-            font-size: 20px;
-        }
-
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script type="text/javascript">
         var selectedLessonID = <%=selectedLessonID%>;
     </script>
-
-    <script>
-        window.onload = function () {
-            document.querySelector('[id$="aDeleteBtn"]').disabled = selectedLessonID <= 0;
-        }
-
-        function toggleSection(panelId, title) {
-            var panel = document.querySelector('[id$="' + panelId + '"]');
-            var arrow = title.querySelector('.arrow-icon');
-            panel.classList.toggle('open');
-            arrow.classList.toggle('arrow-rotate');
-        }
-
-        function showMaterialOnly() {
-            document.getElementById('materialSection').classList.remove('hidden');
-            document.getElementById('quizSection').classList.add('hidden');
-        }
-
-        function showQuizOnly() {
-            document.getElementById('quizSection').classList.remove('hidden');
-            document.getElementById('materialSection').classList.add('hidden');
-        }
-
-        function enableSort() {
-            var numbers = document.querySelectorAll('.item-number');
-            numbers.forEach(function (n) {
-                n.style.display = 'inline';
-            });
-
-            var list = document.querySelector('[id$="materialPanel"]');
-            var sortable = new Sortable(list, {
-                animation: 150,
-                onEnd: function (evt) {
-                    var items = document.querySelectorAll('.material-item');
-                    var order = [];
-                    items.forEach(function (item) {
-                        order.push(item.getAttribute('data-id'));
-                    });
-                    document.querySelector('[id$="hdnOrder"]').value = order.join(',');
-                }
-            });
-            document.querySelector('[id$="saveOrderBtn"]').style.display = 'block';
-        }
-
-        function cancelSort() {
-            var numbers = document.querySelectorAll('.item-number');
-            numbers.forEach(function (n) {
-                n.style.display = 'none';
-            });
-            document.querySelector('[id$="saveOrderBtn"]').style.display = 'none';
-        }
-        function openAddModal() {
-            document.getElementById('modalTitle').innerText = 'Add Lesson';
-            document.getElementById('addLessonContent').style.display = 'block';
-            document.getElementById('deleteLessonContent').style.display = 'none';
-            document.querySelector('[id$="hdnModalMode"]').value = 'Add';
-            document.getElementById('addLessonModal').style.display = 'flex';
-            document.querySelector('[id$="confirmLessonBtn"]').value = 'Add';
-        }
-        function closeModal() {
-            document.getElementById('addLessonModal').style.display = 'none';
-        }
-        function openDeleteModal() {
-            document.getElementById('modalTitle').innerText = 'Delete Lesson';
-            document.getElementById('addLessonContent').style.display = 'none';
-            document.getElementById('deleteLessonContent').style.display = 'block';
-            document.getElementById('deleteLessonContent').style.display = 'block';
-            document.querySelector('[id$="hdnModalMode"]').value = 'Delete';
-            document.getElementById('addLessonModal').style.display = 'flex';
-            document.querySelector('[id$="confirmLessonBtn"]').value = 'Delete';
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -311,7 +19,7 @@
                 <div class="lesson-list-header">
                     <h3>Lessons</h3>
                     <asp:Button ID="aLessonBtn" runat="server" Text="Add Lesson" CssClass="section-btn" OnClientClick="openAddModal(); return false; " />
-                    <asp:Button ID="aDeleteBtn" runat="server" Text="Delete Selected Lesson" CssClass="section-btn" OnClientClick="openDeleteModal(); return false; " />
+                    <asp:Button ID="aDeleteBtn" runat="server" Text="Delete Selected Lesson" CssClass="section-btn" OnClientClick="openLessonDeleteModal(); return false; " />
                     <div id="addLessonModal" style="display:none;" class="modal-overlay">
                         <div class="modal-box">
                             <h2 id="modalTitle">Add Lesson</h2>
@@ -321,6 +29,12 @@
                             </div>
                             <div id="deleteLessonContent" style="display:none;">
                                 <p>Are you sure you want to delete this lesson?</p>
+                            </div>
+                            <div id="deleteMaterialContent" style="display:none;">
+                                <p>Are you sure you want to delete this Material?</p>
+                            </div>
+                            <div id="deleteQuizContent" style="display:none;">
+                                <p>Are you sure you want to delete this Quiz?</p>
                             </div>
                             <div class="modal-buttons">
                                 <asp:Button ID="confirmLessonBtn" runat="server" Text="Add" OnClick="confirmLessonBtn_Click" />
@@ -347,7 +61,7 @@
                     <img src="Images/arrow.png" class="arrow-icon" onclick="toggleSection('materialPanel', this.parentElement)"/> Material
                     <asp:Button ID="mAddBtn" runat="server" Text="Add Material" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="mEditBtn" runat="server" Text="Edit Selected Material" CssClass="section-btn" OnClick="varBtn_Click"/>
-                    <asp:Button ID="mDeleteBtn" runat="server" Text="Delete Selected Material" CssClass="section-btn" OnClick="varBtn_Click"/>
+                    <asp:Button ID="mDeleteBtn" runat="server" Text="Delete Selected Material" CssClass="section-btn" OnClientClick="openMaterialDeleteModal(); return false; " />
                     <asp:Button ID="mEditOrderBtn" runat="server" Text="Edit Order" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="mReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
                 </h2>
@@ -372,7 +86,7 @@
                     <img src="Images/arrow.png" class="arrow-icon" onclick="toggleSection('quizPanel', this.parentElement)"/> Quiz
                     <asp:Button ID="qAddBtn" runat="server" Text="Add Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="qEditBtn" runat="server" Text="Edit Selected Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
-                    <asp:Button ID="qDeleteBtn" runat="server" Text="Delete Selected Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
+                    <asp:Button ID="qDeleteBtn" runat="server" Text="Delete Selected Quiz" CssClass="section-btn" OnClientClick="openQuizDeleteModal(); return false;"/>
                     <asp:Button ID="qReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
                 </h2>
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
