@@ -25,6 +25,11 @@ namespace Wapping_time
             get { return ViewState["selectedMaterialID"] != null ? (int)ViewState["selectedMaterialID"] : 0; }
             set { ViewState["selectedMaterialID"] = value; }
         }
+        protected int selectedQuizID
+        {
+            get { return ViewState["selectedQuizID"] != null ? (int)ViewState["selectedQuizID"] : 0; }
+            set { ViewState["selectedQuizID"] = value; }
+        }
         protected string selectedType
         {
             get { return ViewState["selectedType"] != null ? (string)ViewState["selectedType"] : ""; }
@@ -88,7 +93,7 @@ namespace Wapping_time
                     }
                     else if (section == 'q')
                     {
-                        //"MaterialPage.aspx?CourseID=" + selectedCourseID + "&LessonID=" + selectedLessonID + "&Mode=Add"
+                        Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}");
                     }
                     break;
                 case "Edit":
@@ -99,7 +104,8 @@ namespace Wapping_time
                     }
                     else if (section == 'q')
                     {
-
+                        if (selectedQuizID == 0) return;
+                        Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&QuizID={selectedQuizID}");
                     }
                     break;
                 case "EditOrder":
@@ -214,10 +220,10 @@ namespace Wapping_time
                 else if (type == "quiz")
                 {
                     // Load quizzes
-                    string quizQuery = @"SELECT q.Name FROM Content c 
-                                        JOIN QuizContent q ON c.ContentID = q.ContentID 
-                                        WHERE c.LessonID = @LessonID AND c.Type = 'Quiz'
-                                        ORDER BY c.Position";
+                    string quizQuery = @"SELECT q.QuizID, q.Name FROM Content c 
+                    JOIN QuizContent q ON c.ContentID = q.ContentID 
+                    WHERE c.LessonID = @LessonID AND c.Type = 'Quiz'
+                    ORDER BY c.Position";
                     SqlDataAdapter quizAdapter = new SqlDataAdapter(quizQuery, conn);
                     quizAdapter.SelectCommand.Parameters.AddWithValue("@LessonID", lessonID);
                     DataTable quizTable = new DataTable();
@@ -238,6 +244,12 @@ namespace Wapping_time
         protected void selectMaterial(object source, RepeaterCommandEventArgs e)
         {
             selectedMaterialID = int.Parse(e.CommandArgument.ToString());
+            LoadContent(selectedLessonID, selectedType);
+        }
+
+        protected void selectQuiz(object source, RepeaterCommandEventArgs e)
+        {
+            selectedQuizID = int.Parse(e.CommandArgument.ToString());
             LoadContent(selectedLessonID, selectedType);
         }
 

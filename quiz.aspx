@@ -5,8 +5,8 @@
     <asp:Label ID="lblCourseQuizTitle" runat="server" Text="Course - Quiz Title" CssClass="quiz-page-title"></asp:Label>
     <br />
     <div id="timerBox" style="display:inline-block; background-color:#7842f5; color:#ffffff; font-family:'Segoe UI',sans-serif; font-weight:600; font-size:14px; padding:8px 20px; border-radius:6px; margin-bottom:12px;">
-    <span id="timerDisplay">Loading...</span>
-</div>
+        <span id="timerDisplay">Loading...</span>
+    </div>
     <asp:HiddenField ID="hfTimeLimit" runat="server" />
     <br />
     <asp:Panel ID="pnlMain" runat="server" CssClass="quiz-form-panel">
@@ -19,20 +19,16 @@
     <asp:Button ID="btnSubmit" runat="server" Text="Submit Quiz" CssClass="quiz-btn-save" OnClick="btnSubmit_Click" />
     <asp:Button ID="btnBack" runat="server" Text="Back to Quiz Page" CssClass="quiz-btn-clear" OnClick="btnBack_Click" Visible="false" />
     <br />
-
     <script>
         window.onload = function () {
             var hiddenField = document.getElementById('<%= hfTimeLimit.ClientID %>');
-        var seconds = parseInt(hiddenField.value);
-
-        if (!seconds || seconds <= 0) {
-            document.getElementById('timerBox').style.display = 'none';
-            return;
-        }
-
-        var display = document.getElementById('timerDisplay');
-        var submitBtn = document.getElementById('<%= btnSubmit.ClientID %>');
-
+            var seconds = parseInt(hiddenField.value);
+            if (!seconds || seconds <= 0) {
+                document.getElementById('timerBox').style.display = 'none';
+                return;
+            }
+            var display = document.getElementById('timerDisplay');
+            var submitBtn = document.getElementById('<%= btnSubmit.ClientID %>');
             var timer = setInterval(function () {
                 if (seconds <= 0) {
                     clearInterval(timer);
