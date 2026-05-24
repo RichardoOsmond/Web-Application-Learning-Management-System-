@@ -21,7 +21,7 @@ namespace Wapping_time
 
             if (Request.QueryString["QuizID"] == null)
             {
-                Response.Redirect("bridgePage.aspx?QuizID=3");
+                Response.Redirect("StudentDashboard.aspx");
                 return;
             }
 
@@ -29,9 +29,7 @@ namespace Wapping_time
             {
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                 int roleID = Convert.ToInt32(Session["RoleID"]);
-
                 LoadTitle(quizID);
-
                 if (roleID == 1)
                 {
                     pnlAdmin.Visible = true;
@@ -45,8 +43,7 @@ namespace Wapping_time
             }
         }
 
-        // ─── SHARED ───────────────────────────────────────────────
-
+        // load course + quiz name into title label
         private void LoadTitle(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -63,13 +60,12 @@ namespace Wapping_time
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
-                {
                     lblCourseQuizTitle.Text = reader["CourseName"].ToString() + " — " + reader["Name"].ToString();
-                }
                 reader.Close();
             }
         }
 
+        // convert seconds to readable format
         private string FormatTimeLimit(int totalSeconds)
         {
             int hours = totalSeconds / 3600;
@@ -79,6 +75,7 @@ namespace Wapping_time
             return minutes + "m";
         }
 
+        // get courseID from quizID via join chain
         private int GetCourseID(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -98,6 +95,7 @@ namespace Wapping_time
             }
         }
 
+        // get registrationID for current user in given course
         private int GetRegistrationID(int courseID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -112,8 +110,7 @@ namespace Wapping_time
             }
         }
 
-        // ─── STUDENT VIEW ─────────────────────────────────────────
-
+        // student view — quiz info + attempt button + previous attempts
         private void LoadStudentView(int quizID)
         {
             int courseID = GetCourseID(quizID);
@@ -128,48 +125,35 @@ namespace Wapping_time
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                string query = "SELECT [Name], [TimeLimit], [PassingScores], [MaxAttempts], [Status] FROM QuizContent WHERE QuizID = @QuizID";
+                string query = "SELECT [TimeLimit], [PassingScores], [MaxAttempts], [Status] FROM QuizContent WHERE QuizID = @QuizID";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
-
                 if (reader.Read())
                 {
                     string status = reader["Status"].ToString();
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
                     int passingScore = Convert.ToInt32(reader["PassingScores"]);
                     int maxAttempts = Convert.ToInt32(reader["MaxAttempts"]);
-
                     lblStatusBadge.Text = "Status: " + status;
                     lblTimeLimitStudent.Text = "Time Limit: " + FormatTimeLimit(totalSeconds);
                     lblPassingStudent.Text = "Passing Score: " + passingScore + "%";
-
                     reader.Close();
 
-                    // count attempts used
                     SqlCommand countCmd = new SqlCommand(
-                        "SELECT COUNT(*) FROM QuizAttempt WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID",
-                        conn);
+                        "SELECT COUNT(*) FROM QuizAttempt WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID", conn);
                     countCmd.Parameters.AddWithValue("@RegistrationID", registrationID);
                     countCmd.Parameters.AddWithValue("@QuizID", quizID);
                     int attemptsUsed = Convert.ToInt32(countCmd.ExecuteScalar());
 
                     lblAttemptsInfo.Text = "Attempts: " + attemptsUsed + " / " + maxAttempts;
-
-                    // enable attempt button only if open and attempts remaining
-                    bool canAttempt = status == "Open" && attemptsUsed < maxAttempts;
-                    btnAttempt.Enabled = canAttempt;
-
-                    // store for postback use
+                    btnAttempt.Enabled = status == "Open" && attemptsUsed < maxAttempts;
                     ViewState["RegistrationID"] = registrationID;
                     ViewState["AttemptsUsed"] = attemptsUsed;
 
-                    // load previous attempts grid if any
                     if (attemptsUsed > 0)
-                    {
                         LoadStudentAttempts(quizID, registrationID, conn);
-                    }
                 }
                 else
                 {
@@ -178,21 +162,21 @@ namespace Wapping_time
             }
         }
 
+        // bind student attempts grid
         private void LoadStudentAttempts(int quizID, int registrationID, SqlConnection conn)
         {
             string query = @"
-        SELECT QuizAttemptID, AttemptNumber, DateTaken, Score,
-               CASE WHEN IsPassed = 1 THEN 'Pass' ELSE 'Fail' END AS Result
-        FROM QuizAttempt
-        WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
-        ORDER BY AttemptNumber DESC";
+                SELECT QuizAttemptID, AttemptNumber, DateTaken, Score,
+                       CASE WHEN IsPassed = 1 THEN 'Pass' ELSE 'Fail' END AS Result
+                FROM QuizAttempt
+                WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
+                ORDER BY AttemptNumber DESC";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@RegistrationID", registrationID);
             cmd.Parameters.AddWithValue("@QuizID", quizID);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
-
             gvStudentAttempts.DataSource = dt;
             gvStudentAttempts.DataBind();
             pnlPreviousAttempts.Visible = true;
@@ -204,7 +188,6 @@ namespace Wapping_time
             int registrationID = Convert.ToInt32(ViewState["RegistrationID"]);
             int attemptsUsed = Convert.ToInt32(ViewState["AttemptsUsed"]);
             int newAttemptNumber = attemptsUsed + 1;
-
             int newQuizAttemptID;
 
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -224,8 +207,7 @@ namespace Wapping_time
             Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + newQuizAttemptID);
         }
 
-        // ─── ADMIN VIEW ───────────────────────────────────────────
-
+        // admin view — quiz info + status toggle + student list
         private void LoadAdminView(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -235,50 +217,44 @@ namespace Wapping_time
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
-
                 if (reader.Read())
                 {
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
                     int passingScore = Convert.ToInt32(reader["PassingScores"]);
                     int maxAttempts = Convert.ToInt32(reader["MaxAttempts"]);
                     string status = reader["Status"].ToString();
-
                     lblTimeLimitAdmin.Text = "Time Limit: " + FormatTimeLimit(totalSeconds);
                     lblPassingAdmin.Text = "Passing Score: " + passingScore + "%";
                     lblMaxAttemptsAdmin.Text = "Max Attempts: " + maxAttempts;
-
-                    // toggle button text reflects current status
                     btnToggleStatus.Text = status == "Open" ? "Close Quiz" : "Open Quiz";
-
                     ViewState["CurrentStatus"] = status;
                 }
                 reader.Close();
             }
-
             LoadAdminStudentList(quizID);
         }
 
+        // bind admin student list grid
         private void LoadAdminStudentList(int quizID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-            SELECT r.RegistrationID,
-                   u.Username,
-                   COUNT(qa.QuizAttemptID)    AS AttemptsUsed,
-                   MAX(qa.Score)               AS BestScore
-            FROM QuizAttempt qa
-            JOIN Registration r ON qa.RegistrationID = r.RegistrationID
-            JOIN [User] u       ON r.UserID = u.UserID
-            WHERE qa.QuizID = @QuizID
-            GROUP BY r.RegistrationID, u.Username
-            ORDER BY BestScore DESC";
+                    SELECT r.RegistrationID,
+                           u.Username,
+                           COUNT(qa.QuizAttemptID) AS AttemptsUsed,
+                           MAX(qa.Score)            AS BestScore
+                    FROM QuizAttempt qa
+                    JOIN Registration r ON qa.RegistrationID = r.RegistrationID
+                    JOIN [User] u       ON r.UserID = u.UserID
+                    WHERE qa.QuizID = @QuizID
+                    GROUP BY r.RegistrationID, u.Username
+                    ORDER BY BestScore DESC";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-
                 gvAdminStudents.DataSource = dt;
                 gvAdminStudents.DataBind();
             }
@@ -300,10 +276,24 @@ namespace Wapping_time
                 cmd.ExecuteNonQuery();
             }
 
-            // reload admin view with updated status
             LoadTitle(quizID);
             LoadAdminView(quizID);
         }
+
+        protected void btnReturn_Click(object sender, EventArgs e)
+        {
+            if (Request.QueryString["CourseID"] != null && Request.QueryString["LessonID"] != null)
+            {
+                string courseID = Request.QueryString["CourseID"];
+                string lessonID = Request.QueryString["LessonID"];
+                Response.Redirect($"SelectedCoursePage.aspx?CourseID={courseID}&LessonID={lessonID}");
+            }
+            else
+            {
+                Response.Redirect("StudentDashboard.aspx");
+            }
+        }
+
         protected void gvStudentAttempts_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "ReviewAttempt")
@@ -326,10 +316,10 @@ namespace Wapping_time
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     string query = @"
-                SELECT TOP 1 QuizAttemptID 
-                FROM QuizAttempt 
-                WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
-                ORDER BY Score DESC";
+                        SELECT TOP 1 QuizAttemptID
+                        FROM QuizAttempt
+                        WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
+                        ORDER BY Score DESC";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@RegistrationID", registrationID);
                     cmd.Parameters.AddWithValue("@QuizID", quizID);
@@ -340,5 +330,4 @@ namespace Wapping_time
             }
         }
     }
-        }
-    
+}

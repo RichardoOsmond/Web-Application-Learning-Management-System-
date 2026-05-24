@@ -24,6 +24,15 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Label lblCourseQuizTitle;
 
         /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+
+        /// <summary>
         /// pnlStudent control.
         /// </summary>
         /// <remarks>
@@ -85,6 +94,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAttempt;
+
+        /// <summary>
+        /// btnReturnStudent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnReturnStudent;
 
         /// <summary>
         /// pnlPreviousAttempts control.
@@ -166,6 +184,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnToggleStatus;
+
+        /// <summary>
+        /// btnReturnAdmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnReturnAdmin;
 
         /// <summary>
         /// pnlStudentList control.
