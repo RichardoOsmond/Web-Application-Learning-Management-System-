@@ -7,8 +7,6 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Data.SqlClient;
 
 namespace Wapping_time
 {
@@ -18,10 +16,7 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             CalculateMaxEnrollment();
-=======
->>>>>>> main
             if (!IsPostBack)
             {
                 CourseRepeater.DataBind();
@@ -63,12 +58,6 @@ namespace Wapping_time
             }
         }
 
-<<<<<<< HEAD
-        protected string GetPercentage(object countObj)
-        {
-
-        }
-
         protected string GetPercentage(object countObj)
         {
             if (countObj == null || countObj == DBNull.Value) return "0";
@@ -83,19 +72,11 @@ namespace Wapping_time
 
         protected void saveCourseBtn_Click(object sender, EventArgs e)
         {
-=======
-        protected void saveCourseBtn_Click(object sender, EventArgs e)
-        {
->>>>>>> main
             if (Session["UserID"] == null)
             {
                 Response.Write("<script>alert('Session expired - UserID is null');</script>");
                 return;
             }
-<<<<<<< HEAD
-=======
-            Response.Write("<script>alert('Function reached! UserID = " + Session["UserID"] + "');</script>");
->>>>>>> main
 
             if (string.IsNullOrWhiteSpace(courseNameTxt.Text) ||
                 string.IsNullOrWhiteSpace(descriptionTxt.Text) ||
@@ -113,13 +94,8 @@ namespace Wapping_time
                 string extension = Path.GetExtension(courseFileUpload.FileName);
                 string newFileName = Guid.NewGuid().ToString() + extension;
                 savePath = Path.Combine(folderPath, newFileName);
-<<<<<<< HEAD
 
                 imagePath = "/Images/" + newFileName;
-=======
-                imagePath = "/Images/" + newFileName;
-                courseFileUpload.SaveAs(savePath);
->>>>>>> main
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
@@ -132,7 +108,6 @@ namespace Wapping_time
 
                 try
                 {
-<<<<<<< HEAD
                     // 1. INSERT NEW COURSE
                     string insertCourseQuery = @"
                         INSERT INTO Course 
@@ -140,14 +115,6 @@ namespace Wapping_time
                         OUTPUT INSERTED.CourseID
                         VALUES 
                         (@UserID, @CourseName, @Description, @CourseCategory, @CourseImage, @CourseCreatedDate);
-=======
-                    string insertCourseQuery = @"
-                    INSERT INTO Course 
-                    (UserID, CourseName, Description, CourseCategory, CourseImage, CourseCreatedDate)
-                    OUTPUT INSERTED.CourseID
-                    VALUES 
-                    (@UserID, @CourseName, @Description, @CourseCategory, @CourseImage, @CourseCreatedDate);
->>>>>>> main
                     ";
 
                     int newCourseID;
@@ -164,17 +131,13 @@ namespace Wapping_time
                         newCourseID = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-<<<<<<< HEAD
                     // 2. INSERT REGISTRATIONS FOR CHECKED STUDENTS
-=======
->>>>>>> main
                     foreach (RepeaterItem item in studentRepeater.Items)
                     {
                         Label hiddenStudentID = (Label)item.FindControl("hiddenStudentID");
                         int studentIDHidden = Convert.ToInt32(hiddenStudentID.Text);
                         CheckBox enrollCheckBox = (CheckBox)item.FindControl("enrollCheckBox");
 
-<<<<<<< HEAD
                         if (enrollCheckBox != null && enrollCheckBox.Checked)
                         {
                             string insertRegisterQuery = @"
@@ -190,7 +153,7 @@ namespace Wapping_time
                                 registerCmd.Parameters.AddWithValue("@UserID", studentIDHidden);
                                 registerCmd.Parameters.AddWithValue("@Result", "Pending");
                                 registerCmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now.Date);
-                                registerCmd.Parameters.AddWithValue("@Progress", 0);        
+                                registerCmd.Parameters.AddWithValue("@Progress", 0);
                                 registerCmd.ExecuteNonQuery();
                             }
                         }
@@ -202,40 +165,15 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
-                    
+
                     Response.Redirect(Request.RawUrl);
                 }
-                catch 
+                catch
                 {
-=======
-                        string insertRegisterQuery = @"
-                            INSERT INTO Registration
-                            (CourseID, UserID, Result, RegistrationDate, Progress)
-                            VALUES
-                            (@CourseID, @UserID, @Result, @RegistrationDate, @Progress);
-                            ";
-
-                        using (SqlCommand registerCmd = new SqlCommand(insertRegisterQuery, conn, transaction))
-                        {
-                            registerCmd.Parameters.AddWithValue("@CourseID", newCourseID);
-                            registerCmd.Parameters.AddWithValue("@UserID", studentIDHidden);
-                            registerCmd.Parameters.AddWithValue("@Result", "Pending");
-                            registerCmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now.Date);
-                            registerCmd.Parameters.AddWithValue("@Progress", 0);        
-                            registerCmd.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit();
-                }
-                catch 
-                {
-                    //rollback if error happens
->>>>>>> main
                     transaction.Rollback();
                     throw;
                 }
             }
-<<<<<<< HEAD
         }
 
         protected void updateCourseBtn_Click(object sender, EventArgs e)
@@ -330,7 +268,7 @@ namespace Wapping_time
                                 registerCmd.Parameters.AddWithValue("@UserID", studentIDHidden);
                                 registerCmd.Parameters.AddWithValue("@Result", "Pending");
                                 registerCmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now.Date);
-                                registerCmd.Parameters.AddWithValue("@Progress", 0);        
+                                registerCmd.Parameters.AddWithValue("@Progress", 0);
                                 registerCmd.ExecuteNonQuery();
                             }
                         }
@@ -352,7 +290,7 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
-                    
+
                     Response.Redirect(Request.RawUrl);
                 }
                 catch
@@ -363,19 +301,12 @@ namespace Wapping_time
             }
         }
 
-=======
-            Response.Redirect(Request.RawUrl);
-        }
-
->>>>>>> main
         protected void viewAllCourseBtn_Click(object sender, EventArgs e)
         {
 
         }
         protected void cancelBtn_Click(object sender, EventArgs e)
-        protected void cancelBtn_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             createCourseModal.Style["visibility"] = "hidden";
             modalTitle.InnerText = "Create New Course:";
             courseNameTxt.Text = "";
@@ -385,20 +316,6 @@ namespace Wapping_time
             courseImagePreview.Src = "";
             imagePreviewWrapper.Style["display"] = "none";
             courseFileUpload.Style["display"] = "block";
-=======
-            foreach (RepeaterItem item in studentRepeater.Items)
-            {
-                CheckBox cb = (CheckBox)item.FindControl("enrollCheckBox");
-
-                if (cb != null)
-                {
-                    cb.Checked = false;
-                }
-            }
-        }
-        protected void Button1_Click(object sender, EventArgs e)
-        {
->>>>>>> main
 
             foreach (RepeaterItem item in studentRepeater.Items)
             {
@@ -480,11 +397,7 @@ namespace Wapping_time
             Button btn = (Button)sender;
             String courseID = btn.CommandArgument;
 
-<<<<<<< HEAD
             Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
-=======
-            Response.Redirect($"SelectedCoursePage.aspx?CourseID={courseID}");
->>>>>>> main
         }
 
         protected void RemoveCourseBtn_Click(object sender, EventArgs e)
@@ -518,12 +431,7 @@ namespace Wapping_time
                 }
                 catch (Exception ex)
                 {
-<<<<<<< HEAD
                     Response.Write("<script>alert('Error: " + ex.Message.Replace("'", "") + "');</script>");
-=======
-                    //haven't filled
-                    //Response.Write("<script>alert('Error: " + ex.Message.Replace("'", "") + "');</script>");
->>>>>>> main
                 }
             }
         }
