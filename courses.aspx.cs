@@ -114,12 +114,7 @@ namespace Wapping_time
             editCourseModal.Style["visibility"] = "visible";
         }
 
-        protected void ContinueBtn_Click(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            string courseID = btn.CommandArgument;
-            Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
-        }
+
 
         protected void SaveCourseBtn_Click(object sender, EventArgs e)
         {
