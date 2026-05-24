@@ -24,15 +24,6 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Label lblCourseQuizTitle;
 
         /// <summary>
-        /// hfTimeLimit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfTimeLimit;
-
-        /// <summary>
         /// lblTimer control.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTimer;
+
+        /// <summary>
+        /// hfTimeLimit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfTimeLimit;
 
         /// <summary>
         /// pnlMain control.
