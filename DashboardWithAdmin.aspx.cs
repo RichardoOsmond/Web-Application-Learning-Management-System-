@@ -397,7 +397,7 @@ namespace Wapping_time
             Button btn = (Button)sender;
             String courseID = btn.CommandArgument;
 
-            Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
+            Response.Redirect("SelectedCoursePage.aspx?CourseID=" + courseID);
         }
 
         protected void RemoveCourseBtn_Click(object sender, EventArgs e)

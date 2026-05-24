@@ -40,11 +40,6 @@ namespace Wapping_time
             get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
             set { ViewState["selectedCourseID"] = value; }
         }
-        protected int selectedQuizID
-        {
-            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
-            set { ViewState["selectedCourseID"] = value; }
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
