@@ -51,13 +51,13 @@ namespace Wapping_time
             //    Session["Username"] = "admin";
             //}
 
-            if (Session["RoleName"] == null)
-            {
-                Session["UserID"] = 2;
-                Session["RoleID"] = 2;
-                Session["RoleName"] = "Student";
-                Session["Username"] = "student";
-            }
+            //if (Session["RoleName"] == null)
+            //{
+            //    Session["UserID"] = 2;
+            //    Session["RoleID"] = 2;
+            //    Session["RoleName"] = "Student";
+            //    Session["Username"] = "student";
+            //}
 
             if (Request.QueryString["CourseID"] == null)
             {
