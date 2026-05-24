@@ -11,6 +11,6 @@
         <br />
     </asp:Panel>
     <br />
-    <asp:Button ID="btnSubmit" runat="server" Text="Submit Quiz" CssClass="quiz-btn-save" />
+    <asp:Button ID="btnSubmit" runat="server" Text="Submit Quiz" CssClass="quiz-btn-save" OnClick="btnSubmit_Click" />
     <br />
 </asp:Content>

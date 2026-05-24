@@ -30,12 +30,14 @@ namespace Wapping_time
                 return;
             }
 
+            int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+
             if (!IsPostBack)
             {
-                int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                 LoadTitle(quizID);
-                LoadQuestions(quizID);
             }
+
+            LoadQuestions(quizID);
         }
 
         // ─── LOAD TITLE ───────────────────────────────────────────
