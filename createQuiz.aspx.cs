@@ -18,7 +18,6 @@ namespace Wapping_time
         {
             if (!IsPostBack)
             {
-                // validate required querystrings
                 if (Request.QueryString["CourseID"] == null || Request.QueryString["LessonID"] == null)
                 {
                     lblInstruction.Text = "Invalid access. Missing course or lesson information.";
@@ -29,21 +28,17 @@ namespace Wapping_time
                 int courseID = Convert.ToInt32(Request.QueryString["CourseID"]);
                 int lessonID = Convert.ToInt32(Request.QueryString["LessonID"]);
 
-                // load course name
                 LoadCourseName(courseID);
 
-                // get contentID from lessonID
                 int contentID = GetContentID(lessonID);
-
-                // store contentID in ViewState for later use
                 ViewState["ContentID"] = contentID;
 
-                // edit mode
                 if (Request.QueryString["QuizID"] != null)
                 {
                     int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                     LoadQuiz(quizID);
                     LoadQuestions(quizID);
+                    lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text;
                 }
             }
         }
@@ -71,7 +66,6 @@ namespace Wapping_time
             {
                 conn.Open();
 
-                // check if content row exists for this lesson with type Quiz
                 string selectQuery = "SELECT ContentID FROM Content WHERE LessonID = @LessonID AND Type = 'Quiz'";
                 SqlCommand selectCmd = new SqlCommand(selectQuery, conn);
                 selectCmd.Parameters.AddWithValue("@LessonID", lessonID);
@@ -83,14 +77,11 @@ namespace Wapping_time
                 }
                 else
                 {
-                    // insert new content row for this lesson
-                    string insertQuery = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz')";
+                    string insertQuery = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz'); SELECT SCOPE_IDENTITY()";
                     SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
                     insertCmd.Parameters.AddWithValue("@LessonID", lessonID);
-                    insertCmd.ExecuteNonQuery();
-
-                    SqlCommand getID = new SqlCommand("SELECT SCOPE_IDENTITY()", conn);
-                    return Convert.ToInt32(getID.ExecuteScalar());
+                    object newID = insertCmd.ExecuteScalar();
+                    return Convert.ToInt32(newID);
                 }
             }
         }
@@ -108,7 +99,6 @@ namespace Wapping_time
                 {
                     txtQuizName.Text = reader["Name"].ToString();
 
-                    // convert seconds back to hh:mm for display
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
                     int hours = totalSeconds / 3600;
                     int minutes = (totalSeconds % 3600) / 60;
@@ -159,7 +149,6 @@ namespace Wapping_time
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            // validation
             if (string.IsNullOrEmpty(txtQuizName.Text.Trim()))
             {
                 lblInstruction.Text = "Quiz Name is required.";
@@ -196,15 +185,27 @@ namespace Wapping_time
                 return;
             }
 
-            int passingScore = Convert.ToInt32(txtPassingScore.Text.Trim());
-            int maxAttempts = Convert.ToInt32(txtMaxAttempts.Text.Trim());
+            int passingScore;
+            if (!int.TryParse(txtPassingScore.Text.Trim(), out passingScore) || passingScore < 1 || passingScore > 100)
+            {
+                lblInstruction.Text = "Passing Percentage must be a number between 1 and 100.";
+                lblInstruction.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
+
+            int maxAttempts;
+            if (!int.TryParse(txtMaxAttempts.Text.Trim(), out maxAttempts) || maxAttempts < 1)
+            {
+                lblInstruction.Text = "Max Attempts must be a number greater than 0.";
+                lblInstruction.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
             int contentID = Convert.ToInt32(ViewState["ContentID"]);
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
 
-                // edit mode
                 if (Request.QueryString["QuizID"] != null)
                 {
                     int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
@@ -218,26 +219,22 @@ namespace Wapping_time
                     cmd.ExecuteNonQuery();
                     lblInstruction.Text = "Quiz updated successfully.";
                     lblInstruction.ForeColor = System.Drawing.Color.Green;
+                    lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text.Trim();
                 }
                 else
                 {
-                    // create mode
-                    string query = "INSERT INTO QuizContent ([ContentID], [Name], [TimeLimit], [PassingScores], [MaxAttempts]) VALUES (@ContentID, @Name, @TimeLimit, @PassingScores, @MaxAttempts)";
+                    string query = "INSERT INTO QuizContent ([ContentID], [Name], [TimeLimit], [PassingScores], [MaxAttempts]) VALUES (@ContentID, @Name, @TimeLimit, @PassingScores, @MaxAttempts); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@ContentID", contentID);
                     cmd.Parameters.AddWithValue("@Name", txtQuizName.Text.Trim());
                     cmd.Parameters.AddWithValue("@TimeLimit", totalSeconds.ToString());
                     cmd.Parameters.AddWithValue("@PassingScores", passingScore);
                     cmd.Parameters.AddWithValue("@MaxAttempts", maxAttempts);
-                    cmd.ExecuteNonQuery();
-
-                    // store new QuizID in ViewState
-                    SqlCommand getID = new SqlCommand("SELECT SCOPE_IDENTITY()", conn);
-                    int newQuizID = Convert.ToInt32(getID.ExecuteScalar());
+                    int newQuizID = Convert.ToInt32(cmd.ExecuteScalar());
                     ViewState["QuizID"] = newQuizID;
-
                     lblInstruction.Text = "Quiz created successfully. You can now add questions.";
                     lblInstruction.ForeColor = System.Drawing.Color.Green;
+                    lblAddingFor.Text = "Adding questions for: " + txtQuizName.Text.Trim();
                 }
             }
         }
@@ -250,11 +247,25 @@ namespace Wapping_time
             txtMaxAttempts.Text = string.Empty;
             lblInstruction.Text = "Fill in the details below to create a quiz.";
             lblInstruction.ForeColor = System.Drawing.Color.Gray;
+            ViewState["QuizID"] = null;
+            ViewState["ContentID"] = null;
+            gvQuestions.DataSource = null;
+            gvQuestions.DataBind();
+            txtQuestionText.Text = string.Empty;
+            txtAnswer1.Text = string.Empty;
+            txtAnswer2.Text = string.Empty;
+            txtAnswer3.Text = string.Empty;
+            txtPoints.Text = string.Empty;
+            rbAnswer1.Checked = false;
+            rbAnswer2.Checked = false;
+            rbAnswer3.Checked = false;
+            lblAddingFor.Text = string.Empty;
+            lblQuestionInstruction.Text = "Select a question type and fill in the details below.";
+            lblQuestionInstruction.ForeColor = System.Drawing.Color.Gray;
         }
 
         protected void btnAddQuestion_Click(object sender, EventArgs e)
         {
-            // check quiz is saved first
             if (ViewState["QuizID"] == null && Request.QueryString["QuizID"] == null)
             {
                 lblQuestionInstruction.Text = "Please save the quiz first before adding questions.";
@@ -262,7 +273,6 @@ namespace Wapping_time
                 return;
             }
 
-            // validation
             if (string.IsNullOrEmpty(txtQuestionText.Text.Trim()))
             {
                 lblQuestionInstruction.Text = "Question Text is required.";
@@ -277,7 +287,6 @@ namespace Wapping_time
                 return;
             }
 
-            // MCQ validation
             if (ddlQuestionType.SelectedValue == "MCQ")
             {
                 if (string.IsNullOrEmpty(txtAnswer1.Text.Trim()) ||
@@ -301,33 +310,32 @@ namespace Wapping_time
                 ? Convert.ToInt32(Request.QueryString["QuizID"])
                 : Convert.ToInt32(ViewState["QuizID"]);
 
-            int points = Convert.ToInt32(txtPoints.Text.Trim());
+            int points;
+            if (!int.TryParse(txtPoints.Text.Trim(), out points) || points < 1)
+            {
+                lblQuestionInstruction.Text = "Points must be a number greater than 0.";
+                lblQuestionInstruction.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
             string questionType = ddlQuestionType.SelectedValue;
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
 
-                // get next question order
                 SqlCommand orderCmd = new SqlCommand("SELECT ISNULL(MAX(QuestionOrder), 0) + 1 FROM Question WHERE QuizID = @QuizID", conn);
                 orderCmd.Parameters.AddWithValue("@QuizID", quizID);
                 int questionOrder = Convert.ToInt32(orderCmd.ExecuteScalar());
 
-                // insert question
-                string questionQuery = "INSERT INTO Question ([QuizID], [Question], [Point], [QuestionOrder], [QuestionType]) VALUES (@QuizID, @Question, @Point, @QuestionOrder, @QuestionType)";
+                string questionQuery = "INSERT INTO Question ([QuizID], [Question], [Point], [QuestionOrder], [QuestionType]) VALUES (@QuizID, @Question, @Point, @QuestionOrder, @QuestionType); SELECT SCOPE_IDENTITY()";
                 SqlCommand questionCmd = new SqlCommand(questionQuery, conn);
                 questionCmd.Parameters.AddWithValue("@QuizID", quizID);
                 questionCmd.Parameters.AddWithValue("@Question", txtQuestionText.Text.Trim());
                 questionCmd.Parameters.AddWithValue("@Point", points);
                 questionCmd.Parameters.AddWithValue("@QuestionOrder", questionOrder);
                 questionCmd.Parameters.AddWithValue("@QuestionType", questionType);
-                questionCmd.ExecuteNonQuery();
+                int newQuestionID = Convert.ToInt32(questionCmd.ExecuteScalar());
 
-                // get new QuestionID
-                SqlCommand getQID = new SqlCommand("SELECT SCOPE_IDENTITY()", conn);
-                int newQuestionID = Convert.ToInt32(getQID.ExecuteScalar());
-
-                // insert answers for MCQ
                 if (questionType == "MCQ")
                 {
                     string[] answers = { txtAnswer1.Text.Trim(), txtAnswer2.Text.Trim(), txtAnswer3.Text.Trim() };
@@ -335,16 +343,16 @@ namespace Wapping_time
 
                     for (int i = 0; i < answers.Length; i++)
                     {
-                        string answerQuery = "INSERT INTO Answer ([QuestionID], [Answers]) VALUES (@QuestionID, @Answers)";
+                        string answerQuery = "INSERT INTO Answer ([QuestionID], [Answers], [CorrectOrNot]) VALUES (@QuestionID, @Answers, @CorrectOrNot)";
                         SqlCommand answerCmd = new SqlCommand(answerQuery, conn);
                         answerCmd.Parameters.AddWithValue("@QuestionID", newQuestionID);
                         answerCmd.Parameters.AddWithValue("@Answers", answers[i]);
+                        answerCmd.Parameters.AddWithValue("@CorrectOrNot", correct[i] ? 1 : 0);
                         answerCmd.ExecuteNonQuery();
                     }
                 }
             }
 
-            // clear question fields
             txtQuestionText.Text = string.Empty;
             txtAnswer1.Text = string.Empty;
             txtAnswer2.Text = string.Empty;
@@ -354,7 +362,6 @@ namespace Wapping_time
             rbAnswer2.Checked = false;
             rbAnswer3.Checked = false;
 
-            // reload gridview
             int reloadQuizID = Request.QueryString["QuizID"] != null
                 ? Convert.ToInt32(Request.QueryString["QuizID"])
                 : Convert.ToInt32(ViewState["QuizID"]);
@@ -362,10 +369,6 @@ namespace Wapping_time
 
             lblQuestionInstruction.Text = "Question added successfully.";
             lblQuestionInstruction.ForeColor = System.Drawing.Color.Green;
-        }
-
-        protected void txtMaxAttempts_TextChanged(object sender, EventArgs e)
-        {
         }
     }
 }
