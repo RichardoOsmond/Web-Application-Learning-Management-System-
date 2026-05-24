@@ -12,5 +12,6 @@
     </asp:Panel>
     <br />
     <asp:Button ID="btnSubmit" runat="server" Text="Submit Quiz" CssClass="quiz-btn-save" OnClick="btnSubmit_Click" />
+<asp:Button ID="btnBack" runat="server" Text="Back to Quiz Page" CssClass="quiz-btn-clear" OnClick="btnBack_Click" Visible="false" />
     <br />
 </asp:Content>

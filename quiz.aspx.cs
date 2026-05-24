@@ -37,7 +37,19 @@ namespace Wapping_time
                 LoadTitle(quizID);
             }
 
-            LoadQuestions(quizID);
+            bool isReview = Request.QueryString["Mode"] == "Review";
+
+            if (isReview)
+            {
+                btnSubmit.Visible = false;
+                btnBack.Visible = true;
+                int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
+                LoadQuestionsReview(quizID, quizAttemptID);
+            }
+            else
+            {
+                LoadQuestions(quizID);
+            }
         }
 
         // ─── LOAD TITLE ───────────────────────────────────────────
@@ -96,18 +108,14 @@ namespace Wapping_time
                     string questionType = reader["QuestionType"].ToString();
                     int points = Convert.ToInt32(reader["Point"]);
 
-                    // question wrapper panel
                     Panel pnlQuestion = new Panel();
                     pnlQuestion.CssClass = "quiz-mcq-panel";
                     pnlQuestion.Style["margin-bottom"] = "16px";
 
-                    // question label
                     Label lblQuestion = new Label();
                     lblQuestion.CssClass = "quiz-field-label";
                     lblQuestion.Text = questionNumber + ". " + questionText + " (" + points + " pt" + (points > 1 ? "s" : "") + ")";
                     pnlQuestion.Controls.Add(lblQuestion);
-
-                    // line break
                     pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
 
                     if (questionType == "MCQ")
@@ -117,13 +125,10 @@ namespace Wapping_time
                         rbl.CssClass = "quiz-field-input";
                         rbl.Style["border"] = "none";
                         rbl.Style["width"] = "auto";
-
-                        // load answers for this question
                         LoadAnswersIntoRBL(questionID, rbl);
-
                         pnlQuestion.Controls.Add(rbl);
                     }
-                    else // Essay
+                    else
                     {
                         TextBox txtEssay = new TextBox();
                         txtEssay.ID = "txt_" + questionID;
@@ -141,6 +146,115 @@ namespace Wapping_time
                 reader.Close();
             }
         }
+
+        // ─── LOAD QUESTIONS REVIEW ────────────────────────────────
+
+        private void LoadQuestionsReview(int quizID, int quizAttemptID)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+
+                string questionQuery = @"
+                    SELECT q.QuestionID, q.Question, q.QuestionType, q.Point,
+                           sa.Answer, sa.Status
+                    FROM Question q
+                    LEFT JOIN StudentAnswer sa ON q.QuestionID = sa.QuestionID
+                        AND sa.QuizAttemptID = @QuizAttemptID
+                    WHERE q.QuizID = @QuizID
+                    ORDER BY q.QuestionOrder";
+                SqlCommand cmd = new SqlCommand(questionQuery, conn);
+                cmd.Parameters.AddWithValue("@QuizID", quizID);
+                cmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                DataTable dtQuestions = new DataTable();
+                dtQuestions.Load(reader);
+
+                int questionNumber = 1;
+
+                foreach (DataRow row in dtQuestions.Rows)
+                {
+                    int questionID = Convert.ToInt32(row["QuestionID"]);
+                    string questionText = row["Question"].ToString();
+                    string questionType = row["QuestionType"].ToString();
+                    int points = Convert.ToInt32(row["Point"]);
+                    string studentAnswer = row["Answer"] == DBNull.Value ? "" : row["Answer"].ToString();
+                    string status = row["Status"] == DBNull.Value ? "" : row["Status"].ToString();
+
+                    Panel pnlQuestion = new Panel();
+                    if (status == "Correct")
+                    {
+                        pnlQuestion.CssClass = "quiz-mcq-panel";
+                        pnlQuestion.Style["background-color"] = "#eaffea";
+                        pnlQuestion.Style["border-left"] = "4px solid #4caf50";
+                    }
+                    else if (status == "Incorrect")
+                    {
+                        pnlQuestion.CssClass = "quiz-mcq-panel";
+                        pnlQuestion.Style["background-color"] = "#fff0f0";
+                        pnlQuestion.Style["border-left"] = "4px solid #f44336";
+                    }
+                    else
+                    {
+                        pnlQuestion.CssClass = "quiz-mcq-panel";
+                        pnlQuestion.Style["background-color"] = "#fffbe6";
+                        pnlQuestion.Style["border-left"] = "4px solid #ffc107";
+                    }
+
+                    Label lblQuestion = new Label();
+                    lblQuestion.CssClass = "quiz-field-label";
+                    lblQuestion.Text = questionNumber + ". " + questionText + " (" + points + " pt" + (points > 1 ? "s" : "") + ")";
+                    pnlQuestion.Controls.Add(lblQuestion);
+                    pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
+
+                    if (questionType == "MCQ")
+                    {
+                        RadioButtonList rbl = new RadioButtonList();
+                        rbl.ID = "rbl_" + questionID;
+                        rbl.CssClass = "quiz-field-input";
+                        rbl.Style["border"] = "none";
+                        rbl.Style["width"] = "auto";
+                        rbl.Enabled = false;
+                        LoadAnswersIntoRBL(questionID, rbl);
+
+                        ListItem selected = rbl.Items.FindByValue(studentAnswer);
+                        if (selected != null)
+                            selected.Selected = true;
+
+                        pnlQuestion.Controls.Add(rbl);
+
+                        if (status == "Incorrect")
+                        {
+                            string correctAnswer = GetCorrectAnswer(questionID);
+                            Label lblCorrect = new Label();
+                            lblCorrect.CssClass = "quiz-hint-label";
+                            lblCorrect.ForeColor = System.Drawing.Color.Green;
+                            lblCorrect.Text = "Correct answer: " + correctAnswer;
+                            pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
+                            pnlQuestion.Controls.Add(lblCorrect);
+                        }
+                    }
+                    else
+                    {
+                        TextBox txtEssay = new TextBox();
+                        txtEssay.ID = "txt_" + questionID;
+                        txtEssay.CssClass = "quiz-field-input";
+                        txtEssay.TextMode = TextBoxMode.MultiLine;
+                        txtEssay.Rows = 4;
+                        txtEssay.Style["width"] = "100%";
+                        txtEssay.Text = studentAnswer;
+                        txtEssay.Enabled = false;
+                        pnlQuestion.Controls.Add(txtEssay);
+                    }
+
+                    pnlMain.Controls.Add(pnlQuestion);
+                    questionNumber++;
+                }
+            }
+        }
+
+        // ─── LOAD ANSWERS INTO RBL ────────────────────────────────
 
         private void LoadAnswersIntoRBL(int questionID, RadioButtonList rbl)
         {
@@ -169,7 +283,6 @@ namespace Wapping_time
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
             int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
 
-            // guard against resubmission
             using (SqlConnection checkConn = new SqlConnection(connStr))
             {
                 string checkQuery = "SELECT COUNT(*) FROM StudentAnswer WHERE QuizAttemptID = @QuizAttemptID";
@@ -184,8 +297,6 @@ namespace Wapping_time
                 }
             }
 
-            // REMOVED duplicate int quizID and int quizAttemptID declarations here
-
             decimal totalScore = 0;
             decimal totalPoints = 0;
 
@@ -193,7 +304,6 @@ namespace Wapping_time
             {
                 conn.Open();
 
-                // get all questions for this quiz
                 string questionQuery = @"
                     SELECT QuestionID, QuestionType, Point
                     FROM Question
@@ -221,7 +331,6 @@ namespace Wapping_time
                         RadioButtonList rbl = (RadioButtonList)pnlMain.FindControl("rbl_" + questionID);
                         studentAnswer = rbl != null && rbl.SelectedItem != null ? rbl.SelectedItem.Value : "";
 
-                        // check if correct
                         string correctAnswer = GetCorrectAnswer(questionID, conn);
                         if (studentAnswer == correctAnswer)
                         {
@@ -233,14 +342,13 @@ namespace Wapping_time
                             status = "Incorrect";
                         }
                     }
-                    else // Essay
+                    else
                     {
                         TextBox txtEssay = (TextBox)pnlMain.FindControl("txt_" + questionID);
                         studentAnswer = txtEssay != null ? txtEssay.Text.Trim() : "";
                         status = "Pending";
                     }
 
-                    // INSERT into StudentAnswer
                     string insertAnswer = @"
                         INSERT INTO StudentAnswer (QuizAttemptID, QuestionID, Answer, Status)
                         VALUES (@QuizAttemptID, @QuestionID, @Answer, @Status)";
@@ -252,10 +360,8 @@ namespace Wapping_time
                     insertCmd.ExecuteNonQuery();
                 }
 
-                // compute final score as percentage
                 decimal scorePercent = totalPoints > 0 ? (totalScore / totalPoints) * 100 : 0;
 
-                // get passing score for this quiz
                 SqlCommand passingCmd = new SqlCommand(
                     "SELECT PassingScores FROM QuizContent WHERE QuizID = @QuizID", conn);
                 passingCmd.Parameters.AddWithValue("@QuizID", quizID);
@@ -263,7 +369,6 @@ namespace Wapping_time
 
                 bool isPassed = scorePercent >= passingScore;
 
-                // UPDATE QuizAttempt
                 string updateAttempt = @"
                     UPDATE QuizAttempt
                     SET Score = @Score, IsPassed = @IsPassed
@@ -278,6 +383,9 @@ namespace Wapping_time
             Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
         }
 
+        // ─── GET CORRECT ANSWER ───────────────────────────────────
+
+        // used in btnSubmit_Click with existing open connection
         private string GetCorrectAnswer(int questionID, SqlConnection conn)
         {
             string query = "SELECT Answers FROM Answer WHERE QuestionID = @QuestionID AND CorrectOrNot = 1";
@@ -285,6 +393,28 @@ namespace Wapping_time
             cmd.Parameters.AddWithValue("@QuestionID", questionID);
             object result = cmd.ExecuteScalar();
             return result != null ? result.ToString() : "";
+        }
+
+        // used in LoadQuestionsReview with its own connection
+        private string GetCorrectAnswer(int questionID)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = "SELECT Answers FROM Answer WHERE QuestionID = @QuestionID AND CorrectOrNot = 1";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@QuestionID", questionID);
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null ? result.ToString() : "";
+            }
+        }
+
+        // ─── BACK BUTTON ──────────────────────────────────────────
+
+        protected void btnBack_Click(object sender, EventArgs e)
+        {
+            int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+            Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
         }
     }
 }

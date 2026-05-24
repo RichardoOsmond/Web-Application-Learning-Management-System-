@@ -186,11 +186,11 @@ namespace Wapping_time
         private void LoadStudentAttempts(int quizID, int registrationID, SqlConnection conn)
         {
             string query = @"
-                SELECT AttemptNumber, DateTaken, Score,
-                       CASE WHEN IsPassed = 1 THEN 'Pass' ELSE 'Fail' END AS Result
-                FROM QuizAttempt
-                WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
-                ORDER BY AttemptNumber DESC";
+        SELECT QuizAttemptID, AttemptNumber, DateTaken, Score,
+               CASE WHEN IsPassed = 1 THEN 'Pass' ELSE 'Fail' END AS Result
+        FROM QuizAttempt
+        WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
+        ORDER BY AttemptNumber DESC";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@RegistrationID", registrationID);
             cmd.Parameters.AddWithValue("@QuizID", quizID);
@@ -268,15 +268,16 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-                    SELECT u.Username,
-                           COUNT(qa.QuizAttemptID)    AS AttemptsUsed,
-                           MAX(qa.Score)               AS BestScore
-                    FROM QuizAttempt qa
-                    JOIN Registration r ON qa.RegistrationID = r.RegistrationID
-                    JOIN [User] u       ON r.UserID = u.UserID
-                    WHERE qa.QuizID = @QuizID
-                    GROUP BY u.Username
-                    ORDER BY BestScore DESC";
+            SELECT r.RegistrationID,
+                   u.Username,
+                   COUNT(qa.QuizAttemptID)    AS AttemptsUsed,
+                   MAX(qa.Score)               AS BestScore
+            FROM QuizAttempt qa
+            JOIN Registration r ON qa.RegistrationID = r.RegistrationID
+            JOIN [User] u       ON r.UserID = u.UserID
+            WHERE qa.QuizID = @QuizID
+            GROUP BY r.RegistrationID, u.Username
+            ORDER BY BestScore DESC";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@QuizID", quizID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -308,5 +309,41 @@ namespace Wapping_time
             LoadTitle(quizID);
             LoadAdminView(quizID);
         }
+        protected void gvStudentAttempts_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "ReviewAttempt")
+            {
+                int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+                int rowIndex = Convert.ToInt32(e.CommandArgument);
+                int quizAttemptID = Convert.ToInt32(gvStudentAttempts.DataKeys[rowIndex].Value);
+                Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + quizAttemptID + "&Mode=Review");
+            }
+        }
+
+        protected void gvAdminStudents_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "ReviewStudent")
+            {
+                int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+                int rowIndex = Convert.ToInt32(e.CommandArgument);
+                int registrationID = Convert.ToInt32(gvAdminStudents.DataKeys[rowIndex].Value);
+
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    string query = @"
+                SELECT TOP 1 QuizAttemptID 
+                FROM QuizAttempt 
+                WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
+                ORDER BY Score DESC";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@RegistrationID", registrationID);
+                    cmd.Parameters.AddWithValue("@QuizID", quizID);
+                    conn.Open();
+                    int quizAttemptID = Convert.ToInt32(cmd.ExecuteScalar());
+                    Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + quizAttemptID + "&Mode=Review");
+                }
+            }
+        }
     }
-}
+        }
+    

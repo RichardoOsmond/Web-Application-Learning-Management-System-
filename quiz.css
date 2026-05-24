@@ -250,3 +250,18 @@ body {
     .quiz-grid-panel .quiz-grid {
         margin-top: 16px;
     }
+
+.quiz-panel-correct {
+    background-color: #eaffea;
+    border-left: 4px solid #4caf50;
+}
+
+.quiz-panel-incorrect {
+    background-color: #fff0f0;
+    border-left: 4px solid #f44336;
+}
+
+.quiz-panel-pending {
+    background-color: #fffbe6;
+    border-left: 4px solid #ffc107;
+}

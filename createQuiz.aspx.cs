@@ -59,30 +59,16 @@ namespace Wapping_time
                 reader.Close();
             }
         }
-
         private int GetContentID(int lessonID)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
-                string selectQuery = "SELECT ContentID FROM Content WHERE LessonID = @LessonID AND Type = 'Quiz'";
-                SqlCommand selectCmd = new SqlCommand(selectQuery, conn);
-                selectCmd.Parameters.AddWithValue("@LessonID", lessonID);
-                object result = selectCmd.ExecuteScalar();
-
-                if (result != null)
-                {
-                    return Convert.ToInt32(result);
-                }
-                else
-                {
-                    string insertQuery = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz'); SELECT SCOPE_IDENTITY()";
-                    SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
-                    insertCmd.Parameters.AddWithValue("@LessonID", lessonID);
-                    object newID = insertCmd.ExecuteScalar();
-                    return Convert.ToInt32(newID);
-                }
+                string insertQuery = "INSERT INTO Content (LessonID, Position, Type) VALUES (@LessonID, 'Quiz', 'Quiz'); SELECT SCOPE_IDENTITY()";
+                SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
+                insertCmd.Parameters.AddWithValue("@LessonID", lessonID);
+                object newID = insertCmd.ExecuteScalar();
+                return Convert.ToInt32(newID);
             }
         }
 

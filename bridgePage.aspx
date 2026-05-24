@@ -19,15 +19,16 @@
 
             <asp:Panel ID="pnlPreviousAttempts" runat="server" CssClass="quiz-form-panel quiz-grid-panel" Visible="false">
                 <asp:Label ID="lblPrevAttempts" runat="server" CssClass="quiz-page-title" Text="Your Attempts"></asp:Label>
-                <asp:GridView ID="gvStudentAttempts" runat="server" CssClass="quiz-grid" AutoGenerateColumns="false">
-                    <Columns>
-                        <asp:BoundField DataField="AttemptNumber" HeaderText="#" />
-                        <asp:BoundField DataField="DateTaken" HeaderText="Date Taken" DataFormatString="{0:dd MMM yyyy, hh:mm tt}" />
-                        <asp:BoundField DataField="Score" HeaderText="Score %" DataFormatString="{0:F1}" />
-                        <asp:BoundField DataField="Result" HeaderText="Result" />
-                        <asp:ButtonField ButtonType="Button" Text="Review" HeaderText="" ControlStyle-CssClass="quiz-btn-clear" />
-                    </Columns>
-                </asp:GridView>
+                <asp:GridView ID="gvStudentAttempts" runat="server" CssClass="quiz-grid" AutoGenerateColumns="false" OnRowCommand="gvStudentAttempts_RowCommand" DataKeyNames="QuizAttemptID">
+    <Columns>
+        <asp:BoundField DataField="QuizAttemptID" HeaderText="" Visible="false" />
+        <asp:BoundField DataField="AttemptNumber" HeaderText="#" />
+        <asp:BoundField DataField="DateTaken" HeaderText="Date Taken" DataFormatString="{0:dd MMM yyyy, hh:mm tt}" />
+        <asp:BoundField DataField="Score" HeaderText="Score %" DataFormatString="{0:F1}" />
+        <asp:BoundField DataField="Result" HeaderText="Result" />
+        <asp:ButtonField ButtonType="Button" Text="Review" HeaderText="" CommandName="ReviewAttempt" ControlStyle-CssClass="quiz-btn-clear" />
+    </Columns>
+</asp:GridView>
             </asp:Panel>
         </asp:Panel>
 
@@ -42,14 +43,15 @@
 
             <asp:Panel ID="pnlStudentList" runat="server" CssClass="quiz-form-panel quiz-grid-panel">
                 <asp:Label ID="lblStudentList" runat="server" CssClass="quiz-page-title" Text="Student Attempts"></asp:Label>
-                <asp:GridView ID="gvAdminStudents" runat="server" CssClass="quiz-grid" AutoGenerateColumns="false">
-                    <Columns>
-                        <asp:BoundField DataField="Username" HeaderText="Student" />
-                        <asp:BoundField DataField="AttemptsUsed" HeaderText="Attempts Used" />
-                        <asp:BoundField DataField="BestScore" HeaderText="Best Score %" DataFormatString="{0:F1}" />
-                        <asp:ButtonField ButtonType="Button" Text="Review" HeaderText="" ControlStyle-CssClass="quiz-btn-clear" />
-                    </Columns>
-                </asp:GridView>
+                <asp:GridView ID="gvAdminStudents" runat="server" CssClass="quiz-grid" AutoGenerateColumns="false" OnRowCommand="gvAdminStudents_RowCommand" DataKeyNames="RegistrationID">
+    <Columns>
+        <asp:BoundField DataField="RegistrationID" HeaderText="" Visible="false" />
+        <asp:BoundField DataField="Username" HeaderText="Student" />
+        <asp:BoundField DataField="AttemptsUsed" HeaderText="Attempts Used" />
+        <asp:BoundField DataField="BestScore" HeaderText="Best Score %" DataFormatString="{0:F1}" />
+        <asp:ButtonField ButtonType="Button" Text="Review" HeaderText="" CommandName="ReviewStudent" ControlStyle-CssClass="quiz-btn-clear" />
+    </Columns>
+</asp:GridView>
             </asp:Panel>
         </asp:Panel>
 
