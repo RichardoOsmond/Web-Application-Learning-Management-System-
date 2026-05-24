@@ -15,26 +15,22 @@ namespace Wapping_time
         }
         protected void btnDashboard_Click(object sender, EventArgs e)
         {
-            if ((int)Session["RoleID"] == 1)
+            if (Session["RoleName"].ToString() == "Student")
             {
                 Response.Redirect("StudentDashboard.aspx");
-                Console.WriteLine("Hello");
             } else
             {
                 Response.Redirect("DashboardWithAdmin.aspx");
-                Console.WriteLine("Hi");
             }
         }
         protected void btnCourse_Click(object sender, EventArgs e)
         {
-            if ((int)Session["RoleID"] == 1)
+            if (Session["RoleName"].ToString() == "Student")
             {
                 Response.Redirect("StudentCourse.aspx");
-                Console.WriteLine("Hello");
             } else
             {
-                Response.Redirect("SelectedCoursePage.aspx");
-                Console.WriteLine("Hi");
+                Response.Redirect("AdminCourse.aspx");
             }
         }
     }

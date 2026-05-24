@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AdminCourse.aspx" />
     <Content Include="CSS\StudentCourse.css" />
     <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="MaterialPage.aspx" />
@@ -110,6 +111,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminCourse.aspx.cs">
+      <DependentUpon>AdminCourse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminCourse.aspx.designer.cs">
+      <DependentUpon>AdminCourse.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MaterialPage.aspx.cs">
       <DependentUpon>MaterialPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -13,7 +13,7 @@
         <asp:Repeater ID="rptEnrolledCourses" runat="server">
             <ItemTemplate>
                 <a href='<%# "SelectedCoursePage.aspx?CourseID=" + Eval("Course.CourseID") %>' class="item_link">
-                    <div class="course_container" id="listCourses">
+                    <div class="course_container">
                         <asp:Image runat="server" ImageUrl='<%# "~" + Eval("Course.ImageName") %>' CssClass="course_image" />
                         <div class="course_information">
                             <asp:Label ID="lblCourseName" CssClass="course_name" runat="server"><%# Eval("Course.CourseName") %></asp:Label>
