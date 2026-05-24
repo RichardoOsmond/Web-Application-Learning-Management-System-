@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminCourse.aspx" />
-<ItemGroup>
     <Content Include="CSS\StudentCourse.css" />
     <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="MaterialPage.aspx" />
@@ -93,8 +92,6 @@
     <Content Include="Images\Course Icon\Math icon.png" />
     <Content Include="forgotPassword.aspx" />
     <Content Include="DashboardWithAdmin.aspx" />
-    <Content Include="Images\CourseNextButton.png" />
-    <Content Include="Images\CoursePrevButton.png" />
     <Content Include="Images\penguin.png" />
     <Content Include="register.aspx" />
     <Content Include="Scripts\Dashboard.js" />
@@ -122,6 +119,7 @@
     </Compile>
     <Compile Include="AdminCourse.aspx.designer.cs">
       <DependentUpon>AdminCourse.aspx</DependentUpon>
+    </Compile>
     <Compile Include="bridgePage.aspx.cs">
       <DependentUpon>bridgePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -166,13 +164,6 @@
     <Compile Include="Courses.aspx.designer.cs">
       <DependentUpon>Courses.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DashboardWithAdmin.aspx.cs">
-      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DashboardWithAdmin.aspx.designer.cs">
-      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
-    </Compile>
     <Compile Include="createQuiz.aspx.cs">
       <DependentUpon>createQuiz.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -183,6 +174,9 @@
     <Compile Include="quiz.aspx.cs">
       <DependentUpon>quiz.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="quiz.aspx.designer.cs">
+      <DependentUpon>quiz.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminEditCoursePage.aspx.cs">
       <DependentUpon>AdminEditCoursePage.aspx</DependentUpon>
@@ -234,13 +228,6 @@
     </Compile>
     <Compile Include="StudentDashboard.aspx.designer.cs">
       <DependentUpon>StudentDashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="quiz.aspx.cs">
-      <DependentUpon>quiz.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="quiz.aspx.designer.cs">
-      <DependentUpon>quiz.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
