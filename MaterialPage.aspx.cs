@@ -48,6 +48,9 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+                Response.Redirect("login.aspx");
+
             hdnUploadPath.Value = "Math Image/Material";
             selectedMode = Request.QueryString["Mode"];
             if (!IsPostBack)
@@ -112,7 +115,7 @@ namespace Wapping_time
                         selectedMaterialID = Convert.ToInt32(cmd.ExecuteScalar());
                     }
                 }
-                selectedMode = "Edit";
+                Response.Redirect($"MaterialPage.aspx?Mode=Edit&LessonID={selectedLessonID}&MaterialID={selectedMaterialID}&CourseID={selectedCourseID}");
             }
             else if (selectedMode == "Edit")
             {
@@ -263,7 +266,6 @@ namespace Wapping_time
                                 File.Delete(fullPath);
                             }
                         }
-
                     }
                 }
                 else
@@ -310,6 +312,7 @@ namespace Wapping_time
             btnEditCards.Visible = true;
             btnDoneCards.Visible = false;
             cardBackText.Text = "";
+            selectedFlashcardID = -1;
             LoadFlashcards();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "cardDone", "disableCardEdit();", true);
         }

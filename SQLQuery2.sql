@@ -31,6 +31,8 @@ INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [La
     (1, 'David Chen',       'changeme', 'david@example.com',     GETDATE(), GETDATE(), NULL);
 GO
 
+select u.UserID, u.Username, u.Email, u.Password, c.CourseID, c.CourseName, c.UserID as CourseCreatorID from [User] u INNER JOIN [Course] c on c.UserID = u.UserID;
+
 -- ---- Courses (CourseID is IDENTITY) ----
 -- Created by teacher_julian (UserID = 2).
 -- CourseName is VARCHAR(10) so keep names <= 10 chars!

@@ -134,10 +134,13 @@ INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [La
 (1, 'Jin', '123qwe', '123@a.com',  GETDATE(), GETDATE(), 'I love something?!')
 
 INSERT INTO [Registration] ([UserID], [CourseID], [Result], [RegistrationDate], [Progress]) VALUES
-    (11, 2, 'Finished', GETDATE(), 100)
+    (12, 1, 'Finished', GETDATE(), 100)
 
 select * from [User]
+DELETE FROM [User] WHERE UserID = 11;
+DELETE FROM [Registration] WHERE UserID = 11;
 select * from [Role]
+select * from [Registration]
 select * from [Course]
 UPDATE [Course] SET CourseImage = '/Images/Course Icon/Math icon.png' WHERE CourseName = 'Math';
 SELECT l.LessonID, l.LessonName, m.MaterialID, m.Name

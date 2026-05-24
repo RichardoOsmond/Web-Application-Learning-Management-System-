@@ -1,8 +1,11 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -37,16 +40,27 @@ namespace Wapping_time
             get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
             set { ViewState["selectedCourseID"] = value; }
         }
+        protected int selectedQuizID
+        {
+            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
+            set { ViewState["selectedCourseID"] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+                Response.Redirect("login.aspx");
+
             if (!IsPostBack)
             {
                 selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
                 selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
                 selectedType = Request.QueryString["type"];
                 LoadLessons(selectedCourseID);
-                LoadContent(selectedLessonID, selectedType);
+                if(selectedLessonID > 0)
+                {
+                    LoadContent(selectedLessonID, selectedType);
+                }
             }
 
             if (selectedType == "material") ScriptManager.RegisterStartupScript(this, this.GetType(), "showSection", "showMaterialOnly();", true);
@@ -64,6 +78,10 @@ namespace Wapping_time
             if (action == "Return")
             {
                 Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
+            }
+            else if (action == "Lesson")
+            {
+
             }
 
             switch (action)
@@ -90,150 +108,78 @@ namespace Wapping_time
                         Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&QuizID={selectedQuizID}");
                     }
                     break;
-                case "Delete":
-                    if (section == 'q')
-                    {
-                        if (selectedQuizID == 0) return;
-
-                        using (SqlConnection conn = new SqlConnection(connString))
-                        {
-                            conn.Open();
-
-                            // block deletion if attempts exist
-                            string checkAttempts = "SELECT COUNT(*) FROM QuizAttempt WHERE QuizID = @QuizID";
-                            SqlCommand checkCmd = new SqlCommand(checkAttempts, conn);
-                            checkCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
-                            int attemptCount = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                            if (attemptCount > 0)
-                            {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "deleteError",
-                                    "alert('Cannot delete this quiz. Students have already attempted it. Close the quiz instead.');", true);
-                                return;
-                            }
-
-                            // get contentID before deleting
-                            string getContent = "SELECT ContentID FROM QuizContent WHERE QuizID = @QuizID";
-                            SqlCommand getContentCmd = new SqlCommand(getContent, conn);
-                            getContentCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
-                            int contentID = Convert.ToInt32(getContentCmd.ExecuteScalar());
-
-                            // delete answers
-                            string deleteAnswers = @"DELETE FROM Answer WHERE QuestionID IN 
-                                     (SELECT QuestionID FROM Question WHERE QuizID = @QuizID)";
-                            SqlCommand deleteAnswersCmd = new SqlCommand(deleteAnswers, conn);
-                            deleteAnswersCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
-                            deleteAnswersCmd.ExecuteNonQuery();
-
-                            // delete questions
-                            string deleteQuestions = "DELETE FROM Question WHERE QuizID = @QuizID";
-                            SqlCommand deleteQuestionsCmd = new SqlCommand(deleteQuestions, conn);
-                            deleteQuestionsCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
-                            deleteQuestionsCmd.ExecuteNonQuery();
-
-                            // delete quiz
-                            string deleteQuiz = "DELETE FROM QuizContent WHERE QuizID = @QuizID";
-                            SqlCommand deleteQuizCmd = new SqlCommand(deleteQuiz, conn);
-                            deleteQuizCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
-                            deleteQuizCmd.ExecuteNonQuery();
-
-                            // delete content row
-                            string deleteContent = "DELETE FROM Content WHERE ContentID = @ContentID";
-                            SqlCommand deleteContentCmd = new SqlCommand(deleteContent, conn);
-                            deleteContentCmd.Parameters.AddWithValue("@ContentID", contentID);
-                            deleteContentCmd.ExecuteNonQuery();
-                        }
-
-                        selectedQuizID = 0;
-                        LoadContent(selectedLessonID, selectedType);
-                        return;
-                    }
-                    if (selectedMaterialID <= 0) break;
-                    int materialContentID = -1;
-
-                    using (SqlConnection conn = new SqlConnection(connString))
-                    {
-                        conn.Open();
-
-                        // Get the description (HTML) to find embedded images
-                        string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
-                        SqlCommand getCmd = new SqlCommand(getQuery, conn);
-                        getCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-                        string html = getCmd.ExecuteScalar().ToString();
-
-                        // image paths from HTML and delete files
-                        var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
-                        foreach (System.Text.RegularExpressions.Match match in matches)
-                        {
-                            string imagePath = Server.MapPath(match.Groups[1].Value);
-                            if (File.Exists(imagePath))
-                            {
-                                File.Delete(imagePath);
-                            }
-                        }
-                        string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
-                        using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
-                        {
-                            getCardsCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-                            using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
-                            {
-                                while (cardReader.Read())
-                                {
-                                    string imgFile = cardReader["FrontImage"].ToString();
-                                    if (!string.IsNullOrEmpty(imgFile))
-                                    {
-                                        string fullPath = Server.MapPath(imgFile);
-                                        if (File.Exists(fullPath))
-                                            File.Delete(fullPath);
-                                    }
-                                }
-                            }
-                        }
-                            
-                        string deleteCardStr = @"DELETE FROM FlashCard WHERE MaterialID = @MaterialID;";
-                        using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
-                        {
-                            delCardCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-                            delCardCmd.ExecuteNonQuery();
-                        }
-
-                        string join = @"SELECT m.ContentID
-                                        FROM MaterialContent m 
-                                        JOIN Content c ON m.ContentID = c.ContentID
-                                        WHERE m.MaterialID = @MaterialID";
-                        using (SqlCommand cmd = new SqlCommand(join, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                if (reader.Read())
-                                {
-                                    materialContentID = Convert.ToInt32(reader["ContentID"]);
-                                }
-                            }
-                        }
-
-                        if (materialContentID > -1)
-                        {
-                            string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
-                                DELETE FROM Content WHERE ContentID = @ContentID;";
-
-                            using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
-                            {
-                                delCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
-                                delCmd.Parameters.AddWithValue("@ContentID", materialContentID);
-
-                                delCmd.ExecuteNonQuery();
-                            }
-                        }
-                    }
-
-                    LoadContent(selectedLessonID, selectedType);
-                    break;
                 case "EditOrder":
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort();", true);
                     break;
+            }
+        }
+
+        private void DeleteMaterial(int materialID, SqlConnection conn)
+        {
+            int contentID = -1;
+
+            // Get images path and delete them
+            string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
+            SqlCommand getCmd = new SqlCommand(getQuery, conn);
+            getCmd.Parameters.AddWithValue("@MaterialID", materialID);
+            string html = getCmd.ExecuteScalar().ToString();
+
+            var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                string imagePath = Server.MapPath(match.Groups[1].Value);
+                if (File.Exists(imagePath)) File.Delete(imagePath);
+            }
+
+            // Delete flashcard images and records
+            string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
+            using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
+            {
+                getCardsCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
+                {
+                    while (cardReader.Read())
+                    {
+                        string imgFile = cardReader["FrontImage"].ToString();
+                        if (!string.IsNullOrEmpty(imgFile))
+                        {
+                            string fullPath = Server.MapPath(imgFile);
+                            if (File.Exists(fullPath)) File.Delete(fullPath);
+                        }
+                    }
+                }
+            }
+
+            string deleteCardStr = "DELETE FROM FlashCard WHERE MaterialID = @MaterialID";
+            using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
+            {
+                delCardCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                delCardCmd.ExecuteNonQuery();
+            }
+
+            string join = @"SELECT m.ContentID FROM MaterialContent m 
+                    JOIN Content c ON m.ContentID = c.ContentID
+                    WHERE m.MaterialID = @MaterialID";
+            using (SqlCommand cmd = new SqlCommand(join, conn))
+            {
+                cmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) contentID = Convert.ToInt32(reader["ContentID"]);
+                }
+            }
+
+            // Delete from material Content
+            if (contentID > -1)
+            {
+                string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
+                             DELETE FROM Content WHERE ContentID = @ContentID;";
+                using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
+                {
+                    delCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                    delCmd.Parameters.AddWithValue("@ContentID", contentID);
+                    delCmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -291,7 +237,7 @@ namespace Wapping_time
         {
             selectedLessonID = int.Parse(e.CommandArgument.ToString());
             selectedMaterialID = 0;
-            LoadLessons(1); // placeholder
+            LoadLessons(selectedCourseID);
             LoadContent(selectedLessonID, selectedType);
         }
 
@@ -326,6 +272,85 @@ namespace Wapping_time
             }
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideNumbers", "cancelSort();", true);
             LoadContent(selectedLessonID, selectedType);
+        }
+
+        protected void confirmLessonBtn_Click(object sender, EventArgs e)
+        {
+            if (hdnModalMode.Value == "Add")
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+
+                    string insert = @"INSERT INTO [Lesson] (CourseID, LessonOrder, LessonName) 
+                                   VALUES (@CourseID, (SELECT ISNULL(MAX(LessonOrder), 0) + 1 
+                                   FROM Lesson WHERE CourseID = @CourseID), @LessonName)";
+                    using (SqlCommand cmd = new SqlCommand(insert, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CourseID", selectedCourseID);
+                        cmd.Parameters.AddWithValue("LessonName", lessonNameTxt.Text.Trim());
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                lessonNameTxt.Text = "";
+                LoadLessons(selectedCourseID);
+            }
+            else if (hdnModalMode.Value == "DeleteL")
+            {
+                if (selectedLessonID == 0) return;
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+
+                    string getAllMaterial = @"SELECT m.MaterialID FROM MaterialContent m 
+                                             JOIN Content c ON m.ContentID = c.ContentID 
+                                             WHERE c.LessonID = @LessonID";
+                    List<int> materialIDs = new List<int>();
+                    using (SqlCommand cmd = new SqlCommand(getAllMaterial, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@LessonID", selectedLessonID);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                                materialIDs.Add(Convert.ToInt32(reader["MaterialID"]));
+                        }
+                    }
+                    foreach (int materialID in materialIDs)
+                        DeleteMaterial(materialID, conn);
+
+                    string query = "DELETE FROM Lesson WHERE LessonID = @LessonID";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@LessonID", selectedLessonID);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                selectedLessonID = 0;
+            }
+            else if (hdnModalMode.Value == "DeleteM")
+            {
+                if (selectedLessonID == 0) return;
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    DeleteMaterial(selectedMaterialID, conn);
+                }
+                LoadContent(selectedLessonID, selectedType);
+                selectedMaterialID = 0;
+            }
+            else if (hdnModalMode.Value == "DeleteQ")
+            {
+                if (selectedQuizID == 0) return;
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    //Should run DeleteQuiz
+                    //DeleteMaterial(selectedMaterialID, conn);
+                }
+                LoadContent(selectedLessonID, selectedType);
+                selectedQuizID = 0;
+            }
+            LoadLessons(selectedCourseID);
         }
     }
 }

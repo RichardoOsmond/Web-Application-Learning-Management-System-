@@ -24,6 +24,51 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.HiddenField hdnOrder;
 
         /// <summary>
+        /// hdnModalMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnModalMode;
+
+        /// <summary>
+        /// aLessonBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button aLessonBtn;
+
+        /// <summary>
+        /// aDeleteBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button aDeleteBtn;
+
+        /// <summary>
+        /// lessonNameTxt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox lessonNameTxt;
+
+        /// <summary>
+        /// confirmLessonBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button confirmLessonBtn;
+
+        /// <summary>
         /// LessonRepeater control.
         /// </summary>
         /// <remarks>
