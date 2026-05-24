@@ -98,6 +98,7 @@ namespace Wapping_time
                     int newContentID = 0;
                     using (SqlCommand cmd = new SqlCommand(insertContentQuery, conn))
                     {
+                        Response.Write("<script>alert('LessonID: " + selectedLessonID + "');</script>");
                         cmd.Parameters.AddWithValue("@LessonID", selectedLessonID);
                         newContentID = Convert.ToInt32(cmd.ExecuteScalar());
                     }

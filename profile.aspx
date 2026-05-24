@@ -221,6 +221,31 @@
 
         /*validator*/
         .val-text { font-size: 12px; margin-left: 110px; margin-top: -8px; margin-bottom: 4px; }
+
+        /*logout*/
+        .btn-logout {
+            margin-left: auto;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            align-self: flex-start;
+        }
+        .btn-logout img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+        .btn-logout:hover {
+            transform: scale(1.12);
+            background: rgba(192, 57, 43, 0.08);
+            border-radius: 8px;
+        } 
     </style>
 </asp:Content>
 
@@ -228,7 +253,7 @@
 <div class="profile-bg">
     <div class="profile-card">
 
-        <a href="dashboard.aspx" class="btn-back">&#8592;</a>
+        <a href='<%= Session["RoleName"].ToString() == "Admin" ? "DashboardWithAdmin.aspx" : "StudentDashboard.aspx" %>' class="btn-back">&#8592;</a>
 
 
         <div class="profile-top">
@@ -254,6 +279,9 @@
                     </div>
                 </div>
             </div>
+             <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="btn-logout" ToolTip="Logout">
+                    <img src="Images/door.png" alt="Logout" />
+            </asp:LinkButton>
         </div>
 
 

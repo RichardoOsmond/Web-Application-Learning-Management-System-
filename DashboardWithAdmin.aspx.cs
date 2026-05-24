@@ -90,12 +90,9 @@ namespace Wapping_time
 
             if (courseFileUpload.HasFile)
             {
-                string folderPath = Server.MapPath("~/Images/");
-                string extension = Path.GetExtension(courseFileUpload.FileName);
-                string newFileName = Guid.NewGuid().ToString() + extension;
-                savePath = Path.Combine(folderPath, newFileName);
-
-                imagePath = "/Images/" + newFileName;
+                string fileName = "img_" + Guid.NewGuid().ToString().Substring(0, 8) + Path.GetExtension(courseFileUpload.FileName);
+                savePath = Server.MapPath("~/Images/Course Icon/" + fileName);
+                imagePath = "/Images/Course Icon/" + fileName;
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
@@ -165,8 +162,6 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
-
-                    Response.Redirect(Request.RawUrl);
                 }
                 catch
                 {
@@ -174,6 +169,7 @@ namespace Wapping_time
                     throw;
                 }
             }
+            Response.Redirect(Request.RawUrl);
         }
 
         protected void updateCourseBtn_Click(object sender, EventArgs e)
@@ -290,8 +286,6 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
-
-                    Response.Redirect(Request.RawUrl);
                 }
                 catch
                 {
@@ -299,6 +293,7 @@ namespace Wapping_time
                     throw;
                 }
             }
+            Response.Redirect(Request.RawUrl);
         }
 
         protected void viewAllCourseBtn_Click(object sender, EventArgs e)
@@ -410,28 +405,112 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                try
+
+                // Get all materials for this course
+                string getAllMaterials = @"SELECT m.MaterialID FROM MaterialContent m 
+                                  JOIN Content c ON m.ContentID = c.ContentID 
+                                  JOIN Lesson l ON c.LessonID = l.LessonID 
+                                  WHERE l.CourseID = @CourseID";
+                List<int> materialIDs = new List<int>();
+                using (SqlCommand cmd = new SqlCommand(getAllMaterials, conn))
                 {
-                    // Delete registrations first due to FK constraint
-                    using (SqlCommand cmd = new SqlCommand(
-                        "DELETE FROM Registration WHERE CourseID=@CourseID", conn))
+                    cmd.Parameters.AddWithValue("@CourseID", courseID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@CourseID", courseID);
-                        cmd.ExecuteNonQuery();
+                        while (reader.Read())
+                            materialIDs.Add(Convert.ToInt32(reader["MaterialID"]));
                     }
-
-                    using (SqlCommand cmd = new SqlCommand(
-                        "DELETE FROM Course WHERE CourseID=@CourseID", conn))
-                    {
-                        cmd.Parameters.AddWithValue("@CourseID", courseID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    Response.Redirect(Request.RawUrl);
                 }
-                catch (Exception ex)
+
+                // Delete each material (files + DB records)
+                foreach (int materialID in materialIDs)
+                    DeleteMaterial(materialID, conn);
+
+                // Delete quizzes, lessons, registrations, course
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM QuizContent WHERE ContentID IN (SELECT ContentID FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID))", conn))
+                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
+
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID)", conn))
+                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
+
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM Lesson WHERE CourseID = @CourseID", conn))
+                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
+
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM Registration WHERE CourseID = @CourseID", conn))
+                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
+
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM Course WHERE CourseID = @CourseID", conn))
+                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
+            }
+
+            Response.Redirect(Request.RawUrl);
+        }
+
+        private void DeleteMaterial(int materialID, SqlConnection conn)
+        {
+            int contentID = -1;
+
+            // Get images path and delete them
+            string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
+            SqlCommand getCmd = new SqlCommand(getQuery, conn);
+            getCmd.Parameters.AddWithValue("@MaterialID", materialID);
+            string html = getCmd.ExecuteScalar().ToString();
+
+            var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                string imagePath = Server.MapPath(match.Groups[1].Value);
+                if (File.Exists(imagePath)) File.Delete(imagePath);
+            }
+
+            // Delete flashcard images and records
+            string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
+            using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
+            {
+                getCardsCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
                 {
-                    Response.Write("<script>alert('Error: " + ex.Message.Replace("'", "") + "');</script>");
+                    while (cardReader.Read())
+                    {
+                        string imgFile = cardReader["FrontImage"].ToString();
+                        if (!string.IsNullOrEmpty(imgFile))
+                        {
+                            string fullPath = Server.MapPath(imgFile);
+                            if (File.Exists(fullPath)) File.Delete(fullPath);
+                        }
+                    }
+                }
+            }
+
+            string deleteCardStr = "DELETE FROM FlashCard WHERE MaterialID = @MaterialID";
+            using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
+            {
+                delCardCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                delCardCmd.ExecuteNonQuery();
+            }
+
+            string join = @"SELECT m.ContentID FROM MaterialContent m 
+                    JOIN Content c ON m.ContentID = c.ContentID
+                    WHERE m.MaterialID = @MaterialID";
+            using (SqlCommand cmd = new SqlCommand(join, conn))
+            {
+                cmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) contentID = Convert.ToInt32(reader["ContentID"]);
+                }
+            }
+
+            // Delete from material Content
+            if (contentID > -1)
+            {
+                string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
+                             DELETE FROM Content WHERE ContentID = @ContentID;";
+                using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
+                {
+                    delCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                    delCmd.Parameters.AddWithValue("@ContentID", contentID);
+                    delCmd.ExecuteNonQuery();
                 }
             }
         }

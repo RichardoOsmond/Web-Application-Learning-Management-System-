@@ -1,1 +1,0 @@
-﻿ALTER TABLE [dbo].[Course] ADD [CourseImage] VARCHAR(255) NULL

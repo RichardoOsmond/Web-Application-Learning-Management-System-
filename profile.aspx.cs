@@ -34,7 +34,7 @@ namespace Wapping_time
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
-                    string sql = "SELECT Username, Email, AboutMe FROM [User] WHERE UserID = @UserID";
+                    string sql = "SELECT Username, Email, [About Me] FROM [User] WHERE UserID = @UserID";
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserID", CurrentUserID);
@@ -45,7 +45,7 @@ namespace Wapping_time
                             {
                                 string username = reader["Username"].ToString();
                                 string email = reader["Email"].ToString();
-                                string about = reader["AboutMe"] == DBNull.Value ? "" : reader["AboutMe"].ToString();
+                                string about = reader["About Me"] == DBNull.Value ? "" : reader["About Me"].ToString();
 
 
                                 litName.Text = username;
@@ -191,7 +191,7 @@ namespace Wapping_time
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
-                    string sql = "UPDATE [User] SET AboutMe = @About WHERE UserID = @UserID";
+                    string sql = "UPDATE [User] SET About Me = @About WHERE UserID = @UserID";
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@About", about);
@@ -262,6 +262,13 @@ namespace Wapping_time
             lblMessage.Text = msg;
             lblMessage.CssClass = success ? "msg msg-success" : "msg msg-error";
             lblMessage.Visible = true;
+        }
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("login.aspx");
         }
     }
 }

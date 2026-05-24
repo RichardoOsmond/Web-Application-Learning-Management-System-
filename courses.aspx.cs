@@ -224,8 +224,6 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
-
-                    Response.Redirect(Request.RawUrl);
                 }
                 catch
                 {
@@ -233,6 +231,7 @@ namespace Wapping_time
                     throw;
                 }
             }
+            Response.Redirect(Request.RawUrl);
         }
 
         protected void RemoveCourseBtn_Click(object sender, EventArgs e)
