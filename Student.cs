@@ -27,6 +27,7 @@ namespace Wapping_time
         private int calculateTotalCourseCompletion(List<Registration> registrations)
         {
             int sumProgress = 0;
+            if (registrations.Count == 0) { return 0; }
             foreach (Registration registration in registrations)
             {
                 sumProgress += registration.getProgress();

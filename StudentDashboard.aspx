@@ -38,7 +38,7 @@
                     <ItemTemplate>
                         <a href='<%# "SelectedCoursePage.aspx?CourseID=" + Eval("Course.CourseID") %>' class="item_link">
                             <div class="item">
-                                <asp:Image runat="server" ImageUrl='<%# "~/Images/Course Icon/" + Eval("Course.ImageName") %>' CssClass="course_image" />
+                                <asp:Image runat="server" ImageUrl='<%# "~" + Eval("Course.ImageName") %>' CssClass="course_image" />
                                 <div class="course_name"><%# Eval("Course.CourseName") %></div>
                                 <div class="course_desc"><%# Eval("Course.Description") %></div>
                             </div>

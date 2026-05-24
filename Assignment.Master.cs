@@ -21,7 +21,7 @@ namespace Wapping_time
                 Console.WriteLine("Hello");
             } else
             {
-                Response.Redirect("StudentDashboard.aspx");
+                Response.Redirect("DashboardWithAdmin.aspx");
                 Console.WriteLine("Hi");
             }
         }
@@ -33,7 +33,7 @@ namespace Wapping_time
                 Console.WriteLine("Hello");
             } else
             {
-                Response.Redirect("StudentCourse.aspx");
+                Response.Redirect("SelectedCoursePage.aspx");
                 Console.WriteLine("Hi");
             }
         }
