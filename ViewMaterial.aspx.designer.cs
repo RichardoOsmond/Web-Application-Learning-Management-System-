@@ -11,61 +11,43 @@ namespace Wapping_time
 {
 
 
-    public partial class courses
+    public partial class ViewMaterial
     {
 
         /// <summary>
-        /// SeacrhTB control.
+        /// returnBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox SeacrhTB;
+        protected global::System.Web.UI.WebControls.Button returnBtn;
 
         /// <summary>
-        /// scienceBtn control.
+        /// lblName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button scienceBtn;
+        protected global::System.Web.UI.WebControls.Label lblName;
 
         /// <summary>
-        /// socialBtn control.
+        /// backText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button socialBtn;
+        protected global::System.Web.UI.WebControls.Literal backText;
 
         /// <summary>
-        /// extracurricularBtn control.
+        /// FlashcardRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button extracurricularBtn;
-
-        /// <summary>
-        /// Repeater1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater1;
-
-        /// <summary>
-        /// SqlDataSource1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
+        protected global::System.Web.UI.WebControls.Repeater FlashcardRepeater;
     }
 }

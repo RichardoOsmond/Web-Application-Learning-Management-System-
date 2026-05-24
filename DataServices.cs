@@ -29,7 +29,7 @@ namespace Wapping_time
                             string email = reader["Email"].ToString();
                             DateTime lastLogin = (DateTime)reader["Last Login"];
                             DateTime lastLogout = (DateTime)reader["Last Logout"];
-                            string aboutMe = reader["AboutMe"] == DBNull.Value ? null : reader["AboutMe"].ToString();
+                            string aboutMe = reader["About Me"] == DBNull.Value ? null : reader["About Me"].ToString();
                             return new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
                         }
                     }
@@ -67,7 +67,7 @@ namespace Wapping_time
                             int courseID = (int)reader["CourseID"];
                             int courseUserID = (int)reader["CourseCreatorID"];
                             string courseName = reader["CourseName"].ToString();
-                            string imageName = reader["ImageName"].ToString();
+                            string imageName = reader["CourseImage"].ToString();
                             string description = reader["Description"].ToString();
                             string courseCreatorName = reader["Username"].ToString();
                             DateTime courseCreationDate = (DateTime)reader["CourseCreatedDate"];
