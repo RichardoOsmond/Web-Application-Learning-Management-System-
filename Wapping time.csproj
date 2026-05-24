@@ -1,4 +1,4 @@
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -133,6 +133,9 @@
     <Compile Include="bridgePage.aspx.designer.cs">
       <DependentUpon>bridgePage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DashboardWithAdmin.aspx.designer.cs">
+      <DependentUpon>DashboardWithAdmin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MaterialPage.aspx.cs">
       <DependentUpon>MaterialPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -172,7 +175,7 @@
     </Compile>
     <Compile Include="quiz.aspx.cs">
       <DependentUpon>quiz.aspx</DependentUpon>
-    </Compile>  
+    </Compile>
     <Compile Include="Courses.aspx.cs">
       <DependentUpon>Courses.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
