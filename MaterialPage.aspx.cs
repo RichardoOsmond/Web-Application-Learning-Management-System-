@@ -48,6 +48,9 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+                Response.Redirect("login.aspx");
+
             hdnUploadPath.Value = "Math Image/Material";
             selectedMode = Request.QueryString["Mode"];
             if (!IsPostBack)

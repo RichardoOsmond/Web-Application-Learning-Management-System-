@@ -13,11 +13,6 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // TEMP TEST - remove before final submission
-            Session["UserID"] = 1;
-            Session["RoleID"] = 2;
-            Session["Username"] = "student";
-
             if (Session["UserID"] == null)
             {
                 Response.Redirect("login.aspx");

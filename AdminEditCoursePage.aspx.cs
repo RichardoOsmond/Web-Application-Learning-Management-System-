@@ -38,6 +38,9 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+                Response.Redirect("login.aspx");
+
             if (!IsPostBack)
             {
                 selectedCourseID = int.Parse(Request.QueryString["CourseID"]);

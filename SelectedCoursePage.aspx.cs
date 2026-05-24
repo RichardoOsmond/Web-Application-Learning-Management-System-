@@ -43,6 +43,9 @@ namespace Wapping_time
         private string roleName = "";
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+                Response.Redirect("login.aspx");
+
             roleName = Session["RoleName"].ToString();
             selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
             using (SqlConnection conn = new SqlConnection(connString))

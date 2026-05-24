@@ -72,9 +72,9 @@
     <Content Include="CSS\StudentCourse.css" />
     <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="MaterialPage.aspx" />
-    <Content Include="App_Data\ReadCardDB.mdf" />
-    <Content Include="App_Data\ReadCardDB_log.ldf">
-      <DependentUpon>ReadCardDB.mdf</DependentUpon>
+    <Content Include="App_Data\READCARDDB.mdf" />
+    <Content Include="App_Data\READCARDDB_log.ldf">
+      <DependentUpon>READCARDDB.mdf</DependentUpon>
     </Content>
     <Content Include="bridgePage.aspx" />
     <Content Include="chat.aspx" />

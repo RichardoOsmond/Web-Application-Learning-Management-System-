@@ -14,7 +14,6 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserID"] = 2;
             if (!IsPostBack)
             {
                 CourseRepeater.DataBind();
