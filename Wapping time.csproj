@@ -68,14 +68,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CSS\StudentCourse.css" />
     <Content Include="MaterialPage.aspx" />
     <Content Include="App_Data\ReadCardDB.mdf" />
     <Content Include="App_Data\ReadCardDB_log.ldf">
       <DependentUpon>ReadCardDB.mdf</DependentUpon>
     </Content>
     <Content Include="chat.aspx" />
+    <Content Include="Scripts\StudentCourse.js" />
     <Content Include="SelectedCoursePage.aspx" />
-    <Content Include="Courses.aspx" />
+    <Content Include="courses.aspx" />
     <Content Include="CSS\Dashboard.css" />
     <Content Include="CSS\StudentDashboard.css" />
     <Content Include="Database Query.sql" />
