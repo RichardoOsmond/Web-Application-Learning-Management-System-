@@ -131,11 +131,20 @@ VALUES
 (48, 'Social Science History Quiz', '20', 60, 3)
 
 INSERT INTO [User] ([RoleID], [Username], [Password], [Email], [Last Login], [Last Logout], [About Me]) VALUES
-(2, 'Jin', '123qwe', '123@a.com',  GETDATE(), GETDATE(), 'I love something?!')
+(1, 'Jin', '123qwe', '123@a.com',  GETDATE(), GETDATE(), 'I love something?!')
 
 INSERT INTO [Registration] ([UserID], [CourseID], [Result], [RegistrationDate], [Progress]) VALUES
-    (11, 1, 'InProgress', GETDATE(), 60)
-
+    (11, 2, 'Finished', GETDATE(), 100)
 
 select * from [User]
+select * from [Role]
 select * from [Course]
+UPDATE [Course] SET CourseImage = '/Images/Course Icon/Math icon.png' WHERE CourseName = 'Math';
+SELECT l.LessonID, l.LessonName, m.MaterialID, m.Name
+FROM Lesson l 
+JOIN Course c ON l.CourseID = c.CourseID 
+JOIN Content ct ON ct.LessonID = l.LessonID
+JOIN MaterialContent m ON m.ContentID = ct.ContentID
+WHERE c.CourseID = 2
+select * from [FlashCard]
+select * from [Registration]

@@ -13,18 +13,41 @@ namespace Wapping_time
     public partial class ViewMaterial : System.Web.UI.Page
     {
         private readonly string connString = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
+        protected int selectedLessonID
+        {
+            get { return ViewState["selectedLessonID"] != null ? (int)ViewState["selectedLessonID"] : 0; }
+            set { ViewState["selectedLessonID"] = value; }
+        }
+
+        protected int selectedMaterialID
+        {
+            get { return ViewState["selectedMaterialID"] != null ? (int)ViewState["selectedMaterialID"] : 0; }
+            set { ViewState["selectedMaterialID"] = value; }
+        }
+        protected string selectedType
+        {
+            get { return ViewState["selectedType"] != null ? (string)ViewState["selectedType"] : ""; }
+            set { ViewState["selectedType"] = value; }
+        }
+        protected int selectedCourseID
+        {
+            get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
+            set { ViewState["selectedCourseID"] = value; }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                int materialID = int.Parse(Request.QueryString["MaterialID"] ?? "0");
+                selectedMaterialID = int.Parse(Request.QueryString["MaterialID"]);
+                selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
+                selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
 
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     conn.Open();
                     string query = "SELECT Name, Description FROM MaterialContent WHERE MaterialID = @MaterialID";
                     SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@MaterialID", materialID);
+                    cmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -36,7 +59,7 @@ namespace Wapping_time
                     string flashQuery = "SELECT FrontImage, BackText FROM Flashcard WHERE MaterialID = @MaterialID ORDER BY CardOrder";
                     using (SqlDataAdapter flashAdapter = new SqlDataAdapter(flashQuery, conn))
                     {
-                        flashAdapter.SelectCommand.Parameters.AddWithValue("@MaterialID", materialID);
+                        flashAdapter.SelectCommand.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
                         DataTable flashTable = new DataTable();
                         flashAdapter.Fill(flashTable);
                         FlashcardRepeater.DataSource = flashTable;
@@ -44,6 +67,11 @@ namespace Wapping_time
                     }
                 }
             }
+        }
+
+        protected void returnBtn_Click(object sender, EventArgs e)
+        {
+            Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}");
         }
     }
 }

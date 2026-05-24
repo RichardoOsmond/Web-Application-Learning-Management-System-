@@ -27,7 +27,13 @@ namespace Wapping_time
                 Session["UserID"] = userId;
                 Session["Email"]  = email;
                 GetRoleName();
-                Response.Redirect("StudentDashboard.aspx");
+                if (Session["RoleName"].ToString() == "Student")
+                {
+                    Response.Redirect("StudentDashboard.aspx");
+                } else
+                {
+                    Response.Redirect("DashboardWithAdmin.aspx");
+                }
             }
             else
             {

@@ -16,7 +16,9 @@
         .left-column-center {
             width: 600px;
             display: flex;
-
+        }
+        .left-column-center h1 {
+            font-size: 36px
         }
 
         .lesson-list-big {
@@ -50,10 +52,24 @@
             width: 350px;
             flex-shrink: 0;
             text-align: center;
+            margin-right: 40px;
+        }
+
+        .right-column h1{
+            font-size: 36px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            margin-left: 75px;
+        }
+
+        .right-column p {
+            color: #666;
+            margin-left: 62px;
+            width: 320px;
         }
 
         .course-image img {
-            width: 100%;
+            width: 400px;
             border-radius: 10px;
         }
 
@@ -199,7 +215,7 @@
     <div class="course-container" id="courseContainer">
         <div class="left-column left-column-center">
             <div class="lesson-list-big">
-                <h3>Lessons</h3>
+                <h1>Lessons</h1>
                 <asp:Repeater ID="LessonRepeater" runat="server" OnItemCommand="selectLesson">
                     <ItemTemplate>
                         <asp:LinkButton ID="LessonLink" runat="server"
@@ -221,7 +237,7 @@
                 <asp:Panel ID="materialPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="MaterialRepeater" runat="server">
                         <ItemTemplate>
-                            <a href='ViewMaterial.aspx?MaterialID=<%# Eval("MaterialID") %>'><%# Eval("Name") %></a>
+                            <a href='ViewMaterial.aspx?MaterialID=<%# Eval("MaterialID") %>&CourseID=<%# selectedCourseID %>&LessonID=<%# selectedLessonID %>'><%# Eval("Name") %></a>
                         </ItemTemplate>
                     </asp:Repeater>
                 </asp:Panel>
@@ -243,10 +259,10 @@
 
         <div class="right-column">
             <div class="course-image">
-                <img src="Images/Math icon.png" alt="Course Image" />
+                <img src='<%=courseImage%>' alt="Course Image" />
+                <h1><%=courseName%></h1>
+                <p><%=courseDescription %></p>
             </div>
-            <h3>Math</h3>
-            <p>(042026-MT)</p>
         </div>
     </div>
 </asp:Content>

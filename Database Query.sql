@@ -144,6 +144,8 @@ CREATE TABLE [dbo].[ChatMessages]
     CONSTRAINT [FK_ChatMessages_ToUser] FOREIGN KEY ([ToUserID]) REFERENCES [User]([UserID])
 )
 
+
+
 /*
 DROP TABLE [ChatMessages]
 DROP TABLE [Notifications]

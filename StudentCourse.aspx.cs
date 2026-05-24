@@ -11,7 +11,10 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            int userID = (int)Session["UserID"];
+            List<Registration> registrations = DataServices.getEnrolledCourses(userID);
+            rptEnrolledCourses.DataSource = registrations;
+            rptEnrolledCourses.DataBind();
         }
     }
 }

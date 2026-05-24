@@ -13,6 +13,7 @@ namespace Wapping_time
         public string ImageName { get; private set; }
         public string Description { get; private set; }
         public DateTime CourseCreatedDate { get; private set; }
+        public string CreatorName { get; private set; }
 
         public Course(int courseID, int userID, string courseName, string description, string imageName)
         {
@@ -30,6 +31,10 @@ namespace Wapping_time
             ImageName = imageName;
             Description = description;
             CourseCreatedDate = courseCreatedDate;
+        }
+        public void setCreatorName(string username)
+        {
+            CreatorName = username;
         }
     }
 }

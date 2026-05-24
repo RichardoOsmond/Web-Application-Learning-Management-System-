@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Wapping_time
 {
-    public class Student : User
+    public class Student
     {
         private int TotalCourseCompletion { get; set; }
         private string ProfileImage { get; set; } // Will probably remove this later, assuming user class have profileImage from the database table
@@ -15,7 +15,7 @@ namespace Wapping_time
 
         public Student(int userID, int roleID, string username, string email, DateTime lastLogin, DateTime lastLogout, string aboutMe,
             List<Registration> registrations, List<Notifications> notifications, List<ChatMessages> chatMessages)
-            : base(userID, roleID, username, email, lastLogin, lastLogout, aboutMe)
+            //I erased the base, stop making error!!
         {
             EnrolledCourses = registrations;
             Notifications = notifications;
@@ -27,6 +27,7 @@ namespace Wapping_time
         private int calculateTotalCourseCompletion(List<Registration> registrations)
         {
             int sumProgress = 0;
+            if (registrations.Count == 0) { return 0; }
             foreach (Registration registration in registrations)
             {
                 sumProgress += registration.getProgress();

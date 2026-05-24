@@ -50,8 +50,8 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate " +
-                    "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID WHERE r.UserID = @UserID ORDER BY c.CourseName";
+                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate, u.Username " +
+                    "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID INNER JOIN [User] u on c.UserID = u.UserID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserID", userID);
@@ -69,9 +69,11 @@ namespace Wapping_time
                             string courseName = reader["CourseName"].ToString();
                             string imageName = reader["CourseImage"].ToString();
                             string description = reader["Description"].ToString();
+                            string courseCreatorName = reader["Username"].ToString();
                             DateTime courseCreationDate = (DateTime)reader["CourseCreatedDate"];
 
                             Course course = new Course(courseID, courseUserID, courseName, description, imageName, courseCreationDate);
+                            course.setCreatorName(courseCreatorName);
                             Registration registration = new Registration(registrationID, registrationUseriD, result, progress, course, registrationDate);
                             registeredCourses.Add(registration);
                         }
@@ -81,6 +83,47 @@ namespace Wapping_time
             return registeredCourses;
         }
 
+        public static void createNewChatMessage(int fromUserID, int toUserID, string content, DateTime sentTime, string senderName)
+        {
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "INSERT INTO [ChatMessages] " +
+                    "([FromUserID], [ToUserID], [Content], [SentTime], [IsRead]) " +
+                    "values " +
+                    "(@FromUserID,@ToUserID,@Content,@SentTime,0);";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FromUserID", fromUserID);
+                    cmd.Parameters.AddWithValue("@ToUserID", toUserID);
+                    cmd.Parameters.AddWithValue("@Content", content);
+                    cmd.Parameters.AddWithValue("@SentTime", sentTime);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            string notificationTitle = "A new chat message!";
+            string notificationContent = "You have a new message from " + senderName;
+            createNewNotifications(toUserID, notificationTitle, notificationContent, sentTime);
+        }
+        public static void createNewNotifications(int userID, string title, string content, DateTime createdTime)
+        {
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "INSERT INTO [Notifications] " +
+                    "([UserID], [Title], [Content], [CreatedTime], [IsRead]) " +
+                    "values " +
+                    "(@UserID, @Title, @Content, @CreatedTime, 0);";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userID);
+                    cmd.Parameters.AddWithValue("@Title", title);
+                    cmd.Parameters.AddWithValue("@Content", content);
+                    cmd.Parameters.AddWithValue("@CreatedTime", createdTime);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
         public static List<Course> loadAllCreatedCourse(int loggedInUser)
         {
             List<Course> listOfCourses = new List<Course>();
@@ -105,7 +148,7 @@ namespace Wapping_time
                             String imageUrl = (String)reader["CourseImage"];
                             DateTime courseCreatedDate = (DateTime)reader["CourseCreatedDate"];
 
-                            Course course = new Course(courseID, loggedInUser, courseName, description, imageUrl,courseCreatedDate);
+                            Course course = new Course(courseID, loggedInUser, courseName, description, imageUrl, courseCreatedDate);
                             listOfCourses.Add(course);
                         }
                     }
@@ -197,8 +240,7 @@ namespace Wapping_time
                             DateTime sentTime = (DateTime)reader["SentTime"];
                             bool isRead = (bool)reader["IsRead"];
                             string username = reader["Username"].ToString();
-                            ChatMessages chatMessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, sentTime);
-                            chatMessage.setSenderName(username);
+                            ChatMessages chatMessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, username, sentTime);
                             chatMessages.Add(chatMessage);
                         }
                     }

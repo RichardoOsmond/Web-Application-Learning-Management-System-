@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +12,14 @@ namespace Wapping_time
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected void ContinueBtn_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            string courseID = btn.CommandArgument;
+
+            Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
         }
     }
 }

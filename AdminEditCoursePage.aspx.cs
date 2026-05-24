@@ -58,7 +58,7 @@ namespace Wapping_time
 
             if (action == "Return")
             {
-                Response.Redirect("SelectedCoursePage.aspx");
+                Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
             }
 
             switch (action)
@@ -66,7 +66,7 @@ namespace Wapping_time
                 case "Add":
                     if (section == 'm')
                     {
-                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Add");
+                        Response.Redirect($"MaterialPage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&Mode=Add");
                     }
                     else if (section == 'q')
                     {
@@ -77,7 +77,7 @@ namespace Wapping_time
                     if (section == 'm')
                     {
                         if (selectedMaterialID == 0) return;
-                        Response.Redirect("MaterialPage.aspx?LessonID=" + selectedLessonID + "&Mode=Edit&MaterialID=" + selectedMaterialID);
+                        Response.Redirect($"MaterialPage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&Mode=Edit&MaterialID={selectedMaterialID}");
                     }
                     else if (section == 'q')
                     {
@@ -108,7 +108,25 @@ namespace Wapping_time
                                 File.Delete(imagePath);
                             }
                         }
-
+                        string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
+                        using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
+                        {
+                            getCardsCmd.Parameters.AddWithValue("@MaterialID", selectedMaterialID);
+                            using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
+                            {
+                                while (cardReader.Read())
+                                {
+                                    string imgFile = cardReader["FrontImage"].ToString();
+                                    if (!string.IsNullOrEmpty(imgFile))
+                                    {
+                                        string fullPath = Server.MapPath(imgFile);
+                                        if (File.Exists(fullPath))
+                                            File.Delete(fullPath);
+                                    }
+                                }
+                            }
+                        }
+                            
                         string deleteCardStr = @"DELETE FROM FlashCard WHERE MaterialID = @MaterialID;";
                         using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
                         {

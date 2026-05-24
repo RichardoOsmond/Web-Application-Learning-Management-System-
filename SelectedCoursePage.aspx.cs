@@ -24,11 +24,45 @@ namespace Wapping_time
             get { return ViewState["selectedCourseID"] != null ? (int)ViewState["selectedCourseID"] : -1; }
             set { ViewState["selectedCourseID"] = value; }
         }
+        protected string courseImage
+        {
+            get { return ViewState["courseImage"] != null ? (string)ViewState["courseImage"] : ""; }
+            set { ViewState["courseImage"] = value; }
+        }
+        protected string courseDescription
+        {
+            get { return ViewState["courseDescription"] != null ? (string)ViewState["courseDescription"] : ""; }
+            set { ViewState["courseDescription"] = value; }
+
+        }
+        protected string courseName
+        {
+            get { return ViewState["courseName"] != null ? (string)ViewState["courseName"] : ""; }
+            set { ViewState["courseName"] = value; }
+        }
         private string roleName = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             roleName = Session["RoleName"].ToString();
             selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                string courseInfo = @"SELECT CourseName, CourseImage, Description FROM [Course] WHERE CourseID = @CourseID";
+                using (SqlCommand cmd = new SqlCommand(courseInfo, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CourseID", selectedCourseID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            courseName = reader["CourseName"].ToString();
+                            courseImage = reader["CourseImage"].ToString();
+                            courseDescription = reader["Description"].ToString();
+                        }
+                    }
+                }
+            }
             if (roleName == "Admin")
             {
                 btnMaterial.Visible = true;
@@ -37,7 +71,9 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
-                LoadLessons(selectedLessonID);
+                if (Request.QueryString["LessonID"] != null) selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
+                LoadLessons(selectedCourseID);
+                LoadContent(selectedLessonID);
             }
         }
 
@@ -90,18 +126,18 @@ namespace Wapping_time
         protected void selectLesson(object source, RepeaterCommandEventArgs e)
         {
             selectedLessonID = int.Parse(e.CommandArgument.ToString());
-            LoadLessons(1);
+            LoadLessons(selectedCourseID);
             LoadContent(selectedLessonID);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "moveLesson", "moveLessonToLeft();", true);
         }
 
         protected void btnMaterial_Click(object sender, EventArgs e)
         {
-            Response.Redirect("AdminEditCoursePage.aspx?LessonID=" + +selectedLessonID + "&type=material");
+            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=material");
         }
         protected void btnQuiz_Click(object sender, EventArgs e)
         {
-            Response.Redirect("AdminEditCoursePage.aspx?LessonID=" + selectedLessonID + "&type=quiz");
+            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=quiz");
         }
     }
 }
