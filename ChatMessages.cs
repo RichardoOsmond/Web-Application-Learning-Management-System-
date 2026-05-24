@@ -16,16 +16,17 @@ namespace Wapping_time
         public string SenderName { get; private set; }
 
         // Function to set dateTime here
-        public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead)
+        public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead, string username)
         {
             ChatMessageID = chatMessageID;
             FromUserID = fromUserID;
             ToUserID = toUserID;
             Content = content;
             IsRead = isRead;
+            SenderName = username;
             SentTime = setDateTime(); // Must Format To String Before Use
         }
-        public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead, DateTime sentTime)
+        public ChatMessages(int chatMessageID, int fromUserID, int toUserID, string content, bool isRead, string username, DateTime sentTime)
         {
             ChatMessageID = chatMessageID;
             FromUserID = fromUserID;
@@ -33,14 +34,11 @@ namespace Wapping_time
             Content = content;
             SentTime = sentTime;
             IsRead = isRead;
+            SenderName = username;
         }
         private DateTime setDateTime()
         {
             return DateTime.Now;
-        }
-        public void setSenderName(string username)
-        {
-            SenderName = username;
         }
     }
 }

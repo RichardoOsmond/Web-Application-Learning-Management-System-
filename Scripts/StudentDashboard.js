@@ -1,10 +1,10 @@
 ﻿var currentItem = 0;
 
 function slideCourse(direction) {
-    var list = document.getElementById("listCourses");
-    if (!list) { return; }
+    var listCourses = document.getElementById("listCourses");
+    if (!listCourses) { return; }
 
-    var items = list.getElementsByClassName("item");
+    var items = listCourses.getElementsByClassName("item");
     var totalItems = items.length;
     if (totalItems === 0) { return; }
 
@@ -17,5 +17,5 @@ function slideCourse(direction) {
     if (currentItem < 0) { currentItem = maxIndex; }
     if (currentItem > maxIndex) { currentItem = 0; }
 
-    list.style.transform = "translateX(-" + (currentItem * itemWidth) + "px)";
+    listCourses.style.transform = "translateX(-" + (currentItem * itemWidth) + "px)";
 }

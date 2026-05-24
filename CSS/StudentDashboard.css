@@ -1,5 +1,4 @@
-﻿/* Create a notification box with a frame around the box (border), with a rounded edge*/
-body {
+﻿body {
     background-color: #EDE7F6;
     color: #663399;
 }
@@ -31,6 +30,13 @@ body {
     text-align: center;
 }
 
+.item_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Create a notification box with a frame around the box (border), with a rounded edge*/
 .notification_box {
     background-color: #F6CEFC;
     color: #FFFFFF;
