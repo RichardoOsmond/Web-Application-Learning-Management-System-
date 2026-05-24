@@ -158,7 +158,34 @@ namespace Wapping_time
 
             return listOfCourses;
         }
-
+        public static List<User> getAllStudents()
+        {
+            List<User> users = new List<User>();
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "Select [UserID], [RoleID], [Username], [Email], [LastLogin], [LastLogout], [AboutMe] FROM [User] WHERE [RoleID] = 1;";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int userID = (int)reader["UserID"];
+                            int roleID = (int)reader["RoleID"];
+                            string username = reader["Username"].ToString();
+                            string email = reader["Email"].ToString();
+                            DateTime lastLogin = (DateTime)reader["LastLogin"];
+                            DateTime lastLogout = (DateTime)reader["LastLogout"];
+                            string aboutMe = reader["AboutMe"].ToString();
+                            User user = new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
+                            users.Add(user);
+                        }
+                    }
+                }
+            }
+            return users;
+        }
         public static List<Notifications> getNotifications(int userID)
         {
             List<Notifications> notifications = new List<Notifications>();
