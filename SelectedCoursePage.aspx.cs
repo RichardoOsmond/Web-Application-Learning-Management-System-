@@ -65,6 +65,20 @@ namespace Wapping_time
             }
             if (roleName == "Admin")
             {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    string checkLesson = "SELECT COUNT(*) FROM Lesson WHERE CourseID = @CourseID";
+                    using (SqlCommand cmd = new SqlCommand(checkLesson, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CourseID", selectedCourseID);
+                        int lessonCount = (int)cmd.ExecuteScalar();
+                        if(lessonCount == 0)
+                        {
+                            Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=material");
+                        }
+                    }
+                }
                 btnMaterial.Visible = true;
                 btnQuiz.Visible = true;
             }
@@ -138,6 +152,18 @@ namespace Wapping_time
         protected void btnQuiz_Click(object sender, EventArgs e)
         {
             Response.Redirect($"AdminEditCoursePage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&type=quiz");
+        }
+
+        protected void returnBtn_Click(object sender, EventArgs e)
+        {
+            if (roleName == "Student")
+            {
+                Response.Redirect("StudentDashboard.aspx");
+            }
+            else
+            {
+                Response.Redirect("DashboardWithAdmin.aspx");
+            }
         }
     }
 }

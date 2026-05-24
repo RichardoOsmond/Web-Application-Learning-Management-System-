@@ -19,7 +19,7 @@ namespace Wapping_time
             Button btn = (Button)sender;
             string courseID = btn.CommandArgument;
 
-            Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
+            Response.Redirect($"SelectedCoursePage.aspx?CourseID={courseID}");
         }
     }
 }

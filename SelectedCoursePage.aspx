@@ -168,7 +168,20 @@
         .section-btn:hover {
             background-color: #5a2d9c;
         }
-
+        .return-btn{
+            background-color: #7842f5;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: 0;
+            margin-right: auto;
+            display: block;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
     </style>
     <script>
         function toggleSection(panelId, title) {
@@ -212,6 +225,7 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:Button ID="returnBtn" runat="server" Text="Return" CssClass="return-btn" OnClick="returnBtn_Click" />
     <div class="course-container" id="courseContainer">
         <div class="left-column left-column-center">
             <div class="lesson-list-big">

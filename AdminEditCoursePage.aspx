@@ -6,6 +6,18 @@
             border-radius: 15px;
             padding: 15px;
             width: 100%;
+            flex: 1;
+        }
+
+        .lesson-list h3 {
+            font-size: 30px;
+        }
+
+        .lesson-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         .lesson-link {
@@ -29,11 +41,12 @@
             display: flex;
             gap: 20px;
             padding: 30px;
+            align-items: stretch;
         }
 
         .left-column {
-            width: 350px;
-            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .middle-column {
@@ -83,6 +96,13 @@
 
         .section-btn:hover {
             background-color: #5a2d9c;
+        }
+
+        .section-btn:disabled {
+            background-color: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .section-panel::-webkit-scrollbar {
@@ -158,9 +178,60 @@
             display: none;
         }
 
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .modal-box {
+            background: #d6c8f5;
+            padding: 30px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 400px;
+            min-height: 200px
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 195px;
+            margin-top: 40px;
+        }
+
+        .modal-buttons button, .modal-buttons input[type="submit"] {
+            background-color: #7842f5;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .modal-box h2{
+            font-size: 30px;
+        }
+
+        .modal-box .name-input {
+            font-size: 20px;
+        }
+
     </style>
+    <script type="text/javascript">
+        var selectedLessonID = <%=selectedLessonID%>;
+    </script>
 
     <script>
+        window.onload = function () {
+            document.querySelector('[id$="aDeleteBtn"]').disabled = selectedLessonID <= 0;
+        }
+
         function toggleSection(panelId, title) {
             var panel = document.querySelector('[id$="' + panelId + '"]');
             var arrow = title.querySelector('.arrow-icon');
@@ -206,17 +277,58 @@
             });
             document.querySelector('[id$="saveOrderBtn"]').style.display = 'none';
         }
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = 'Add Lesson';
+            document.getElementById('addLessonContent').style.display = 'block';
+            document.getElementById('deleteLessonContent').style.display = 'none';
+            document.querySelector('[id$="hdnModalMode"]').value = 'Add';
+            document.getElementById('addLessonModal').style.display = 'flex';
+            document.querySelector('[id$="confirmLessonBtn"]').value = 'Add';
+        }
+        function closeModal() {
+            document.getElementById('addLessonModal').style.display = 'none';
+        }
+        function openDeleteModal() {
+            document.getElementById('modalTitle').innerText = 'Delete Lesson';
+            document.getElementById('addLessonContent').style.display = 'none';
+            document.getElementById('deleteLessonContent').style.display = 'block';
+            document.getElementById('deleteLessonContent').style.display = 'block';
+            document.querySelector('[id$="hdnModalMode"]').value = 'Delete';
+            document.getElementById('addLessonModal').style.display = 'flex';
+            document.querySelector('[id$="confirmLessonBtn"]').value = 'Delete';
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:HiddenField ID="hdnOrder" runat="server" />
+    <asp:HiddenField ID="hdnModalMode" runat="server" />
 
         <div class="course-container" id="courseContainer">
         <div class="left-column">
             <div class="lesson-list">
-                <h3>Lessons</h3>
+                <div class="lesson-list-header">
+                    <h3>Lessons</h3>
+                    <asp:Button ID="aLessonBtn" runat="server" Text="Add Lesson" CssClass="section-btn" OnClientClick="openAddModal(); return false; " />
+                    <asp:Button ID="aDeleteBtn" runat="server" Text="Delete Selected Lesson" CssClass="section-btn" OnClientClick="openDeleteModal(); return false; " />
+                    <div id="addLessonModal" style="display:none;" class="modal-overlay">
+                        <div class="modal-box">
+                            <h2 id="modalTitle">Add Lesson</h2>
+                            <div id="addLessonContent">
+                                <label>Lesson Name:</label>
+                                <asp:TextBox ID="lessonNameTxt" runat="server" CssClass="name-input" />
+                            </div>
+                            <div id="deleteLessonContent" style="display:none;">
+                                <p>Are you sure you want to delete this lesson?</p>
+                            </div>
+                            <div class="modal-buttons">
+                                <asp:Button ID="confirmLessonBtn" runat="server" Text="Add" OnClick="confirmLessonBtn_Click" />
+                                <button type="button" onclick="closeModal()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <asp:Repeater ID="LessonRepeater" runat="server" OnItemCommand="selectLesson">
                     <ItemTemplate>
                         <asp:LinkButton ID="LessonLink" runat="server"

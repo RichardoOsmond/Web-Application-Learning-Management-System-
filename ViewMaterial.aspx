@@ -91,7 +91,6 @@
             display: block;
             margin-left: 20px;
             margin-top: 20px;
-            transition: background-color 0.3s, color 0.3s;
         }
     </style>
 </asp:Content>

@@ -52,8 +52,8 @@ namespace Wapping_time
                 string extension = Path.GetExtension(courseFileUpload.FileName);
                 string newFileName = Guid.NewGuid().ToString() + extension;
                 savePath = Path.Combine(folderPath, newFileName);
-
                 imagePath = "/Images/" + newFileName;
+                courseFileUpload.SaveAs(savePath);
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
@@ -67,12 +67,12 @@ namespace Wapping_time
                 try
                 {
                     string insertCourseQuery = @"
-                INSERT INTO Course 
-                (UserID, CourseName, Description, CourseCategory, CourseImage, CourseCreatedDate)
-                OUTPUT INSERTED.CourseID
-                VALUES 
-                (@UserID, @CourseName, @Description, @CourseCategory, @CourseImage, @CourseCreatedDate);
-            ";
+                    INSERT INTO Course 
+                    (UserID, CourseName, Description, CourseCategory, CourseImage, CourseCreatedDate)
+                    OUTPUT INSERTED.CourseID
+                    VALUES 
+                    (@UserID, @CourseName, @Description, @CourseCategory, @CourseImage, @CourseCreatedDate);
+                    ";
 
                     int newCourseID;
 
@@ -99,7 +99,7 @@ namespace Wapping_time
                             (CourseID, UserID, Result, RegistrationDate, Progress)
                             VALUES
                             (@CourseID, @UserID, @Result, @RegistrationDate, @Progress);
-                        ";
+                            ";
 
                         using (SqlCommand registerCmd = new SqlCommand(insertRegisterQuery, conn, transaction))
                         {
@@ -111,14 +111,7 @@ namespace Wapping_time
                             registerCmd.ExecuteNonQuery();
                         }
                     }
-
                     transaction.Commit();
-
-                    //save to folder images
-                    courseFileUpload.SaveAs(savePath);
-                    
-                    Response.Redirect(Request.RawUrl);
-                    
                 }
                 catch 
                 {
@@ -127,6 +120,7 @@ namespace Wapping_time
                     throw;
                 }
             }
+            Response.Redirect(Request.RawUrl);
         }
 
         protected void viewAllCourseBtn_Click(object sender, EventArgs e)
@@ -168,7 +162,7 @@ namespace Wapping_time
             Button btn = (Button)sender;
             String courseID = btn.CommandArgument;
 
-            Response.Redirect("CourseDetails.aspx?CourseID=" + courseID);
+            Response.Redirect($"SelectedCoursePage.aspx?CourseID={courseID}");
         }
 
         protected void RemoveCourseBtn_Click(object sender, EventArgs e)
