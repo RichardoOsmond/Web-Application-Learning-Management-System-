@@ -41,6 +41,7 @@ namespace Wapping_time
 
             if (isReview)
             {
+                hfTimeLimit.Value = "0"; // ADD THIS LINE
                 btnSubmit.Visible = false;
                 btnBack.Visible = true;
                 int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
@@ -74,10 +75,12 @@ namespace Wapping_time
                     lblCourseQuizTitle.Text = reader["CourseName"].ToString() + " — " + reader["Name"].ToString();
 
                     int totalSeconds = Convert.ToInt32(reader["TimeLimit"]);
+                    hfTimeLimit.Value = totalSeconds.ToString(); // ADD THIS LINE
+
                     int hours = totalSeconds / 3600;
                     int minutes = (totalSeconds % 3600) / 60;
                     string timeDisplay = hours > 0 ? hours + "h " + minutes + "m" : minutes + "m";
-                    lblInstruction.Text = "Time Limit: " + timeDisplay + " — Answer all questions and click Submit when done.";
+                    lblInstruction.Text = "Answer all questions and click Submit when done.";
                 }
                 reader.Close();
             }
