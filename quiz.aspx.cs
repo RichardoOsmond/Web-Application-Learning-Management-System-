@@ -169,6 +169,23 @@ namespace Wapping_time
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
             int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
 
+            // guard against resubmission
+            using (SqlConnection checkConn = new SqlConnection(connStr))
+            {
+                string checkQuery = "SELECT COUNT(*) FROM StudentAnswer WHERE QuizAttemptID = @QuizAttemptID";
+                SqlCommand checkCmd = new SqlCommand(checkQuery, checkConn);
+                checkCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+                checkConn.Open();
+                int existing = Convert.ToInt32(checkCmd.ExecuteScalar());
+                if (existing > 0)
+                {
+                    Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
+                    return;
+                }
+            }
+
+            // REMOVED duplicate int quizID and int quizAttemptID declarations here
+
             decimal totalScore = 0;
             decimal totalPoints = 0;
 
