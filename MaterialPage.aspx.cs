@@ -92,7 +92,7 @@ namespace Wapping_time
 
                     // 1. Insert into Content Table and return the new ID
                     string insertContentQuery = @"INSERT INTO Content (LessonID, Position, Type) 
-                                  VALUES (@LessonID, (SELECT ISNULL(MAX(Position), 0) + 1 FROM Content WHERE LessonID = @LessonID), 'Material');
+                                  VALUES (@LessonID, (SELECT ISNULL(MAX(Position), 0) + 1 FROM Content WHERE LessonID = @LessonID AND Type = 'Material'), 'Material');
                                   SELECT SCOPE_IDENTITY();";
 
                     int newContentID = 0;
