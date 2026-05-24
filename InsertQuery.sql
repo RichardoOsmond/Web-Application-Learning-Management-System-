@@ -62,3 +62,4 @@ VALUES
 (2, 4, 'In Progress', CAST(GETDATE() AS DATE), 0);  -- Random progress: 0%
 
 SELECT LessonID, CourseID, LessonName FROM [dbo].[Lesson];
+SELECT * FROM Lesson WHERE LessonID = 2

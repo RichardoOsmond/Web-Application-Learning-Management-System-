@@ -74,20 +74,18 @@ namespace Wapping_time
             {
                 Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
             }
-            else if (action == "Lesson")
-            {
-
-            }
 
             switch (action)
             {
                 case "Add":
                     if (section == 'm')
                     {
+                        if (selectedLessonID == 0) return;
                         Response.Redirect($"MaterialPage.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}&Mode=Add");
                     }
                     else if (section == 'q')
                     {
+                        if (selectedQuizID == 0) return;
                         Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}");
                     }
                     break;

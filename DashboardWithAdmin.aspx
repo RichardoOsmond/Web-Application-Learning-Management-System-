@@ -54,17 +54,16 @@
         .courseBox {
             display: flex;
             flex-direction: column;
-            height: 300px;
             border-radius: 20px;
             overflow: hidden;
+            background-color: white;
         }
 
         .contentInCourseBox {
-            flex-basis: 50%;
-            min-height: 0;
             position: relative;
             width: 100%;
-            height: 100%
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
         }
 
         .editCourse {

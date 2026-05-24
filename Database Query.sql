@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Course]
 (
     [CourseID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [UserID] INT NOT NULL, 
-    [CourseName] VARCHAR(15) NOT NULL, 
+    [CourseName] VARCHAR(40) NOT NULL, 
     [Description] VARCHAR(255) NOT NULL, 
     [CourseCreatedDate] DATE NOT NULL, 
     [CourseImage] VARCHAR(255),
