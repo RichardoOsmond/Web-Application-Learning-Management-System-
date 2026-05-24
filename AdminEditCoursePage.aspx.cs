@@ -85,7 +85,7 @@ namespace Wapping_time
                     }
                     else if (section == 'q')
                     {
-                        if (selectedQuizID == 0) return;
+                        if (selectedLessonID == 0) return;
                         Response.Redirect($"createQuiz.aspx?CourseID={selectedCourseID}&LessonID={selectedLessonID}");
                     }
                     break;

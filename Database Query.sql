@@ -56,6 +56,7 @@ CREATE TABLE [dbo].[QuizContent]
     [TimeLimit] VARCHAR(255) NOT NULL, 
     [PassingScores] INT NOT NULL, 
     [MaxAttempts] INT NOT NULL, 
+    [Status] NVARCHAR(10) NOT NULL DEFAULT='Closed', 
     CONSTRAINT [FK_QuizContent_Content] FOREIGN KEY ([ContentID]) REFERENCES [Content]([ContentID])
 )
 
@@ -108,6 +109,7 @@ CREATE TABLE [dbo].[Answer]
     [AnswerID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
     [QuestionID] INT NOT NULL, 
     [Answers] NVARCHAR(100) NOT NULL, 
+    [CorrectOrNot] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [FK_Answer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
 

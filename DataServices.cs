@@ -50,7 +50,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate, u.Username " +
+                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCategory, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate, u.Username " +
                     "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID INNER JOIN [User] u on c.UserID = u.UserID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -69,10 +69,11 @@ namespace Wapping_time
                             string courseName = reader["CourseName"].ToString();
                             string imageName = reader["CourseImage"].ToString();
                             string description = reader["Description"].ToString();
+                            string courseCategory = reader["CourseCategory"].ToString();
                             string courseCreatorName = reader["Username"].ToString();
                             DateTime courseCreationDate = (DateTime)reader["CourseCreatedDate"];
 
-                            Course course = new Course(courseID, courseUserID, courseName, description, imageName, courseCreationDate);
+                            Course course = new Course(courseID, courseUserID, courseName, description, courseCategory, imageName, courseCreationDate);
                             course.setCreatorName(courseCreatorName);
                             Registration registration = new Registration(registrationID, registrationUseriD, result, progress, course, registrationDate);
                             registeredCourses.Add(registration);
@@ -146,10 +147,11 @@ namespace Wapping_time
                             int userID = (int)reader["UserID"];
                             String courseName = reader["CourseName"].ToString();
                             String description = reader["Description"].ToString();
+                            string courseCategory = reader["CourseCategory"].ToString();
                             String imageUrl = reader["CourseImage"].ToString();
                             DateTime courseCreatedDate = (DateTime)reader["CourseCreatedDate"];
 
-                            Course course = new Course(courseID, loggedInUser, courseName, description, imageUrl, courseCreatedDate);
+                            Course course = new Course(courseID, loggedInUser, courseName, description, courseCategory, imageUrl, courseCreatedDate);
                             listOfCourses.Add(course);
                         }
                     }

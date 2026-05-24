@@ -63,3 +63,194 @@ VALUES
 
 SELECT LessonID, CourseID, LessonName FROM [dbo].[Lesson];
 SELECT * FROM Lesson WHERE LessonID = 2
+
+
+
+-- =====================================================================
+-- DETAILED CONTENT DATA FOR THE "MATH" COURSE
+-- =====================================================================
+-- Run AFTER your existing insert script (Roles, Users, Courses,
+-- Registrations must already exist).
+--
+-- KEY DESIGN POINTS:
+--   * We find the Math course by NAME, not a hardcoded ID — safer.
+--   * All child IDs (LessonID, ContentID, QuizID, QuestionID, MaterialID)
+--     are IDENTITY columns, so we capture each with SCOPE_IDENTITY()
+--     immediately after inserting its parent. NEVER hardcode these IDs.
+--   * Image placeholders use '/Images/Course Icon/profile.png' as requested.
+--   * Content.Type is either 'Material' or 'Quiz'; that determines whether
+--     it links to MaterialContent or QuizContent.
+-- =====================================================================
+
+DECLARE @MathCourseID INT;
+SELECT @MathCourseID = CourseID FROM [dbo].[Course] WHERE CourseName = 'Math';
+
+IF @MathCourseID IS NULL
+BEGIN
+    PRINT 'ERROR: Math course not found. Run the course insert script first.';
+    RETURN;
+END
+
+PRINT 'Found Math course with CourseID = ' + CAST(@MathCourseID AS VARCHAR);
+
+DECLARE @LessonID INT;
+DECLARE @ContentID INT;
+DECLARE @QuizID INT;
+DECLARE @QuestionID INT;
+DECLARE @MaterialID INT;
+
+-- =====================================================================
+-- LESSON 1: Introduction to Numbers
+-- =====================================================================
+INSERT INTO [dbo].[Lesson] ([CourseID], [LessonOrder], [LessonName])
+VALUES (@MathCourseID, 1, N'Introduction to Numbers');
+SET @LessonID = SCOPE_IDENTITY();
+
+-- Lesson 1 / Content 1: MATERIAL
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '1', 'Material');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[MaterialContent] ([ContentID], [Name], [Description])
+VALUES (@ContentID, N'Understanding Number Types',
+        N'Numbers come in several families. Natural numbers (1, 2, 3, ...) are the counting numbers. Whole numbers add zero to that set. Integers extend further to include negatives (-3, -2, -1, 0, 1, 2, 3). Rational numbers can be written as fractions, while irrational numbers like pi cannot. Understanding these categories is the foundation for all of mathematics.');
+SET @MaterialID = SCOPE_IDENTITY();   -- capture BEFORE inserting flashcards
+
+INSERT INTO [dbo].[Flashcard] ([MaterialID], [FrontImage], [BackText], [CardOrder])
+VALUES
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Natural Numbers: counting numbers starting from 1 (1, 2, 3, ...).', 1),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Whole Numbers: natural numbers plus zero (0, 1, 2, 3, ...).', 2),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Integers: whole numbers plus their negatives (..., -2, -1, 0, 1, 2, ...).', 3);
+
+-- Lesson 1 / Content 2: QUIZ
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '2', 'Quiz');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScores], [MaxAttempts])
+VALUES (@ContentID, N'Number Types Quiz', '300', 70, 3);
+SET @QuizID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Which of these is a natural number?', N'Select the correct option.', '/Images/Course Icon/profile.png', 10, 1, 'MultipleChoice');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'7'),
+    (@QuestionID, N'-3'),
+    (@QuestionID, N'0.5'),
+    (@QuestionID, N'-1.2');
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Is -5 an integer?', N'True or False.', NULL, 5, 2, 'TrueFalse');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'True'),
+    (@QuestionID, N'False');
+
+-- =====================================================================
+-- LESSON 2: Addition and Subtraction
+-- =====================================================================
+INSERT INTO [dbo].[Lesson] ([CourseID], [LessonOrder], [LessonName])
+VALUES (@MathCourseID, 2, N'Addition and Subtraction');
+SET @LessonID = SCOPE_IDENTITY();
+
+-- Lesson 2 / Content 1: MATERIAL
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '1', 'Material');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[MaterialContent] ([ContentID], [Name], [Description])
+VALUES (@ContentID, N'The Basics of Adding and Subtracting',
+        N'Addition combines two or more numbers into a sum. Subtraction finds the difference between numbers. When adding, the order does not matter (3 + 5 = 5 + 3), a property called commutativity. Subtraction is NOT commutative: 5 - 3 is not the same as 3 - 5. Always line up place values when working with larger numbers.');
+SET @MaterialID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[Flashcard] ([MaterialID], [FrontImage], [BackText], [CardOrder])
+VALUES
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Sum: the result of adding numbers together.', 1),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Difference: the result of subtracting one number from another.', 2),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Commutative Property: order does not matter in addition (a + b = b + a).', 3);
+
+-- Lesson 2 / Content 2: QUIZ
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '2', 'Quiz');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScores], [MaxAttempts])
+VALUES (@ContentID, N'Addition and Subtraction Quiz', '600', 80, 2);
+SET @QuizID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 24 + 18?', N'Select the sum.', NULL, 10, 1, 'MultipleChoice');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'42'),
+    (@QuestionID, N'40'),
+    (@QuestionID, N'32'),
+    (@QuestionID, N'44');
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 50 - 27?', N'Select the difference.', NULL, 10, 2, 'MultipleChoice');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'23'),
+    (@QuestionID, N'33'),
+    (@QuestionID, N'27'),
+    (@QuestionID, N'13');
+
+-- =====================================================================
+-- LESSON 3: Introduction to Multiplication
+-- =====================================================================
+INSERT INTO [dbo].[Lesson] ([CourseID], [LessonOrder], [LessonName])
+VALUES (@MathCourseID, 3, N'Introduction to Multiplication');
+SET @LessonID = SCOPE_IDENTITY();
+
+-- Lesson 3 / Content 1: MATERIAL
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '1', 'Material');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[MaterialContent] ([ContentID], [Name], [Description])
+VALUES (@ContentID, N'Multiplication as Repeated Addition',
+        N'Multiplication is a shortcut for repeated addition. For example, 4 x 3 means adding 4 three times: 4 + 4 + 4 = 12. The numbers being multiplied are called factors, and the result is the product. Learning the times tables from 1 to 12 builds a strong foundation for division, fractions, and algebra later on.');
+SET @MaterialID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[Flashcard] ([MaterialID], [FrontImage], [BackText], [CardOrder])
+VALUES
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Factor: a number being multiplied.', 1),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'Product: the result of multiplication.', 2),
+    (@MaterialID, '/Images/Course Icon/profile.png', N'4 x 3 = 12, because 4 + 4 + 4 = 12.', 3);
+
+-- Lesson 3 / Content 2: QUIZ
+INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
+VALUES (@LessonID, '2', 'Quiz');
+SET @ContentID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScores], [MaxAttempts])
+VALUES (@ContentID, N'Multiplication Basics Quiz', '450', 75, 3);
+SET @QuizID = SCOPE_IDENTITY();
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 6 x 7?', N'Select the product.', NULL, 10, 1, 'MultipleChoice');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'42'),
+    (@QuestionID, N'36'),
+    (@QuestionID, N'48'),
+    (@QuestionID, N'40');
+
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Multiplication is the same as repeated addition.', N'True or False.', NULL, 5, 2, 'TrueFalse');
+SET @QuestionID = SCOPE_IDENTITY();
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
+    (@QuestionID, N'True'),
+    (@QuestionID, N'False');
+
+PRINT 'Math course content inserted successfully.';
+
+-- =====================================================================
+-- VERIFICATION (uncomment to run)
+-- =====================================================================
+-- SELECT l.LessonOrder, l.LessonName, c.Position, c.Type
+-- FROM Lesson l INNER JOIN Content c ON l.LessonID = c.LessonID
+-- WHERE l.CourseID = (SELECT CourseID FROM Course WHERE CourseName = 'Math')
+-- ORDER BY l.LessonOrder, c.Position;
