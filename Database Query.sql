@@ -156,9 +156,11 @@ CREATE TABLE [dbo].[StudentAnswer]
     [QuestionID] INT NOT NULL,
     [Answer] NVARCHAR(MAX) NOT NULL,
     [Status] NVARCHAR(20) NOT NULL,
+    [AdminComment] NVARCHAR(MAX) NULL,
     CONSTRAINT [FK_StudentAnswer_QuizAttempt] FOREIGN KEY ([QuizAttemptID]) REFERENCES [QuizAttempt]([QuizAttemptID]),
     CONSTRAINT [FK_StudentAnswer_Question] FOREIGN KEY ([QuestionID]) REFERENCES [Question]([QuestionID])
 )
+
 
 /*
 DROP TABLE [StudentAnswer]
