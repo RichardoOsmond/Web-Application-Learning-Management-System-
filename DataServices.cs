@@ -188,6 +188,37 @@ namespace Wapping_time
             }
             return users;
         }
+        public static List<ChatMessages> getConversations(int fromUserID, int toUserID)
+        {
+            List<ChatMessages> conversations = new List<ChatMessages>();
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT c.ChatMessageID, c.FromUserID, c.ToUserID, c.Content, c.IsRead, c.SentTime, u.Username " +
+                    "FROM [ChatMessages] c INNER JOIN [User] u ON m.FromUserID = u.UserID WHERE m.FromUserID = @FromUserID AND m.ToUserID = @ToUserID;";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FromUserID", fromUserID);
+                    cmd.Parameters.AddWithValue("@ToUserID", toUserID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int chatMessageID = (int)reader["ChatMessageID"];
+                            fromUserID = (int)reader["FromUserID"];
+                            toUserID = (int)reader["ToUserID"];
+                            string content = reader["Content"].ToString();
+                            bool isRead = (bool)reader["IsRead"];
+                            DateTime sentTime = (DateTime)reader["SentTime"];
+                            string username = reader["Username"].ToString();
+                            ChatMessages chatmessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, username, sentTime);
+                            conversations.Add(chatmessage);
+                        }
+                    }
+                }
+            }
+            return conversations;
+        }
         public static List<Notifications> getNotifications(int userID)
         {
             List<Notifications> notifications = new List<Notifications>();
