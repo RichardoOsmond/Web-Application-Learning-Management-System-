@@ -166,20 +166,20 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "Select [UserID], [RoleID], [Username], [Email], [LastLogin], [LastLogout], [AboutMe] FROM [User] WHERE [RoleID] = 1;";
+                string query = "Select [UserID], [RoleID], [Username], [Email], [Last Login], [Last Logout], [About Me] FROM [User] WHERE [RoleID] = 1;";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
                             int userID = (int)reader["UserID"];
                             int roleID = (int)reader["RoleID"];
                             string username = reader["Username"].ToString();
                             string email = reader["Email"].ToString();
-                            DateTime lastLogin = (DateTime)reader["LastLogin"];
-                            DateTime lastLogout = (DateTime)reader["LastLogout"];
-                            string aboutMe = reader["AboutMe"].ToString();
+                            DateTime lastLogin = (DateTime)reader["Last Login"];
+                            DateTime lastLogout = (DateTime)reader["Last Logout"];
+                            string aboutMe = reader["About Me"].ToString();
                             User user = new User(userID, roleID, username, email, lastLogin, lastLogout, aboutMe);
                             users.Add(user);
                         }
@@ -195,23 +195,24 @@ namespace Wapping_time
             {
                 conn.Open();
                 string query = "SELECT c.ChatMessageID, c.FromUserID, c.ToUserID, c.Content, c.IsRead, c.SentTime, u.Username " +
-                    "FROM [ChatMessages] c INNER JOIN [User] u ON m.FromUserID = u.UserID WHERE m.FromUserID = @FromUserID AND m.ToUserID = @ToUserID;";
+                    "FROM [ChatMessages] c INNER JOIN [User] u ON c.FromUserID = u.UserID WHERE (c.FromUserID = @FromUserID AND c.ToUserID = @ToUserID) " +
+                    "OR (c.FromUserID = @ToUserID AND c.ToUserID = @FromUserID;";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@FromUserID", fromUserID);
                     cmd.Parameters.AddWithValue("@ToUserID", toUserID);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
                             int chatMessageID = (int)reader["ChatMessageID"];
-                            fromUserID = (int)reader["FromUserID"];
-                            toUserID = (int)reader["ToUserID"];
+                            int msgFromUserID = (int)reader["FromUserID"];
+                            int msgToUserID = (int)reader["ToUserID"];
                             string content = reader["Content"].ToString();
                             bool isRead = (bool)reader["IsRead"];
                             DateTime sentTime = (DateTime)reader["SentTime"];
                             string username = reader["Username"].ToString();
-                            ChatMessages chatmessage = new ChatMessages(chatMessageID, fromUserID, toUserID, content, isRead, username, sentTime);
+                            ChatMessages chatmessage = new ChatMessages(chatMessageID, msgFromUserID, msgToUserID, content, isRead, username, sentTime);
                             conversations.Add(chatmessage);
                         }
                     }
