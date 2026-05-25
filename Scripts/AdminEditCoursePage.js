@@ -70,7 +70,7 @@ function openLessonDeleteModal() {
     document.getElementById('deleteLessonContent').style.display = 'block';
     document.querySelector('[id$="hdnModalMode"]').value = 'DeleteL';
     document.getElementById('addLessonModal').style.display = 'flex';
-    document.querySelector('[id$="confirmLessonBtn"]').value = 'DeleteL';
+    document.querySelector('[id$="confirmLessonBtn"]').value = 'Delete';
 }
 
 function openMaterialDeleteModal() {
