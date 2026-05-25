@@ -202,7 +202,7 @@ namespace Wapping_time
                         if (selected != null)
                             selected.Selected = true;
                         pnlQuestion.Controls.Add(rbl);
-                        if (status == "Incorrect")
+                        if (status == "Incorrect" || string.IsNullOrEmpty(studentAnswer))
                         {
                             string correctAnswer = GetCorrectAnswer(questionID);
                             Label lblCorrect = new Label();
@@ -224,12 +224,176 @@ namespace Wapping_time
                         txtEssay.Text = studentAnswer;
                         txtEssay.Enabled = false;
                         pnlQuestion.Controls.Add(txtEssay);
+
+                        txtEssay.Enabled = false;
+                        pnlQuestion.Controls.Add(txtEssay);
+
+                        // show admin comment to everyone if exists
+                        string existingComment = GetAdminComment(questionID, Convert.ToInt32(Request.QueryString["QuizAttemptID"]));
+                        if (!string.IsNullOrEmpty(existingComment))
+                        {
+                            Label lblAdminComment = new Label();
+                            lblAdminComment.CssClass = "quiz-hint-label";
+                            lblAdminComment.ForeColor = System.Drawing.Color.DarkBlue;
+                            lblAdminComment.Text = "Instructor feedback: " + existingComment;
+                            pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
+                            pnlQuestion.Controls.Add(lblAdminComment);
+                        }
+
+                        // admin grading controls
+                        if (Convert.ToInt32(Session["RoleID"]) == 2)
+
+                            // admin grading controls
+                            if (Convert.ToInt32(Session["RoleID"]) == 2)
+                        {
+                            // current status label
+                            Label lblCurrentStatus = new Label();
+                            lblCurrentStatus.CssClass = "quiz-hint-label";
+                            lblCurrentStatus.Text = "Current Status: " + (string.IsNullOrEmpty(status) ? "Pending" : status);
+                            pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
+                            pnlQuestion.Controls.Add(lblCurrentStatus);
+
+                            // admin comment box
+                            Label lblComment = new Label();
+                            lblComment.CssClass = "quiz-field-label";
+                            lblComment.Text = "Admin Comment / Correct Answer:";
+                            pnlQuestion.Controls.Add(new LiteralControl("<br/>"));
+                            pnlQuestion.Controls.Add(lblComment);
+
+                            TextBox txtComment = new TextBox();
+                            txtComment.ID = "comment_" + questionID;
+                            txtComment.CssClass = "quiz-field-input";
+                            txtComment.TextMode = TextBoxMode.MultiLine;
+                            txtComment.Rows = 3;
+                            txtComment.Style["width"] = "100%";
+
+                            // load existing comment if any
+                            txtComment.Text = GetAdminComment(questionID, Convert.ToInt32(Request.QueryString["QuizAttemptID"]));
+                            pnlQuestion.Controls.Add(txtComment);
+
+                            // mark correct button
+                            Button btnCorrect = new Button();
+                            btnCorrect.ID = "correct_" + questionID;
+                            btnCorrect.Text = "Mark Correct";
+                            btnCorrect.CssClass = "quiz-btn-save";
+                            btnCorrect.Style["margin-right"] = "8px";
+                            btnCorrect.CommandArgument = questionID.ToString();
+                            btnCorrect.Click += new EventHandler(btnGradeEssay_Correct);
+                            pnlQuestion.Controls.Add(new LiteralControl("<br/><br/>"));
+                            pnlQuestion.Controls.Add(btnCorrect);
+
+                            // mark incorrect button
+                            Button btnIncorrect = new Button();
+                            btnIncorrect.ID = "incorrect_" + questionID;
+                            btnIncorrect.Text = "Mark Incorrect";
+                            btnIncorrect.CssClass = "quiz-btn-clear";
+                            btnIncorrect.CommandArgument = questionID.ToString();
+                            btnIncorrect.Click += new EventHandler(btnGradeEssay_Incorrect);
+                            pnlQuestion.Controls.Add(btnIncorrect);
+                        }
                     }
 
                     pnlMain.Controls.Add(pnlQuestion);
                     questionNumber++;
                 }
             }
+        }
+
+        protected void btnGradeEssay_Correct(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int questionID = Convert.ToInt32(btn.CommandArgument);
+            GradeEssay(questionID, "Correct");
+        }
+
+        protected void btnGradeEssay_Incorrect(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int questionID = Convert.ToInt32(btn.CommandArgument);
+            GradeEssay(questionID, "Incorrect");
+        }
+
+        private void GradeEssay(int questionID, string status)
+        {
+            int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
+
+            // get comment from dynamic textbox
+            TextBox txtComment = (TextBox)pnlMain.FindControl("comment_" + questionID);
+            string comment = txtComment != null ? txtComment.Text.Trim() : "";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+
+                // update status and comment
+                string updateAnswer = @"UPDATE StudentAnswer 
+                                SET Status = @Status, AdminComment = @AdminComment 
+                                WHERE QuestionID = @QuestionID AND QuizAttemptID = @QuizAttemptID";
+                SqlCommand cmd = new SqlCommand(updateAnswer, conn);
+                cmd.Parameters.AddWithValue("@Status", status);
+                cmd.Parameters.AddWithValue("@AdminComment", comment);
+                cmd.Parameters.AddWithValue("@QuestionID", questionID);
+                cmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+                cmd.ExecuteNonQuery();
+
+                // recalculate score
+                RecalcScore(quizAttemptID, conn);
+            }
+
+            // reload review page
+            int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+            string courseID = Request.QueryString["CourseID"] ?? "";
+            string lessonID = Request.QueryString["LessonID"] ?? "";
+            Response.Redirect($"quiz.aspx?QuizID={quizID}&QuizAttemptID={quizAttemptID}&Mode=Review&CourseID={courseID}&LessonID={lessonID}");
+        }
+
+        private void RecalcScore(int quizAttemptID, SqlConnection conn)
+        {
+            // get total points earned (only Correct answers)
+            string scoreQuery = @"
+        SELECT SUM(q.Point)
+        FROM StudentAnswer sa
+        JOIN Question q ON sa.QuestionID = q.QuestionID
+        WHERE sa.QuizAttemptID = @QuizAttemptID AND sa.Status = 'Correct'";
+            SqlCommand scoreCmd = new SqlCommand(scoreQuery, conn);
+            scoreCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+            object scoreResult = scoreCmd.ExecuteScalar();
+            decimal totalEarned = scoreResult != DBNull.Value && scoreResult != null ? Convert.ToDecimal(scoreResult) : 0;
+
+            // get total possible points
+            string totalQuery = @"
+        SELECT SUM(q.Point)
+        FROM StudentAnswer sa
+        JOIN Question q ON sa.QuestionID = q.QuestionID
+        WHERE sa.QuizAttemptID = @QuizAttemptID";
+            SqlCommand totalCmd = new SqlCommand(totalQuery, conn);
+            totalCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+            object totalResult = totalCmd.ExecuteScalar();
+            decimal totalPoints = totalResult != DBNull.Value && totalResult != null ? Convert.ToDecimal(totalResult) : 0;
+
+            decimal scorePercent = totalPoints > 0 ? (totalEarned / totalPoints) * 100 : 0;
+
+            // get passing score for this attempt's quiz
+            string passingQuery = @"
+        SELECT qc.PassingScores 
+        FROM QuizAttempt qa
+        JOIN QuizContent qc ON qa.QuizID = qc.QuizID
+        WHERE qa.QuizAttemptID = @QuizAttemptID";
+            SqlCommand passingCmd = new SqlCommand(passingQuery, conn);
+            passingCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+            int passingScore = Convert.ToInt32(passingCmd.ExecuteScalar());
+
+            bool isPassed = scorePercent >= passingScore;
+
+            // update QuizAttempt
+            string updateQuery = @"UPDATE QuizAttempt 
+                           SET Score = @Score, IsPassed = @IsPassed 
+                           WHERE QuizAttemptID = @QuizAttemptID";
+            SqlCommand updateCmd = new SqlCommand(updateQuery, conn);
+            updateCmd.Parameters.AddWithValue("@Score", scorePercent);
+            updateCmd.Parameters.AddWithValue("@IsPassed", isPassed ? 1 : 0);
+            updateCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+            updateCmd.ExecuteNonQuery();
         }
 
         // load answers into a RadioButtonList
@@ -375,11 +539,26 @@ namespace Wapping_time
                 return result != null ? result.ToString() : "";
             }
         }
+        private string GetAdminComment(int questionID, int quizAttemptID)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = "SELECT AdminComment FROM StudentAnswer WHERE QuestionID = @QuestionID AND QuizAttemptID = @QuizAttemptID";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@QuestionID", questionID);
+                cmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null && result != DBNull.Value ? result.ToString() : "";
+            }
+        }
 
         protected void btnBack_Click(object sender, EventArgs e)
         {
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
-            Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
+            string courseID = Request.QueryString["CourseID"] ?? "";
+            string lessonID = Request.QueryString["LessonID"] ?? "";
+            Response.Redirect($"bridgePage.aspx?QuizID={quizID}&CourseID={courseID}&LessonID={lessonID}");
         }
     }
-}
+} 

@@ -299,9 +299,11 @@ namespace Wapping_time
             if (e.CommandName == "ReviewAttempt")
             {
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+                string courseID = Request.QueryString["CourseID"] ?? "";
+                string lessonID = Request.QueryString["LessonID"] ?? "";
                 int rowIndex = Convert.ToInt32(e.CommandArgument);
                 int quizAttemptID = Convert.ToInt32(gvStudentAttempts.DataKeys[rowIndex].Value);
-                Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + quizAttemptID + "&Mode=Review");
+                Response.Redirect($"quiz.aspx?QuizID={quizID}&QuizAttemptID={quizAttemptID}&Mode=Review&CourseID={courseID}&LessonID={lessonID}");
             }
         }
 
@@ -310,22 +312,24 @@ namespace Wapping_time
             if (e.CommandName == "ReviewStudent")
             {
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
+                string courseID = Request.QueryString["CourseID"] ?? "";
+                string lessonID = Request.QueryString["LessonID"] ?? "";
                 int rowIndex = Convert.ToInt32(e.CommandArgument);
                 int registrationID = Convert.ToInt32(gvAdminStudents.DataKeys[rowIndex].Value);
 
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     string query = @"
-                        SELECT TOP 1 QuizAttemptID
-                        FROM QuizAttempt
-                        WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
-                        ORDER BY Score DESC";
+                SELECT TOP 1 QuizAttemptID
+                FROM QuizAttempt
+                WHERE RegistrationID = @RegistrationID AND QuizID = @QuizID
+                ORDER BY Score DESC";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@RegistrationID", registrationID);
                     cmd.Parameters.AddWithValue("@QuizID", quizID);
                     conn.Open();
                     int quizAttemptID = Convert.ToInt32(cmd.ExecuteScalar());
-                    Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + quizAttemptID + "&Mode=Review");
+                    Response.Redirect($"quiz.aspx?QuizID={quizID}&QuizAttemptID={quizAttemptID}&Mode=Review&CourseID={courseID}&LessonID={lessonID}");
                 }
             }
         }
