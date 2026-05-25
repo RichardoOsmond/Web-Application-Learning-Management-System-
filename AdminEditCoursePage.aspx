@@ -87,19 +87,24 @@
                     <asp:Button ID="qAddBtn" runat="server" Text="Add Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="qEditBtn" runat="server" Text="Edit Selected Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="qDeleteBtn" runat="server" Text="Delete Selected Quiz" CssClass="section-btn" OnClientClick="openQuizDeleteModal(); return false;"/>
+                    <asp:Button ID="qEditOrderBtn" runat="server" Text="Edit Order" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="qReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
                 </h2>
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
-                    <asp:Repeater ID="QuizRepeater" runat="server" OnItemCommand="selectQuiz">
-    <ItemTemplate>
-        <asp:LinkButton ID="QuizLink" runat="server"
-            CommandArgument='<%# Eval("QuizID") %>'
-            CssClass='<%# (int)Eval("QuizID") == selectedQuizID ? "active" : "" %>'>
-            <%# Eval("Name") %>
-        </asp:LinkButton>
-    </ItemTemplate>
-</asp:Repeater>
+                    <asp:Repeater ID="QuizRepeater" runat="server" OnItemCommand="selectQuiz">                     
+                        <ItemTemplate>
+                            <div class="quiz-item" data-id='<%# Eval("QuizID") %>'>
+                                <span class="item-number hidden"><%# Container.ItemIndex + 1 %>.</span>
+                                <asp:LinkButton ID="QuizLink" runat="server"
+                                    CommandArgument='<%# Eval("QuizID") %>'
+                                    CssClass='<%# (int)Eval("QuizID") == selectedQuizID ? "active" : "" %>'>
+                                    <%# Eval("Name") %>
+                                </asp:LinkButton>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </asp:Panel>
+                <asp:Button ID="qSaveOrderBtn" runat="server" Text= "Save Order" CssClass="section-btn save-order-btn" OnClick="qSaveOrderBtn_Click" style="display:none" />
             </div>
         </div>
 

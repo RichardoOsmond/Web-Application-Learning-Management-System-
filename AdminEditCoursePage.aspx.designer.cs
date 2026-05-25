@@ -177,6 +177,15 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.Button qDeleteBtn;
 
         /// <summary>
+        /// qEditOrderBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button qEditOrderBtn;
+
+        /// <summary>
         /// qReturnBtn control.
         /// </summary>
         /// <remarks>
@@ -202,5 +211,14 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater QuizRepeater;
+
+        /// <summary>
+        /// qSaveOrderBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button qSaveOrderBtn;
     }
 }

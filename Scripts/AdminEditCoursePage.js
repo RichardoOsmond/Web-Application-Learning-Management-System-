@@ -19,17 +19,16 @@ function showQuizOnly() {
     document.getElementById('materialSection').classList.add('hidden');
 }
 
-function enableSort() {
+function enableSort(panelSuffix) {
     var numbers = document.querySelectorAll('.item-number');
     numbers.forEach(function (n) {
         n.style.display = 'inline';
     });
-
-    var list = document.querySelector('[id$="materialPanel"]');
+    var list = document.querySelector('[id$="' + panelSuffix + '"]');
     var sortable = new Sortable(list, {
         animation: 150,
         onEnd: function (evt) {
-            var items = document.querySelectorAll('.material-item');
+            var items = list.querySelectorAll('[data-id]');
             var order = [];
             items.forEach(function (item) {
                 order.push(item.getAttribute('data-id'));
@@ -37,7 +36,10 @@ function enableSort() {
             document.querySelector('[id$="hdnOrder"]').value = order.join(',');
         }
     });
-    document.querySelector('[id$="saveOrderBtn"]').style.display = 'block';
+    var saveBtn = panelSuffix === 'materialPanel'
+        ? document.querySelector('[id$="saveOrderBtn"]')
+        : document.querySelector('[id$="qSaveOrderBtn"]');
+    saveBtn.style.display = 'block';
 }
 
 function cancelSort() {
@@ -45,8 +47,12 @@ function cancelSort() {
     numbers.forEach(function (n) {
         n.style.display = 'none';
     });
-    document.querySelector('[id$="saveOrderBtn"]').style.display = 'none';
+    var saveBtn = document.querySelector('[id$="saveOrderBtn"]');
+    var qSaveBtn = document.querySelector('[id$="qSaveOrderBtn"]');
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (qSaveBtn) qSaveBtn.style.display = 'none';
 }
+
 function openAddModal() {
     document.getElementById('modalTitle').innerText = 'Add Lesson';
     document.getElementById('addLessonContent').style.display = 'block';

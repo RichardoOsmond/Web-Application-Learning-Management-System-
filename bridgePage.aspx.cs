@@ -30,7 +30,7 @@ namespace Wapping_time
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                 int roleID = Convert.ToInt32(Session["RoleID"]);
                 LoadTitle(quizID);
-                if (roleID == 1)
+                if (roleID == 2)
                 {
                     pnlAdmin.Visible = true;
                     LoadAdminView(quizID);

@@ -102,7 +102,10 @@ namespace Wapping_time
                     }
                     break;
                 case "EditOrder":
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort();", true);
+                    if (section == 'm')
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort('materialPanel');", true);
+                    else if (section == 'q')
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "enableSort", "enableSort('quizPanel');", true);
                     break;
             }
         }
@@ -267,6 +270,27 @@ namespace Wapping_time
             LoadContent(selectedLessonID, selectedType);
         }
 
+        protected void qSaveOrderBtn_Click(object sender, EventArgs e)
+        {
+            string[] ids = hdnOrder.Value.Split(',');
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(ids[i])) continue;
+
+                    string query = "UPDATE Content SET Position = @Position WHERE ContentID = (SELECT ContentID FROM QuizContent WHERE QuizID = @QuizID)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Position", i + 1);
+                    cmd.Parameters.AddWithValue("@QuizID", int.Parse(ids[i]));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideNumbers", "cancelSort();", true);
+            LoadContent(selectedLessonID, selectedType);
+        }
+
         protected void confirmLessonBtn_Click(object sender, EventArgs e)
         {
             if (hdnModalMode.Value == "Add")
@@ -337,8 +361,51 @@ namespace Wapping_time
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     conn.Open();
-                    //Should run DeleteQuiz
-                    //DeleteMaterial(selectedMaterialID, conn);
+                    // block deletion if attempts exist
+                    string checkAttempts = "SELECT COUNT(*) FROM QuizAttempt WHERE QuizID = @QuizID";
+                    SqlCommand checkCmd = new SqlCommand(checkAttempts, conn);
+                    checkCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                    int attemptCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (attemptCount > 0)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "deleteError",
+                            "alert('Cannot delete this quiz. Students have already attempted it. Close the quiz instead.');", true);
+                        return;
+                    }
+
+                    // get contentID before deleting
+                    string getContent = "SELECT ContentID FROM QuizContent WHERE QuizID = @QuizID";
+                    SqlCommand getContentCmd = new SqlCommand(getContent, conn);
+                    getContentCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                    int contentID = Convert.ToInt32(getContentCmd.ExecuteScalar());
+
+                    // delete answers
+                    string deleteAnswers = @"DELETE FROM Answer WHERE QuestionID IN 
+                                     (SELECT QuestionID FROM Question WHERE QuizID = @QuizID)";
+                    SqlCommand deleteAnswersCmd = new SqlCommand(deleteAnswers, conn);
+                    deleteAnswersCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                    deleteAnswersCmd.ExecuteNonQuery();
+
+                    // delete questions
+                    string deleteQuestions = "DELETE FROM Question WHERE QuizID = @QuizID";
+                    SqlCommand deleteQuestionsCmd = new SqlCommand(deleteQuestions, conn);
+                    deleteQuestionsCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                    deleteQuestionsCmd.ExecuteNonQuery();
+
+                    // delete quiz
+                    string deleteQuiz = "DELETE FROM QuizContent WHERE QuizID = @QuizID";
+                    SqlCommand deleteQuizCmd = new SqlCommand(deleteQuiz, conn);
+                    deleteQuizCmd.Parameters.AddWithValue("@QuizID", selectedQuizID);
+                    deleteQuizCmd.ExecuteNonQuery();
+
+                    // delete content row
+                    string deleteContent = "DELETE FROM Content WHERE ContentID = @ContentID";
+                    SqlCommand deleteContentCmd = new SqlCommand(deleteContent, conn);
+                    deleteContentCmd.Parameters.AddWithValue("@ContentID", contentID);
+                    deleteContentCmd.ExecuteNonQuery();
+
+
                 }
                 LoadContent(selectedLessonID, selectedType);
                 selectedQuizID = 0;

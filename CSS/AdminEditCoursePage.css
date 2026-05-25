@@ -164,6 +164,7 @@
     margin-top: 10px;
 }
 
+.quiz-item,
 .material-item {
     display: flex;
     align-items: center;
