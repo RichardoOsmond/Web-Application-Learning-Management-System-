@@ -90,10 +90,11 @@ namespace Wapping_time
 
             if (courseFileUpload.HasFile)
             {
-                string fileName = "img_" + Guid.NewGuid().ToString().Substring(0, 8) + Path.GetExtension(courseFileUpload.FileName);
-                savePath = Server.MapPath("~/Images/Course Icon/" + fileName);
-                imagePath = "/Images/Course Icon/" + fileName;
-            }
+                string folderPath = Server.MapPath("~/Images/Course Icon/");
+                string newFileName = "img_" + Guid.NewGuid().ToString().Substring(0, 8) + Path.GetExtension(courseFileUpload.FileName);
+                savePath = Path.Combine(folderPath, newFileName);
+                imagePath = "/Images/Course Icon/" + newFileName;
+            }  
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
 
@@ -308,7 +309,7 @@ namespace Wapping_time
             descriptionTxt.Text = "";
             CategoryDDL.SelectedIndex = 0;
             hiddenCourseIDs.Value = "";
-            courseImagePreview.Src = "";
+            courseImage.ImageUrl = "";
             imagePreviewWrapper.Style["display"] = "none";
             courseFileUpload.Style["display"] = "block";
 
@@ -358,13 +359,13 @@ namespace Wapping_time
                             string imgUrl = reader["CourseImage"] != DBNull.Value ? reader["CourseImage"].ToString() : "";
                             if (!string.IsNullOrEmpty(imgUrl))
                             {
-                                courseImagePreview.Src = imgUrl;
+                                courseImage.ImageUrl = imgUrl;
                                 imagePreviewWrapper.Style["display"] = "block";
                                 courseFileUpload.Style["display"] = "none";
                             }
                             else
                             {
-                                courseImagePreview.Src = "";
+                                courseImage.ImageUrl = "";
                                 imagePreviewWrapper.Style["display"] = "none";
                                 courseFileUpload.Style["display"] = "block";
                             }

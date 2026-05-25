@@ -2,7 +2,6 @@
 <%@ Register assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.DataVisualization.Charting" tagprefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_circle,draw,edit" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=groups" />
     <style type="text/css">
         #globalDiv {
             display: flex;
@@ -17,8 +16,7 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         #topTopDiv {
@@ -44,6 +42,15 @@
             justify-content: space-between
         }
 
+        #middleDiv {
+            display: flex;
+            gap: 25px;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            align-items: stretch;
+        }
+
         #bottomBottomDiv {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -57,12 +64,13 @@
             border-radius: 20px;
             overflow: hidden;
             background-color: white;
+            height: 350px;
         }
 
         .contentInCourseBox {
+            flex-basis: 50%;
             position: relative;
             width: 100%;
-            aspect-ratio: 16 / 9;
             overflow: hidden;
         }
 
@@ -79,23 +87,6 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-        }
-
-        #totalStudents {
-            display: flex;
-            flex-direction: column;
-            width: 100%
-        }
-
-        #group-icon {
-            color: #5b20a8;
-            background-color: #e6c2ff;
-            border-radius: 50%;
-            height: 50px;
-            width: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .modal-overlay {
@@ -211,6 +202,46 @@
             margin-left: 10px;
         }
     </style>
+    <script>
+        function removeCourseImage() {
+            var fileUpload = document.getElementById("<%= courseFileUpload.ClientID %>");
+            var imagePreview = document.getElementById("<%= courseImage.ClientID %>");
+            var wrapper = document.getElementById("<%= imagePreviewWrapper.ClientID %>");
+
+            imagePreview.src = "";
+            wrapper.style.display = "none";
+
+            fileUpload.value = "";
+            fileUpload.style.display = "block";
+        }
+        function renderImagePreview(input) {
+            var imagePreview = document.getElementById("<%= courseImage.ClientID %>");
+            var wrapper = document.getElementById("<%= imagePreviewWrapper.ClientID %>");
+
+            if (input.files && input.files[0]) {
+                var file = input.files[0];
+
+                if (!file.type.startsWith("image/")) {
+                    alert("Please choose an image file.");
+                    input.value = "";
+                    imagePreview.src = "";
+                    imagePreview.style.display = "none";
+                    return;
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    wrapper.style.display = "block";
+                    input.style.display = "none";
+                };
+
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" runat="server" contentplaceholderid="ContentPlaceHolder1">
     <div id="globalDiv">
@@ -227,109 +258,106 @@
             </div>
         </div>
 
-        <div
-            style="display: flex; gap: 25px; width: 100%; margin-top: 20px; margin-bottom: 20px; align-items: stretch;">
-
-            <div
-                style="flex: 6; background-color: white; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; align-items: center;">
-                <h3 style="align-self: flex-start; margin-bottom: 10px;">Course Creation Trend</h3>
-                <asp:Chart ID="Chart1" runat="server" DataSourceID="courseCreationTrend" Width="600px"
-                    Height="250px">
-                    <Series>
-                        <asp:Series ChartType="Line" Name="Series1" XValueMember="CourseCreatedDate"
-                            YValueMembers="CourseID">
-                        </asp:Series>
-                    </Series>
-                    <ChartAreas>
-                        <asp:ChartArea Name="ChartArea1"></asp:ChartArea>
-                    </ChartAreas>
-                </asp:Chart>
-            </div>
-
-            <div style="flex: 4; background-color: white; border-radius: 20px; padding: 20px;">
-                <h3 style="margin-bottom: 20px;">Top Courses by Enrollment</h3>
-
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <asp:Repeater ID="TopExtracurricularRepeater" runat="server"
-                        DataSourceID="topExtracurricular">
-                        <ItemTemplate>
-                            <div style="display: flex; align-items: center;">
-                                <span
-                                    style="width: 130px; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    <%# Eval("CourseName") %>
-                                </span>
-                                <div
-                                    style="flex-grow: 1; background-color: #F5D1FF; border-radius: 5px; margin: 0 10px; height: 12px;">
-                                    <div
-                                        style='<%# "width: " + GetPercentage(Eval("EnrollmentCount")) + "%; background-color: #7842F5; height: 100%; border-radius: 5px;" %>'>
-                                    </div>
-                                </div>
-                                <span style="font-weight: bold; color: #3e2548;">
-                                    <%# Eval("EnrollmentCount") %>
-                                </span>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-
-                    <asp:Label ID="noTopCoursesMsg" runat="server" Text="No extracurricular courses found."
-                        Visible="false"
-                        style="color: #666; font-style: italic; text-align: center; margin-top: 10px;">
-                    </asp:Label>
-                </div>
-            </div>
-
+        <div id="middleDiv"">
+    <div
+        style=" flex: 6; background-color: white; border-radius: 20px; padding: 20px; display: flex;
+            flex-direction: column; align-items: center;">
+            <h3 style="align-self: flex-start; margin-bottom: 10px;">Course Creation Trend</h3>
+            <asp:Chart ID="Chart1" runat="server" DataSourceID="courseCreationTrend" Width="600px"
+                Height="250px">
+                <Series>
+                    <asp:Series ChartType="Line" Name="Series1" XValueMember="CourseCreatedDate"
+                        YValueMembers="CourseID">
+                    </asp:Series>
+                </Series>
+                <ChartAreas>
+                    <asp:ChartArea Name="ChartArea1"></asp:ChartArea>
+                </ChartAreas>
+            </asp:Chart>
         </div>
 
-        <div id="bottomDiv">
-            <div id="topBottomDiv">
-                <asp:Label ID="courseLbl" runat="server" Text="Courses You Teach"
-                    style="font-size: large; font-weight: 700"></asp:Label>
-                <asp:Button ID="viewAllCourseBtn" runat="server" Text="View All Courses"
-                    OnClick="ViewAllCourseBtn_Click" />
+        <div style="flex: 4; background-color: white; border-radius: 20px; padding: 20px;">
+            <h3 style="margin-bottom: 20px;">Top Courses by Enrollment</h3>
 
-            </div>
-            <br />
-
-            <div id="bottomBottomDiv">
-                <h4 id="noCourseMsg" style="text-align: center; width:100%; grid-column: 1 / -1;" runat="server"
-                    visible="false">You haven't created any courses!</h4>
-
-                <asp:Repeater ID="CourseRepeater" runat="server" DataSourceID="SqlDataSource1">
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <asp:Repeater ID="TopExtracurricularRepeater" runat="server" DataSourceID="topExtracurricular">
                     <ItemTemplate>
-                        <div class="courseBox">
-                            <div class="contentInCourseBox">
-                                <asp:LinkButton ID="editCourseButton" runat="server" CssClass="editCourse"
-                                    CommandArgument='<%# Eval("CourseID") %>' OnClick="EditCourseButton_Click">
-                                    <span class="material-symbols-outlined">edit</span>
-                                </asp:LinkButton>
-                                <img src='<%# string.IsNullOrEmpty(Convert.ToString(Eval("courseImage"))) ? "/Images/penguin.png" : Eval("courseImage") %>'
-                                    style="object-fit:cover; height:100%; width:100%" draggable="false" />
-                            </div>
-
-                            <div class="contentInCourseBox text-description"
-                                style="background-color:white; display:flex; flex-direction:column; justify-content:space-between">
-                                <div>
-                                    <h3>
-                                        <%# Eval("CourseName") %>
-                                    </h3>
-                                    <p>
-                                        <%# Eval("Description") %>
-                                    </p>
-                                </div>
-                                <div style="width:100%; display:flex; justify-content:flex-end ">
-                                    <asp:Button ID="continueBtn" runat="server" Text="Enter"
-                                        CssClass="createCourseButton" OnClick="ContinueBtn_Click"
-                                        CommandArgument='<%# Eval("CourseID") %>' />
+                        <div style="display: flex; align-items: center;">
+                            <span
+                                style="width: 130px; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <%# Eval("CourseName") %>
+                            </span>
+                            <div
+                                style="flex-grow: 1; background-color: #F5D1FF; border-radius: 5px; margin: 0 10px; height: 12px;">
+                                <div
+                                    style='<%# "width: " + GetPercentage(Eval("EnrollmentCount")) + "%; background-color: #7842F5; height: 100%; border-radius: 5px;" %>'>
                                 </div>
                             </div>
-
+                            <span style="font-weight: bold; color: #3e2548;">
+                                <%# Eval("EnrollmentCount") %>
+                            </span>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
 
+                <asp:Label ID="noTopCoursesMsg" runat="server" Text="No extracurricular courses found."
+                    Visible="false"
+                    style="color: #666; font-style: italic; text-align: center; margin-top: 10px;">
+                </asp:Label>
             </div>
         </div>
+
+    </div>
+
+    <div id="bottomDiv">
+        <div id="topBottomDiv">
+            <asp:Label ID="courseLbl" runat="server" Text="Courses You Teach"
+                style="font-size: large; font-weight: 700"></asp:Label>
+            <asp:Button ID="viewAllCourseBtn" runat="server" Text="View All Courses"
+                OnClick="ViewAllCourseBtn_Click" />
+        </div>
         <br />
+
+        <div id="bottomBottomDiv">
+            <h4 id="noCourseMsg" style="text-align: center; width:100%; grid-column: 1 / -1;" runat="server"
+                visible="false">You haven't created any courses!</h4>
+
+            <asp:Repeater ID="CourseRepeater" runat="server" DataSourceID="SqlDataSource1">
+                <ItemTemplate>
+                    <div class="courseBox">
+                        <div class="contentInCourseBox">
+                            <asp:LinkButton ID="editCourseButton" runat="server" CssClass="editCourse"
+                                CommandArgument='<%# Eval("CourseID") %>' OnClick="EditCourseButton_Click">
+                                <span class="material-symbols-outlined">edit</span>
+                            </asp:LinkButton>
+                            <img src='<%# string.IsNullOrEmpty(Convert.ToString(Eval("courseImage"))) ? "/Images/penguin.png" : Eval("courseImage") %>'
+                                style="object-fit:cover; height:100%; width:100%" draggable="false" />
+                        </div>
+
+                        <div class="contentInCourseBox text-description"
+                            style="background-color:white; display:flex; flex-direction:column; justify-content:space-between">
+                            <div>
+                                <h3>
+                                    <%# Eval("CourseName") %>
+                                </h3>
+                                <p>
+                                    <%# Eval("Description") %>
+                                </p>
+                            </div>
+                            <div style="width:100%; display:flex; justify-content:flex-end ">
+                                <asp:Button ID="continueBtn" runat="server" Text="Enter"
+                                    CssClass="createCourseButton" OnClick="ContinueBtn_Click"
+                                    CommandArgument='<%# Eval("CourseID") %>' />
+                            </div>
+                        </div>
+
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+
+        </div>
+    </div>
+    <br />
     </div>
 
 
@@ -349,12 +377,12 @@
                 <span>:</span>
 
                 <asp:FileUpload ID="courseFileUpload" accept="image/*" runat="server"
-                    CssClass="h-createCourseBox" />
+                    CssClass="h-createCourseBox" onchange="renderImagePreview(this)"/>
 
                 <div id="imagePreviewWrapper" runat="server" class="image-preview-wrapper"
                     style="display:none;">
-                    <img id="courseImagePreview" runat="server" src="" draggable="false"
-                        ondragstart="return false;" class="image-preview" />
+                    <asp:Image ID="courseImage" runat="server" draggable="false" CssClass="image-preview" />
+                    <button class="remove-image-btn" type="button" onclick="removeCourseImage()">x</button>
                 </div>
 
                 <label>Course Name</label>

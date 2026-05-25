@@ -28,7 +28,7 @@
         .courseBox {
             display: flex;
             flex-direction: column;
-            height: 300px;
+            height: 350px;
             border-radius: 20px;
             overflow: hidden;
         }
