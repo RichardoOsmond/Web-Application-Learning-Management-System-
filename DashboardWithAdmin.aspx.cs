@@ -19,6 +19,7 @@ namespace Wapping_time
             CalculateMaxEnrollment();
             if (!IsPostBack)
             {
+                welcomeMsg.Text = "Welcome, " + Session["Username"];
                 CourseRepeater.DataBind();
                 noCourseMsg.Visible = CourseRepeater.Items.Count == 0;
 
@@ -197,6 +198,7 @@ namespace Wapping_time
 
             string imagePath = null;
             string savePath = "";
+            string oldImgPath = null;
 
             if (courseFileUpload.HasFile)
             {
@@ -207,8 +209,35 @@ namespace Wapping_time
 
                 imagePath = "/Images/" + newFileName;
             }
+            else if (hdnIsImageRemoved.Value == "true")
+            {
+                imagePath = ""; // Indicates that the image should be deleted
+            }
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
+
+            // Retrieve old image path if we are changing or deleting it
+            if (courseFileUpload.HasFile || hdnIsImageRemoved.Value == "true")
+            {
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    string getOldImgQuery = "SELECT CourseImage FROM Course WHERE CourseID = @CourseID";
+                    using (SqlCommand cmd = new SqlCommand(getOldImgQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CourseID", courseID);
+                        try
+                        {
+                            conn.Open();
+                            object res = cmd.ExecuteScalar();
+                            if (res != null && res != DBNull.Value)
+                            {
+                                oldImgPath = res.ToString();
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
@@ -229,7 +258,7 @@ namespace Wapping_time
                         cmd.Parameters.AddWithValue("@Description", descriptionTxt.Text.Trim());
                         cmd.Parameters.AddWithValue("@CourseCategory", CategoryDDL.SelectedValue);
                         if (imagePath != null)
-                            cmd.Parameters.AddWithValue("@CourseImage", (object)imagePath ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CourseImage", string.IsNullOrEmpty(imagePath) ? DBNull.Value : (object)imagePath);
                         cmd.Parameters.AddWithValue("@CourseID", courseID);
                         cmd.ExecuteNonQuery();
                     }
@@ -287,6 +316,16 @@ namespace Wapping_time
                     {
                         courseFileUpload.SaveAs(savePath);
                     }
+
+                    // Delete the old file from the disk safely post-commit
+                    if (!string.IsNullOrEmpty(oldImgPath))
+                    {
+                        string oldPhysicalPath = Server.MapPath(oldImgPath);
+                        if (File.Exists(oldPhysicalPath))
+                        {
+                            try { File.Delete(oldPhysicalPath); } catch { }
+                        }
+                    }
                 }
                 catch
                 {
@@ -312,6 +351,7 @@ namespace Wapping_time
             courseImage.ImageUrl = "";
             imagePreviewWrapper.Style["display"] = "none";
             courseFileUpload.Style["display"] = "block";
+            hdnIsImageRemoved.Value = "false";
 
             foreach (RepeaterItem item in studentRepeater.Items)
             {
@@ -328,6 +368,7 @@ namespace Wapping_time
             saveBtn.Visible = true;
             updateBtn.Visible = false;
             removeCourseBtn.Visible = false;
+            hdnIsImageRemoved.Value = "false";
             createCourseModal.Style["visibility"] = "visible";
         }
 
@@ -336,6 +377,7 @@ namespace Wapping_time
             LinkButton btn = (LinkButton)sender;
             int courseID = Convert.ToInt32(btn.CommandArgument);
 
+            hdnIsImageRemoved.Value = "false";
             modalTitle.InnerText = "Edit Course:";
             removeCourseBtn.Visible = true;
             saveBtn.Visible = false;
@@ -401,119 +443,9 @@ namespace Wapping_time
             int courseID = Convert.ToInt32(hiddenCourseIDs.Value);
             if (courseID == 0) return;
 
-            string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-
-                // Get all materials for this course
-                string getAllMaterials = @"SELECT m.MaterialID FROM MaterialContent m 
-                                  JOIN Content c ON m.ContentID = c.ContentID 
-                                  JOIN Lesson l ON c.LessonID = l.LessonID 
-                                  WHERE l.CourseID = @CourseID";
-                List<int> materialIDs = new List<int>();
-                using (SqlCommand cmd = new SqlCommand(getAllMaterials, conn))
-                {
-                    cmd.Parameters.AddWithValue("@CourseID", courseID);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                            materialIDs.Add(Convert.ToInt32(reader["MaterialID"]));
-                    }
-                }
-
-                // Delete each material (files + DB records)
-                foreach (int materialID in materialIDs)
-                    DeleteMaterial(materialID, conn);
-
-                // Delete quizzes, lessons, registrations, course
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM QuizContent WHERE ContentID IN (SELECT ContentID FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID))", conn))
-                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
-
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID)", conn))
-                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
-
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Lesson WHERE CourseID = @CourseID", conn))
-                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
-
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Registration WHERE CourseID = @CourseID", conn))
-                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
-
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Course WHERE CourseID = @CourseID", conn))
-                { cmd.Parameters.AddWithValue("@CourseID", courseID); cmd.ExecuteNonQuery(); }
-            }
+            DataServices.DeleteCourse(courseID);
 
             Response.Redirect(Request.RawUrl);
-        }
-
-        private void DeleteMaterial(int materialID, SqlConnection conn)
-        {
-            int contentID = -1;
-
-            // Get images path and delete them
-            string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
-            SqlCommand getCmd = new SqlCommand(getQuery, conn);
-            getCmd.Parameters.AddWithValue("@MaterialID", materialID);
-            string html = getCmd.ExecuteScalar().ToString();
-
-            var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
-            foreach (System.Text.RegularExpressions.Match match in matches)
-            {
-                string imagePath = Server.MapPath(match.Groups[1].Value);
-                if (File.Exists(imagePath)) File.Delete(imagePath);
-            }
-
-            // Delete flashcard images and records
-            string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
-            using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
-            {
-                getCardsCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
-                {
-                    while (cardReader.Read())
-                    {
-                        string imgFile = cardReader["FrontImage"].ToString();
-                        if (!string.IsNullOrEmpty(imgFile))
-                        {
-                            string fullPath = Server.MapPath(imgFile);
-                            if (File.Exists(fullPath)) File.Delete(fullPath);
-                        }
-                    }
-                }
-            }
-
-            string deleteCardStr = "DELETE FROM FlashCard WHERE MaterialID = @MaterialID";
-            using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
-            {
-                delCardCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                delCardCmd.ExecuteNonQuery();
-            }
-
-            string join = @"SELECT m.ContentID FROM MaterialContent m 
-                    JOIN Content c ON m.ContentID = c.ContentID
-                    WHERE m.MaterialID = @MaterialID";
-            using (SqlCommand cmd = new SqlCommand(join, conn))
-            {
-                cmd.Parameters.AddWithValue("@MaterialID", materialID);
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read()) contentID = Convert.ToInt32(reader["ContentID"]);
-                }
-            }
-
-            // Delete from material Content
-            if (contentID > -1)
-            {
-                string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
-                             DELETE FROM Content WHERE ContentID = @ContentID;";
-                using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
-                {
-                    delCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                    delCmd.Parameters.AddWithValue("@ContentID", contentID);
-                    delCmd.ExecuteNonQuery();
-                }
-            }
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Wapping_time
 {
@@ -276,6 +278,226 @@ namespace Wapping_time
                 }
             }
             return chatMessages;
+        }
+
+        public static void DeleteMaterial(int materialID, SqlConnection conn, SqlTransaction transaction = null)
+        {
+            int contentID = -1;
+
+            // Get images path and delete them
+            string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
+            SqlCommand getCmd = new SqlCommand(getQuery, conn, transaction);
+            getCmd.Parameters.AddWithValue("@MaterialID", materialID);
+            string html = getCmd.ExecuteScalar().ToString();
+
+            var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                string imagePath = HttpContext.Current.Server.MapPath(match.Groups[1].Value);
+                if (File.Exists(imagePath)) File.Delete(imagePath);
+            }
+
+            // Delete flashcard images and records
+            string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
+            using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn, transaction))
+            {
+                getCardsCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
+                {
+                    while (cardReader.Read())
+                    {
+                        string imgFile = cardReader["FrontImage"].ToString();
+                        if (!string.IsNullOrEmpty(imgFile))
+                        {
+                            string fullPath = HttpContext.Current.Server.MapPath(imgFile);
+                            if (File.Exists(fullPath)) File.Delete(fullPath);
+                        }
+                    }
+                }
+            }
+
+            string deleteCardStr = "DELETE FROM FlashCard WHERE MaterialID = @MaterialID";
+            using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn, transaction))
+            {
+                delCardCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                delCardCmd.ExecuteNonQuery();
+            }
+
+            string join = @"SELECT m.ContentID FROM MaterialContent m 
+                    JOIN Content c ON m.ContentID = c.ContentID
+                    WHERE m.MaterialID = @MaterialID";
+            using (SqlCommand cmd = new SqlCommand(join, conn, transaction))
+            {
+                cmd.Parameters.AddWithValue("@MaterialID", materialID);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) contentID = Convert.ToInt32(reader["ContentID"]);
+                }
+            }
+
+            // Delete from material Content
+            if (contentID > -1)
+            {
+                string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
+                             DELETE FROM Content WHERE ContentID = @ContentID;";
+                using (SqlCommand delCmd = new SqlCommand(deleteStr, conn, transaction))
+                {
+                    delCmd.Parameters.AddWithValue("@MaterialID", materialID);
+                    delCmd.Parameters.AddWithValue("@ContentID", contentID);
+                    delCmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void DeleteCourse(int courseID)
+        {
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Get the course image path
+                        string getCourseImageQuery = "SELECT CourseImage FROM Course WHERE CourseID = @CourseID";
+                        string courseImgPath = null;
+                        using (SqlCommand cmd = new SqlCommand(getCourseImageQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            object result = cmd.ExecuteScalar();
+                            if (result != null && result != DBNull.Value)
+                            {
+                                courseImgPath = result.ToString();
+                            }
+                        }
+
+                        // Get all materials for this course
+                        string getAllMaterials = @"SELECT m.MaterialID FROM MaterialContent m 
+                                          JOIN Content c ON m.ContentID = c.ContentID 
+                                          JOIN Lesson l ON c.LessonID = l.LessonID 
+                                          WHERE l.CourseID = @CourseID";
+                        List<int> materialIDs = new List<int>();
+                        using (SqlCommand cmd = new SqlCommand(getAllMaterials, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                    materialIDs.Add(Convert.ToInt32(reader["MaterialID"]));
+                            }
+                        }
+
+                        // Delete each material (files + DB records)
+                        foreach (int materialID in materialIDs)
+                        {
+                            DeleteMaterial(materialID, conn, transaction);
+                        }
+
+                        // 1. Delete StudentAnswers that belong to any attempts on any quiz of this course
+                        using (SqlCommand cmd = new SqlCommand(@"DELETE sa FROM StudentAnswer sa
+                            INNER JOIN QuizAttempt qa ON sa.QuizAttemptID = qa.QuizAttemptID
+                            INNER JOIN QuizContent qc ON qa.QuizID = qc.QuizID
+                            INNER JOIN Content c ON qc.ContentID = c.ContentID
+                            INNER JOIN Lesson l ON c.LessonID = l.LessonID
+                            WHERE l.CourseID = @CourseID;", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 2. Delete QuizAttempts for quizzes in this course
+                        using (SqlCommand cmd = new SqlCommand(@"DELETE qa FROM QuizAttempt qa
+                            INNER JOIN QuizContent qc ON qa.QuizID = qc.QuizID
+                            INNER JOIN Content c ON qc.ContentID = c.ContentID
+                            INNER JOIN Lesson l ON c.LessonID = l.LessonID
+                            WHERE l.CourseID = @CourseID;", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 3. Delete answers for questions in this course
+                        using (SqlCommand cmd = new SqlCommand("DELETE a FROM Answer a " +
+                            "INNER JOIN Question q ON a.QuestionID = q.QuestionID " +
+                            "INNER JOIN QuizContent quiz ON q.QuizID = quiz.QuizID " +
+                            "INNER JOIN Content c ON quiz.ContentID = c.ContentID " +
+                            "INNER JOIN Lesson l ON c.LessonID = l.LessonID " +
+                            "INNER JOIN Course co ON l.CourseID = co.CourseID " +
+                            "WHERE co.CourseID = @CourseID;", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 4. Delete questions for quizzes in this course
+                        using (SqlCommand cmd = new SqlCommand("DELETE q From Question q " +
+                            "INNER JOIN QuizContent quiz ON q.QuizID = quiz.QuizID " +
+                            "INNER JOIN Content c ON quiz.ContentID = c.ContentID " +
+                            "INNER JOIN Lesson l ON c.LessonID = l.LessonID " +
+                            "INNER JOIN Course co ON l.CourseID = co.CourseID " +
+                            "WHERE co.CourseID = @CourseID;", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 5. Delete QuizContent records
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM QuizContent WHERE ContentID IN (SELECT ContentID FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID))", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 6. Delete Content records (which are Quiz contents; Material contents are deleted in loop)
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Content WHERE LessonID IN (SELECT LessonID FROM Lesson WHERE CourseID = @CourseID)", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 7. Delete Lessons
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Lesson WHERE CourseID = @CourseID", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 8. Delete Registrations
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Registration WHERE CourseID = @CourseID", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 9. Delete Course
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Course WHERE CourseID = @CourseID", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CourseID", courseID);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+
+                        // Now that the database transaction succeeded, delete the physical course image file safely
+                        if (!string.IsNullOrEmpty(courseImgPath))
+                        {
+                            if (HttpContext.Current != null)
+                            {
+                                string fullImgPath = HttpContext.Current.Server.MapPath(courseImgPath);
+                                if (File.Exists(fullImgPath))
+                                {
+                                    try { File.Delete(fullImgPath); } catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -110,74 +110,6 @@ namespace Wapping_time
             }
         }
 
-        private void DeleteMaterial(int materialID, SqlConnection conn)
-        {
-            int contentID = -1;
-
-            // Get images path and delete them
-            string getQuery = "SELECT Description FROM MaterialContent WHERE MaterialID = @MaterialID";
-            SqlCommand getCmd = new SqlCommand(getQuery, conn);
-            getCmd.Parameters.AddWithValue("@MaterialID", materialID);
-            string html = getCmd.ExecuteScalar().ToString();
-
-            var matches = System.Text.RegularExpressions.Regex.Matches(html, @"src=""(/Images/[^""]+)""");
-            foreach (System.Text.RegularExpressions.Match match in matches)
-            {
-                string imagePath = Server.MapPath(match.Groups[1].Value);
-                if (File.Exists(imagePath)) File.Delete(imagePath);
-            }
-
-            // Delete flashcard images and records
-            string getCardsQuery = "SELECT FrontImage FROM Flashcard WHERE MaterialID = @MaterialID";
-            using (SqlCommand getCardsCmd = new SqlCommand(getCardsQuery, conn))
-            {
-                getCardsCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                using (SqlDataReader cardReader = getCardsCmd.ExecuteReader())
-                {
-                    while (cardReader.Read())
-                    {
-                        string imgFile = cardReader["FrontImage"].ToString();
-                        if (!string.IsNullOrEmpty(imgFile))
-                        {
-                            string fullPath = Server.MapPath(imgFile);
-                            if (File.Exists(fullPath)) File.Delete(fullPath);
-                        }
-                    }
-                }
-            }
-
-            string deleteCardStr = "DELETE FROM FlashCard WHERE MaterialID = @MaterialID";
-            using (SqlCommand delCardCmd = new SqlCommand(deleteCardStr, conn))
-            {
-                delCardCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                delCardCmd.ExecuteNonQuery();
-            }
-
-            string join = @"SELECT m.ContentID FROM MaterialContent m 
-                    JOIN Content c ON m.ContentID = c.ContentID
-                    WHERE m.MaterialID = @MaterialID";
-            using (SqlCommand cmd = new SqlCommand(join, conn))
-            {
-                cmd.Parameters.AddWithValue("@MaterialID", materialID);
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read()) contentID = Convert.ToInt32(reader["ContentID"]);
-                }
-            }
-
-            // Delete from material Content
-            if (contentID > -1)
-            {
-                string deleteStr = @"DELETE FROM MaterialContent WHERE MaterialID = @MaterialID;
-                             DELETE FROM Content WHERE ContentID = @ContentID;";
-                using (SqlCommand delCmd = new SqlCommand(deleteStr, conn))
-                {
-                    delCmd.Parameters.AddWithValue("@MaterialID", materialID);
-                    delCmd.Parameters.AddWithValue("@ContentID", contentID);
-                    delCmd.ExecuteNonQuery();
-                }
-            }
-        }
 
         private void LoadLessons(int courseID)
         {
@@ -333,7 +265,7 @@ namespace Wapping_time
                         }
                     }
                     foreach (int materialID in materialIDs)
-                        DeleteMaterial(materialID, conn);
+                        DataServices.DeleteMaterial(materialID, conn);
 
                     string query = "DELETE FROM Lesson WHERE LessonID = @LessonID";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -350,7 +282,7 @@ namespace Wapping_time
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     conn.Open();
-                    DeleteMaterial(selectedMaterialID, conn);
+                    DataServices.DeleteMaterial(selectedMaterialID, conn);
                 }
                 LoadContent(selectedLessonID, selectedType);
                 selectedMaterialID = 0;

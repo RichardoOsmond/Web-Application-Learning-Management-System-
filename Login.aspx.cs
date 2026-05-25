@@ -10,8 +10,6 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack && Session["UserID"] != null)
-                Response.Redirect("StudentDashboard.aspx");
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)

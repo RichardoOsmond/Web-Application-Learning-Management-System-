@@ -87,7 +87,7 @@ namespace Wapping_time
                     }
                 }
             }
-            if (roleName == "Admin")
+            if (roleName == "Admin" || roleName == "SuperAdmin")
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {

@@ -109,16 +109,8 @@ namespace Wapping_time
             studentRepeater.DataBind();
 
             // Show the modal
-            saveBtn.Visible = false;
             updateBtn.Visible = true;
             editCourseModal.Style["visibility"] = "visible";
-        }
-
-
-
-        protected void SaveCourseBtn_Click(object sender, EventArgs e)
-        {
-            // Not used on this page since Courses.aspx is only for editing existing courses.
         }
 
         protected void UpdateCourseBtn_Click(object sender, EventArgs e)
@@ -239,32 +231,14 @@ namespace Wapping_time
             int courseID = Convert.ToInt32(hiddenCourseIDs.Value);
             if (courseID == 0) return;
 
-            string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connStr))
+            try
             {
-                conn.Open();
-                try
-                {
-                    // Delete registrations first due to FK constraint
-                    using (SqlCommand cmd = new SqlCommand("DELETE FROM Registration WHERE CourseID=@CourseID", conn))
-                    {
-                        cmd.Parameters.AddWithValue("@CourseID", courseID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    using (SqlCommand cmd = new SqlCommand("DELETE FROM Course WHERE CourseID=@CourseID", conn))
-                    {
-                        cmd.Parameters.AddWithValue("@CourseID", courseID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    Response.Redirect(Request.RawUrl);
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("<script>alert('Error: " + ex.Message.Replace("'", "") + "');</script>");
-                }
+                DataServices.DeleteCourse(courseID);
+                Response.Redirect(Request.RawUrl);
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('Error: " + ex.Message.Replace("'", "") + "');</script>");
             }
         }
 

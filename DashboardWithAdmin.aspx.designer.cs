@@ -15,6 +15,15 @@ namespace Wapping_time
     {
 
         /// <summary>
+        /// welcomeMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label welcomeMsg;
+
+        /// <summary>
         /// createCourseButton control.
         /// </summary>
         /// <remarks>
@@ -103,6 +112,15 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hiddenCourseIDs;
+
+        /// <summary>
+        /// hdnIsImageRemoved control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIsImageRemoved;
 
         /// <summary>
         /// modalTitle control.

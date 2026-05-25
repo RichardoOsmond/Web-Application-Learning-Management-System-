@@ -5,7 +5,8 @@
 INSERT INTO [dbo].[Role] ([RoleID], [RoleName])
 VALUES 
 (1, 'Student'),
-(2, 'Admin');
+(2, 'Admin'),
+(3, 'SuperAdmin');
 
 
 -- ===================================================================
@@ -21,7 +22,11 @@ INSERT INTO [dbo].[User]
 VALUES 
 (1, 'student_user1', '123qwe', '1@a.com', GETDATE(), GETDATE(), 'Hi, I am a regular student.'),
 (1, 'student_user2', '123qwe', '2@a.com', GETDATE(), GETDATE(), 'Looking forward to learning!'),
-(2, 'admin_user',    '123qwe', '3@a.com', GETDATE(), GETDATE(), 'System Administrator Account.');
+(2, 'admin_user',    '123qwe', '3@a.com', GETDATE(), GETDATE(), 'System Administrator Account.'),
+(3, 'super_admin',    '123qwe', '4@a.com', GETDATE(), GETDATE(), 'Super Administrator Account.'),
+(1, 'student_user3', '123qwe', '5@a.com', GETDATE(), GETDATE(), 'Interested in AI and programming.'),
+(1, 'student_user4', '123qwe', '6@a.com', GETDATE(), GETDATE(), 'Excited to join new courses and improve skills.'),
+(1, 'student_user5', '123qwe', '7@a.com', GETDATE(), GETDATE(), 'Passionate about technology and databases.');
 
 
 -- ===================================================================

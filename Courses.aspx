@@ -207,7 +207,16 @@
                 ConnectionString="<%$ ConnectionStrings:ReadCardDB %>"
                 DeleteCommand="DELETE FROM [Course] WHERE [CourseID] = @CourseID"
                 InsertCommand="INSERT INTO [Course] ([UserID], [CourseName], [Description], [CourseCreatedDate], [CourseImage], [CourseCategory]) VALUES (@UserID, @CourseName, @Description, @CourseCreatedDate, @CourseImage, @CourseCategory)"
-                SelectCommand="SELECT * FROM [Course] WHERE ([CourseName] LIKE '%' + @SearchText + '%') AND (@Category = '' OR [CourseCategory] = @Category)"
+                SelectCommand="SELECT c.*
+FROM [Course] c
+INNER JOIN [User] currentUser 
+    ON currentUser.UserID = @UserID
+INNER JOIN [Role] currentRole 
+    ON currentRole.RoleID = currentUser.RoleID
+WHERE (currentRole.RoleName = 'SuperAdmin' OR c.UserID = @UserID)
+AND c.CourseName LIKE '%' + @SearchText + '%' 
+AND (@Category = '' OR c.CourseCategory = @Category) 
+ORDER BY c.CourseCreatedDate DESC;"
                 UpdateCommand="UPDATE [Course] SET [UserID] = @UserID, [CourseName] = @CourseName, [Description] = @Description, [CourseCreatedDate] = @CourseCreatedDate, [CourseImage] = @CourseImage, [CourseCategory] = @CourseCategory WHERE [CourseID] = @CourseID">
                 <DeleteParameters>
                     <asp:Parameter Name="CourseID" Type="Int32" />
@@ -225,6 +234,7 @@
                         ConvertEmptyStringToNull="false" DefaultValue="" />
                     <asp:ControlParameter ControlID="HiddenCategory" Name="Category" PropertyName="Value"
                         Type="String" ConvertEmptyStringToNull="false" DefaultValue="" />
+                    <asp:SessionParameter Name="UserID" SessionField="UserID" />
                 </SelectParameters>
                 <UpdateParameters>
                     <asp:Parameter Name="UserID" Type="Int32" />
@@ -302,8 +312,6 @@
             <div class="button-row">
                 <asp:Button ID="removeCourseBtn" runat="server" Text="Remove Course"
                     OnClick="RemoveCourseBtn_Click" />
-
-                <asp:Button ID="saveBtn" runat="server" Text="Save Course" OnClick="SaveCourseBtn_Click" />
 
                 <asp:Button ID="updateBtn" runat="server" Text="Update Course" OnClick="UpdateCourseBtn_Click" />
 
