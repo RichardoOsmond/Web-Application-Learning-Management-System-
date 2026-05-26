@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="quiz-body">
         <asp:Label ID="lblCourseQuizTitle" runat="server" CssClass="quiz-page-title" Text="Course - Quiz Title"></asp:Label>
-        <asp:Label ID="Label1" runat="server" CssClass="quiz-page-title" Text="Course - Quiz Title"></asp:Label>
+        
         <asp:Panel ID="pnlStudent" runat="server" Visible="false">
             <asp:Panel ID="pnlStudentInfo" runat="server" CssClass="quiz-form-panel">
                 <asp:Label ID="lblStatusBadge" runat="server" CssClass="quiz-instruction" Text=""></asp:Label>
