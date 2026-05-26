@@ -41,10 +41,10 @@ INSERT INTO [dbo].[Course]
     [CourseCreatedDate], [CourseImage], [CourseCategory]
 )
 VALUES 
-(3, 'English',        'Master English grammar and vocabulary.', CAST(GETDATE() AS DATE), '\Images\Course Icon\English icon.png', 'Languages'),
-(3, 'Math',           'Introduction to algebra and geometry.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Math icon.png',    'Mathematics'),
-(3, 'Science',        'Exploring biology, chemistry, and physics.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Science icon.png', 'Natural Sciences'),
-(3, 'Social Science', 'Understanding human society and history.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Social Science icon.png',  'Humanities');
+(3, 'English',        'Master English grammar and vocabulary.', CAST(GETDATE() AS DATE), '/Images/Course Icon/English icon.png', 'Languages'),
+(3, 'Math',           'Introduction to algebra and geometry.', CAST(GETDATE() AS DATE), '/Images/Course Icon/Math icon.png',    'Mathematics'),
+(3, 'Science',        'Exploring biology, chemistry, and physics.', CAST(GETDATE() AS DATE), '/Images/Course Icon/Science icon.png', 'Natural Sciences'),
+(3, 'Social Science', 'Understanding human society and history.', CAST(GETDATE() AS DATE), '/Images/Course Icon/Social Science icon.png',  'Humanities');
 
 
 -- ===================================================================
