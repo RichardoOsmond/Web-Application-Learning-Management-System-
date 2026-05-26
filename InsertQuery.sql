@@ -41,10 +41,10 @@ INSERT INTO [dbo].[Course]
     [CourseCreatedDate], [CourseImage], [CourseCategory]
 )
 VALUES 
-(3, 'English',        'Master English grammar and vocabulary.', CAST(GETDATE() AS DATE), 'english_thumb.jpg', 'Languages'),
-(3, 'Math',           'Introduction to algebra and geometry.', CAST(GETDATE() AS DATE), 'math_thumb.jpg',    'Mathematics'),
-(3, 'Science',        'Exploring biology, chemistry, and physics.', CAST(GETDATE() AS DATE), 'science_thumb.jpg', 'Natural Sciences'),
-(3, 'Social Science', 'Understanding human society and history.', CAST(GETDATE() AS DATE), 'social_thumb.jpg',  'Humanities');
+(3, 'English',        'Master English grammar and vocabulary.', CAST(GETDATE() AS DATE), '\Images\Course Icon\English icon.png', 'Languages'),
+(3, 'Math',           'Introduction to algebra and geometry.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Math icon.png',    'Mathematics'),
+(3, 'Science',        'Exploring biology, chemistry, and physics.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Science icon.png', 'Natural Sciences'),
+(3, 'Social Science', 'Understanding human society and history.', CAST(GETDATE() AS DATE), '\Images\Course Icon\Social Science icon.png',  'Humanities');
 
 
 -- ===================================================================
@@ -123,9 +123,9 @@ SET @MaterialID = SCOPE_IDENTITY();   -- capture BEFORE inserting flashcards
 
 INSERT INTO [dbo].[Flashcard] ([MaterialID], [FrontImage], [BackText], [CardOrder])
 VALUES
-    (@MaterialID, '/Images/Course Icon/profile.png', N'Natural Numbers: counting numbers starting from 1 (1, 2, 3, ...).', 1),
-    (@MaterialID, '/Images/Course Icon/profile.png', N'Whole Numbers: natural numbers plus zero (0, 1, 2, 3, ...).', 2),
-    (@MaterialID, '/Images/Course Icon/profile.png', N'Integers: whole numbers plus their negatives (..., -2, -1, 0, 1, 2, ...).', 3);
+    (@MaterialID, '/Images/Math Image/Material/flash1.png', N'Natural Numbers: counting numbers starting from 1 (1, 2, 3, ...).', 1),
+    (@MaterialID, '/Images/Math Image/Material/flash2.png', N'Whole Numbers: natural numbers plus zero (0, 1, 2, 3, ...).', 2),
+    (@MaterialID, '/Images/Math Image/Material/flash3.png', N'Integers: whole numbers plus their negatives (..., -2, -1, 0, 1, 2, ...).', 3);
 
 -- Lesson 1 / Content 2: QUIZ
 INSERT INTO [dbo].[Content] ([LessonID], [Position], [Type])
@@ -136,21 +136,20 @@ INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScore
 VALUES (@ContentID, N'Number Types Quiz', '300', 70, 3);
 SET @QuizID = SCOPE_IDENTITY();
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'Which of these is a natural number?', N'Select the correct option.', '/Images/Course Icon/profile.png', 10, 1, 'MultipleChoice');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Which of these is a natural number?', N'Select the correct option.', 10, 1, 'MCQ');
 SET @QuestionID = SCOPE_IDENTITY();
-INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'7'),
-    (@QuestionID, N'-3'),
-    (@QuestionID, N'0.5'),
-    (@QuestionID, N'-1.2');
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers], [CorrectOrNot]) VALUES
+    (@QuestionID, N'7', 1),
+    (@QuestionID, N'-3', 0),
+    (@QuestionID, N'0.5', 0),
+    (@QuestionID, N'-1.2', 0);
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'Is -5 an integer?', N'True or False.', NULL, 5, 2, 'TrueFalse');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Is -5 an integer? Explain why.', N'Write your answer.', 5, 2, 'Essay');
 SET @QuestionID = SCOPE_IDENTITY();
-INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'True'),
-    (@QuestionID, N'False');
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES 
+    (@QuestionID, '');
 
 -- =====================================================================
 -- LESSON 2: Addition and Subtraction
@@ -184,23 +183,23 @@ INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScore
 VALUES (@ContentID, N'Addition and Subtraction Quiz', '600', 80, 2);
 SET @QuizID = SCOPE_IDENTITY();
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'What is 24 + 18?', N'Select the sum.', NULL, 10, 1, 'MultipleChoice');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 24 + 18?', N'Select the sum.', 10, 1, 'MCQ');
 SET @QuestionID = SCOPE_IDENTITY();
-INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'42'),
-    (@QuestionID, N'40'),
-    (@QuestionID, N'32'),
-    (@QuestionID, N'44');
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers], [CorrectOrNot]) VALUES
+    (@QuestionID, N'42', 1),
+    (@QuestionID, N'40', 0),
+    (@QuestionID, N'32', 0),
+    (@QuestionID, N'44', 0);
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'What is 50 - 27?', N'Select the difference.', NULL, 10, 2, 'MultipleChoice');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 50 - 27?', N'Select the difference.', 10, 2, 'MCQ');
 SET @QuestionID = SCOPE_IDENTITY();
-INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'23'),
-    (@QuestionID, N'33'),
-    (@QuestionID, N'27'),
-    (@QuestionID, N'13');
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers], [CorrectOrNot]) VALUES
+    (@QuestionID, N'23', 1),
+    (@QuestionID, N'33', 0),
+    (@QuestionID, N'27', 0),
+    (@QuestionID, N'13', 0);
 
 -- =====================================================================
 -- LESSON 3: Introduction to Multiplication
@@ -234,21 +233,20 @@ INSERT INTO [dbo].[QuizContent] ([ContentID], [Name], [TimeLimit], [PassingScore
 VALUES (@ContentID, N'Multiplication Basics Quiz', '450', 75, 3);
 SET @QuizID = SCOPE_IDENTITY();
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'What is 6 x 7?', N'Select the product.', NULL, 10, 1, 'MultipleChoice');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'What is 6 x 7?', N'Select the product.', 10, 1, 'MCQ');
 SET @QuestionID = SCOPE_IDENTITY();
-INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'42'),
-    (@QuestionID, N'36'),
-    (@QuestionID, N'48'),
-    (@QuestionID, N'40');
+INSERT INTO [dbo].[Answer] ([QuestionID], [Answers], [CorrectOrNot]) VALUES
+    (@QuestionID, N'42', 1),
+    (@QuestionID, N'36', 0),
+    (@QuestionID, N'48', 0),
+    (@QuestionID, N'40', 0);
 
-INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [ImageName], [Point], [QuestionOrder], [QuestionType])
-VALUES (@QuizID, N'Multiplication is the same as repeated addition.', N'True or False.', NULL, 5, 2, 'TrueFalse');
+INSERT INTO [dbo].[Question] ([QuizID], [Question], [Description], [Point], [QuestionOrder], [QuestionType])
+VALUES (@QuizID, N'Multiplication is the same as repeated addition.', N'True or False.', 5, 2, 'Essay');
 SET @QuestionID = SCOPE_IDENTITY();
 INSERT INTO [dbo].[Answer] ([QuestionID], [Answers]) VALUES
-    (@QuestionID, N'True'),
-    (@QuestionID, N'False');
+    (@QuestionID, '')
 
 PRINT 'Math course content inserted successfully.';
 
@@ -259,3 +257,5 @@ PRINT 'Math course content inserted successfully.';
 -- FROM Lesson l INNER JOIN Content c ON l.LessonID = c.LessonID
 -- WHERE l.CourseID = (SELECT CourseID FROM Course WHERE CourseName = 'Math')
 -- ORDER BY l.LessonOrder, c.Position;
+
+select * from Course

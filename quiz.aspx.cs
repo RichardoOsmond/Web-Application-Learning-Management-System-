@@ -241,10 +241,10 @@ namespace Wapping_time
                         }
 
                         // admin grading controls
-                        if (Convert.ToInt32(Session["RoleID"]) == 2)
+                        if (Convert.ToInt32(Session["RoleID"]) == 2 || Convert.ToInt32(Session["RoleID"]) == 3)
 
                             // admin grading controls
-                            if (Convert.ToInt32(Session["RoleID"]) == 2)
+                            if (Convert.ToInt32(Session["RoleID"]) == 2 || Convert.ToInt32(Session["RoleID"]) == 3)
                         {
                             // current status label
                             Label lblCurrentStatus = new Label();

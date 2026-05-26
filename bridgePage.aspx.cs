@@ -30,15 +30,15 @@ namespace Wapping_time
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                 int roleID = Convert.ToInt32(Session["RoleID"]);
                 LoadTitle(quizID);
-                if (roleID == 2)
-                {
-                    pnlAdmin.Visible = true;
-                    LoadAdminView(quizID);
-                }
-                else
+                if (roleID == 1)
                 {
                     pnlStudent.Visible = true;
                     LoadStudentView(quizID);
+                }
+                else
+                {
+                    pnlAdmin.Visible = true;
+                    LoadAdminView(quizID);
                 }
             }
         }

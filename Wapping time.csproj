@@ -68,6 +68,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\READCARDDB.mdf" />
+    <Content Include="App_Data\READCARDDB_log.ldf">
+      <DependentUpon>READCARDDB.mdf</DependentUpon>
+    </Content>
     <Content Include="createQuiz.aspx" />
     <Content Include="CSS\AdminEditCoursePage.css" />
     <Content Include="CSS\MaterialPage.css" />
@@ -77,10 +81,6 @@
     <Content Include="Images\Course Icon\default course icon.png" />
     <Content Include="InsertQuery.sql" />
     <Content Include="MaterialPage.aspx" />
-    <Content Include="App_Data\READCARDDB.mdf" />
-    <Content Include="App_Data\READCARDDB_log.ldf">
-      <DependentUpon>READCARDDB.mdf</DependentUpon>
-    </Content>
     <Content Include="bridgePage.aspx" />
     <Content Include="chat.aspx" />
     <Content Include="Scripts\AdminEditCoursePage.js" />
