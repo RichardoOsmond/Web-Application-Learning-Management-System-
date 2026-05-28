@@ -52,7 +52,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCategory, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.Progress, r.RegistrationDate, u.Username " +
+                string query = "SELECT c.CourseID, c.UserID as CourseCreatorID, c.CourseImage, c.CourseName, c.Description, c.CourseCategory, c.CourseCreatedDate, r.RegistrationID, r.UserID, r.Result, r.RegistrationDate, u.Username " +
                     "FROM [Registration] r INNER JOIN [Course] c on c.CourseID = r.CourseID INNER JOIN [User] u on c.UserID = u.UserID WHERE r.UserID = @UserID ORDER BY c.CourseName";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -65,8 +65,8 @@ namespace Wapping_time
                             int registrationUseriD = (int)reader["UserID"];
                             string result = reader["Result"].ToString();
                             DateTime registrationDate = (DateTime)reader["RegistrationDate"];
-                            int progress = (int)reader["Progress"];
                             int courseID = (int)reader["CourseID"];
+                            int progress = getProgress(registrationID, courseID);
                             int courseUserID = (int)reader["CourseCreatorID"];
                             string courseName = reader["CourseName"].ToString();
                             string imageName = reader["CourseImage"].ToString();
@@ -315,28 +315,36 @@ namespace Wapping_time
             }
         }
 
-        public static (int,int) getProgress(int registrationid)
+        public static int getProgress(int registrationid, int courseID)
         {
-            int curcompletion = -1;
-            int totalcompletion = -1;
+            int curcompletion = 0;
+            int totalcompletion = 0;
+            int progress = 0;
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string getCurCompletionQuery = "SELECT COUNT(*) FROM QuizAttempt q WHERE q.IsPassed = 1 AND q.RegistrationID = @RegistrationID";
-                string getTotalCompletionQuery = "SELECT COUNT(*) FROM QuizAttempt q WHERE q.RegistrationID = @RegistrationID";
+                string getCurCompletionQuery = "SELECT COUNT(DISTINCT q.QuizID) FROM [QuizAttempt] q WHERE q.RegistrationID = @RegistrationID";
+                string getTotalCompletionQuery = "SELECT COUNT(*) FROM [QuizContent] q INNER JOIN [Content] c on q.ContentID = c.ContentID INNER JOIN [Lesson] l on c.LessonID = l.LessonID WHERE l.CourseID = @CourseID";
 
                 using(SqlCommand cmd1 = new SqlCommand(getCurCompletionQuery, conn))
                 { 
                     using(SqlCommand cmd2 = new SqlCommand(getTotalCompletionQuery, conn))
                     {
                         cmd1.Parameters.AddWithValue("@RegistrationID", registrationid);
-                        cmd2.Parameters.AddWithValue("@RegistrationID", registrationid);
+                        cmd2.Parameters.AddWithValue("@CourseID", courseID);
                         curcompletion = (int)cmd1.ExecuteScalar();
                         totalcompletion = (int)cmd2.ExecuteScalar();
                     }
                 }
             }
-            return (curcompletion, totalcompletion);
+            if (totalcompletion == 0)
+            {
+                return progress;
+            } else
+            {
+                progress = (curcompletion * 100) / totalcompletion;
+            }
+            return progress;
         }
 
         public static int getCourseCreatorByQuizID(int quizID)
@@ -345,7 +353,6 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                // Walk the chain: QuizContent -> Content -> Lesson -> Course
                 string query =
                     "SELECT co.UserID " +
                     "FROM [QuizContent] q " +
