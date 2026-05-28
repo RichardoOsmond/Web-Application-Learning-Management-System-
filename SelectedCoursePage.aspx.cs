@@ -100,8 +100,6 @@ namespace Wapping_time
                 if (Request.QueryString["LessonID"] != null) selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
                 LoadLessons(selectedCourseID);
                 LoadContent(selectedLessonID);
-                List<Notifications> notifications = DataServices.getNotifications(Convert.ToInt32(Session["UserID"]));
-                Master.bindNotifications(notifications);
             }
         }
 
