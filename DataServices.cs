@@ -127,41 +127,7 @@ namespace Wapping_time
                 }
             }
         }
-        public static List<Course> loadAllCreatedCourse(int loggedInUser)
-        {
-            List<Course> listOfCourses = new List<Course>();
-            String query = "Select * FROM [Course] where [UserID] = @UserID";
-
-            //establish connection
-            using (SqlConnection conn = new SqlConnection(conString)) 
-            {
-                conn.Open();
-                //using command
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserID", loggedInUser);
-                    //read the result
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int courseID = (int)reader["CourseID"];
-                            int userID = (int)reader["UserID"];
-                            String courseName = reader["CourseName"].ToString();
-                            String description = reader["Description"].ToString();
-                            string courseCategory = reader["CourseCategory"].ToString();
-                            String imageUrl = reader["CourseImage"].ToString();
-                            DateTime courseCreatedDate = (DateTime)reader["CourseCreatedDate"];
-
-                            Course course = new Course(courseID, loggedInUser, courseName, description, courseCategory, imageUrl, courseCreatedDate);
-                            listOfCourses.Add(course);
-                        }
-                    }
-                }
-            }
-
-            return listOfCourses;
-        }
+        
         public static List<User> getAllStudents()
         {
             List<User> users = new List<User>();
