@@ -204,7 +204,9 @@ namespace Wapping_time
                 newQuizAttemptID = Convert.ToInt32(cmd.ExecuteScalar());
             }
 
-            Response.Redirect("quiz.aspx?QuizID=" + quizID + "&QuizAttemptID=" + newQuizAttemptID);
+            string courseID = Request.QueryString["CourseID"] ?? "";
+            string lessonID = Request.QueryString["LessonID"] ?? "";
+            Response.Redirect($"quiz.aspx?QuizID={quizID}&QuizAttemptID={newQuizAttemptID}&CourseID={courseID}&LessonID={lessonID}");
         }
 
         // admin view — quiz info + status toggle + student list

@@ -421,6 +421,8 @@ namespace Wapping_time
         {
             int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
             int quizAttemptID = Convert.ToInt32(Request.QueryString["QuizAttemptID"]);
+            string courseID = Request.QueryString["CourseID"] ?? "";
+            string lessonID = Request.QueryString["LessonID"] ?? "";
 
             // guard against resubmission
             using (SqlConnection checkConn = new SqlConnection(connStr))
@@ -432,7 +434,8 @@ namespace Wapping_time
                 int existing = Convert.ToInt32(checkCmd.ExecuteScalar());
                 if (existing > 0)
                 {
-                    Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
+                    
+                    Response.Redirect($"bridgePage.aspx?QuizID={quizID}&CourseID={courseID}&LessonID={lessonID}");
                     return;
                 }
             }
@@ -513,7 +516,8 @@ namespace Wapping_time
                 updateCmd.ExecuteNonQuery();
             }
 
-            Response.Redirect("bridgePage.aspx?QuizID=" + quizID);
+            
+            Response.Redirect($"bridgePage.aspx?QuizID={quizID}&CourseID={courseID}&LessonID={lessonID}");
         }
 
         // overload for btnSubmit — reuses open connection
