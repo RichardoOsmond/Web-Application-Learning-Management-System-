@@ -198,7 +198,7 @@ namespace Wapping_time
                 conn.Open();
                 string query = "SELECT c.ChatMessageID, c.FromUserID, c.ToUserID, c.Content, c.IsRead, c.SentTime, u.Username " +
                     "FROM [ChatMessages] c INNER JOIN [User] u ON c.FromUserID = u.UserID WHERE (c.FromUserID = @FromUserID AND c.ToUserID = @ToUserID) " +
-                    "OR (c.FromUserID = @ToUserID AND c.ToUserID = @FromUserID;";
+                    "OR (c.FromUserID = @ToUserID AND c.ToUserID = @FromUserID);";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@FromUserID", fromUserID);

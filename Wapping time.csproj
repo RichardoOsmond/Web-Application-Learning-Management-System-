@@ -73,6 +73,7 @@
       <DependentUpon>READCARDDB.mdf</DependentUpon>
     </Content>
     <Content Include="createQuiz.aspx" />
+    <Content Include="CSS\AdminChat.css" />
     <Content Include="CSS\AdminEditCoursePage.css" />
     <Content Include="CSS\MaterialPage.css" />
     <Content Include="CSS\SelectedCoursePage.css" />
@@ -82,7 +83,8 @@
     <Content Include="InsertQuery.sql" />
     <Content Include="MaterialPage.aspx" />
     <Content Include="bridgePage.aspx" />
-    <Content Include="chat.aspx" />
+    <Content Include="AdminChat.aspx" />
+    <Content Include="Scripts\AdminChat.js" />
     <Content Include="Scripts\AdminEditCoursePage.js" />
     <Content Include="Scripts\MaterialPage.js" />
     <Content Include="Scripts\SelectedCoursePage.js" />
@@ -144,12 +146,12 @@
     <Compile Include="Assignment.Master.designer.cs">
       <DependentUpon>Assignment.Master</DependentUpon>
     </Compile>
-    <Compile Include="chat.aspx.cs">
-      <DependentUpon>chat.aspx</DependentUpon>
+    <Compile Include="AdminChat.aspx.cs">
+      <DependentUpon>AdminChat.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="chat.aspx.designer.cs">
-      <DependentUpon>chat.aspx</DependentUpon>
+    <Compile Include="AdminChat.aspx.designer.cs">
+      <DependentUpon>AdminChat.aspx</DependentUpon>
     </Compile>
     <Compile Include="ChatMessages.cs" />
     <Compile Include="Course.cs" />

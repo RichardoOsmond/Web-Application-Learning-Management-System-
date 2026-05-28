@@ -44,7 +44,7 @@ namespace Wapping_time
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                string nameQuery = "SELECT r.RoleID, r.RoleName FROM Role r JOIN [User] u ON r.RoleID = u.RoleID WHERE u.UserID = @UserID";
+                string nameQuery = "SELECT r.RoleID, r.RoleName, u.Username FROM Role r JOIN [User] u ON r.RoleID = u.RoleID WHERE u.UserID = @UserID";
                 SqlCommand cmd = new SqlCommand(nameQuery, conn);
                 cmd.Parameters.AddWithValue("@UserID", Session["UserID"]);
 
@@ -53,8 +53,10 @@ namespace Wapping_time
                 {
                     int roleID = (int)userIDReader["RoleID"];
                     string roleName = userIDReader["RoleName"].ToString();
+                    string username = userIDReader["Username"].ToString();
                     Session["RoleID"] = roleID;
                     Session["RoleName"] = roleName;
+                    Session["Username"] = username;
                 }
             }
         }

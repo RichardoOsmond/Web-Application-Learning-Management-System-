@@ -5,6 +5,7 @@
 <html>
 <head runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/Dashboard.css") %>" />
+    <script>var roleName = "<%= getUserRole() %>"; </script>
     <script src='<%= ResolveUrl ("~/Scripts/Dashboard.js") %>'></script>
     <title></title>
 
