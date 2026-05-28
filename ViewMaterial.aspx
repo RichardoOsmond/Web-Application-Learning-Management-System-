@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="ViewMaterial.aspx.cs" Inherits="Wapping_time.ViewMaterial" %>
+<%@ MasterType VirtualPath="~/Assignment.Master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/ViewMaterial.css") %>" />
 </asp:Content>
