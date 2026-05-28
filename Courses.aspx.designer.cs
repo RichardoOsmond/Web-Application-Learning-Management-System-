@@ -114,6 +114,15 @@ namespace Wapping_time
         protected global::System.Web.UI.WebControls.HiddenField hiddenCourseIDs;
 
         /// <summary>
+        /// hdnIsImageRemoved control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIsImageRemoved;
+
+        /// <summary>
         /// courseFileUpload control.
         /// </summary>
         /// <remarks>
@@ -132,13 +141,13 @@ namespace Wapping_time
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl imagePreviewWrapper;
 
         /// <summary>
-        /// courseImagePreview control.
+        /// courseImage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage courseImagePreview;
+        protected global::System.Web.UI.WebControls.Image courseImage;
 
         /// <summary>
         /// courseNameTxt control.

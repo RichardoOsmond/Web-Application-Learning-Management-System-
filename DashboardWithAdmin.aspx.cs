@@ -19,6 +19,10 @@ namespace Wapping_time
             CalculateMaxEnrollment();
             if (!IsPostBack)
             {
+                if (Session["UserID"] == null)
+                {
+                    Response.Redirect("Login.aspx");
+                }
                 welcomeMsg.Text = "Welcome, " + Session["Username"];
                 CourseRepeater.DataBind();
                 noCourseMsg.Visible = CourseRepeater.Items.Count == 0;
@@ -76,16 +80,12 @@ namespace Wapping_time
 
         protected void saveCourseBtn_Click(object sender, EventArgs e)
         {
-            if (Session["UserID"] == null)
-            {
-                Response.Write("<script>alert('Session expired - UserID is null');</script>");
-                return;
-            }
 
             if (string.IsNullOrWhiteSpace(courseNameTxt.Text) ||
                 string.IsNullOrWhiteSpace(descriptionTxt.Text) ||
                 string.IsNullOrWhiteSpace(CategoryDDL.SelectedValue))
             {
+                Response.Write("<script>alert('Course, description, or category cannot be empty!');</script>");
                 return;
             }
 
@@ -179,12 +179,6 @@ namespace Wapping_time
 
         protected void updateCourseBtn_Click(object sender, EventArgs e)
         {
-            if (Session["UserID"] == null)
-            {
-                Response.Write("<script>alert('Session expired - UserID is null');</script>");
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(courseNameTxt.Text) ||
                 string.IsNullOrWhiteSpace(descriptionTxt.Text) ||
                 string.IsNullOrWhiteSpace(CategoryDDL.SelectedValue))
@@ -214,7 +208,7 @@ namespace Wapping_time
             }
             else if (hdnIsImageRemoved.Value == "true")
             {
-                imagePath = ""; // Indicates that the image should be deleted
+                imagePath = ""; 
             }
 
             string connStr = ConfigurationManager.ConnectionStrings["ReadCardDB"].ConnectionString;
@@ -345,7 +339,7 @@ namespace Wapping_time
         }
         protected void cancelBtn_Click(object sender, EventArgs e)
         {
-            createCourseModal.Style["visibility"] = "hidden";
+            courseModal.Style["visibility"] = "hidden";
             modalTitle.InnerText = "Create New Course:";
             courseNameTxt.Text = "";
             descriptionTxt.Text = "";
@@ -372,7 +366,7 @@ namespace Wapping_time
             updateBtn.Visible = false;
             removeCourseBtn.Visible = false;
             hdnIsImageRemoved.Value = "false";
-            createCourseModal.Style["visibility"] = "visible";
+            courseModal.Style["visibility"] = "visible";
         }
 
         protected void EditCourseButton_Click(object sender, EventArgs e)
@@ -425,7 +419,7 @@ namespace Wapping_time
             studentRepeater.DataBind();
 
             // Show the modal
-            createCourseModal.Style["visibility"] = "visible";
+            courseModal.Style["visibility"] = "visible";
         }
 
         protected void ViewAllCourseBtn_Click(object sender, EventArgs e)

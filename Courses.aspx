@@ -1,5 +1,6 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="Courses.aspx.cs" Inherits="Wapping_time.courses" %> <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="Courses.aspx.cs" Inherits="Wapping_time.courses" %> 
 <%@ MasterType VirtualPath="~/Assignment.Master" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_circle,draw,edit" />
     <style type="text/css">
         #globalDiv {
@@ -136,6 +137,18 @@
             margin-top: 10px;
         }
 
+        .remove-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #333333;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
         .image-preview {
             width: 100%;
             height: 100%;
@@ -152,7 +165,71 @@
             margin-left: 10px;
         }
     </style>
+    <script type="text/javascript">
+        function removeCourseImage() {
+            var fileUpload = document.getElementById("<%= courseFileUpload.ClientID %>");
+            var imagePreview = document.getElementById("<%= courseImage.ClientID %>");
+            var wrapper = document.getElementById("<%= imagePreviewWrapper.ClientID %>");
+            var isRemovedField = document.getElementById("<%= hdnIsImageRemoved.ClientID %>");
 
+            imagePreview.src = "";
+            wrapper.style.display = "none";
+
+            fileUpload.value = "";
+            fileUpload.style.display = "block";
+            isRemovedField.value = "true";
+        }
+        function renderImagePreview(input) {
+            var imagePreview = document.getElementById("<%= courseImage.ClientID %>");
+            var wrapper = document.getElementById("<%= imagePreviewWrapper.ClientID %>");
+            var isRemovedField = document.getElementById("<%= hdnIsImageRemoved.ClientID %>");
+
+            if (input.files && input.files[0]) {
+                isRemovedField.value = "false";
+                var file = input.files[0];
+
+                if (!file.type.startsWith("image/")) {
+                    alert("Please choose an image file.");
+                    input.value = "";
+                    imagePreview.src = "";
+                    imagePreview.style.display = "none";
+                    return;
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    wrapper.style.display = "block";
+                    input.style.display = "none";
+                };
+
+
+                reader.readAsDataURL(file);
+            }
+        }
+        function filterStudents() {
+            var searchInput = document.getElementById('searchStudent');
+            if (searchInput) {
+                var filter = searchInput.value.toLowerCase().trim();
+                var rows = document.querySelectorAll('.student-row');
+
+                rows.forEach(function (row) {
+                    var nameEl = row.querySelector('.student-name');
+                    if (nameEl) {
+                        var nameText = nameEl.textContent.toLowerCase();
+
+                        // If student name includes the search filter, show them, otherwise hide them.
+                        if (nameText.includes(filter)) {
+                            row.style.display = 'contents';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div id="globalDiv">
@@ -181,7 +258,7 @@
                                 CommandArgument='<%# Eval("CourseID") %>' OnClick="EditCourseButton_Click">
                                 <span class="material-symbols-outlined">edit</span>
                             </asp:LinkButton>
-                            <img src='<%# string.IsNullOrEmpty(Convert.ToString(Eval("courseImage"))) ? "/Images/penguin.png" : Eval("courseImage") %>'
+                            <img src='<%# string.IsNullOrEmpty(Convert.ToString(Eval("courseImage"))) ? "/Images/Course Icon/default course icon.png" : Eval("courseImage") %>'
                                 style="object-fit:cover; height:100%; width:100%" draggable="false" />
 
                         </div>
@@ -211,9 +288,9 @@
                 SelectCommand="SELECT c.*
 FROM [Course] c
 INNER JOIN [User] currentUser 
-    ON currentUser.UserID = @UserID
+ON currentUser.UserID = @UserID
 INNER JOIN [Role] currentRole 
-    ON currentRole.RoleID = currentUser.RoleID
+ON currentRole.RoleID = currentUser.RoleID
 WHERE (currentRole.RoleName = 'SuperAdmin' OR c.UserID = @UserID)
 AND c.CourseName LIKE '%' + @SearchText + '%' 
 AND (@Category = '' OR c.CourseCategory = @Category) 
@@ -259,6 +336,7 @@ ORDER BY c.CourseCreatedDate DESC;"
     <div id="editCourseModal" runat="server" class="modal-overlay" style="visibility: hidden;">
         <div class="modal-box">
             <asp:HiddenField ID="hiddenCourseIDs" runat="server" />
+            <asp:HiddenField ID="hdnIsImageRemoved" runat="server" Value="false" />
 
             <h1 style="font-size:25px">Edit Course:</h1>
 
@@ -269,8 +347,8 @@ ORDER BY c.CourseCreatedDate DESC;"
                     CssClass="h-createCourseBox" />
 
                 <div id="imagePreviewWrapper" runat="server" class="image-preview-wrapper" style="display:none;">
-                    <img id="courseImagePreview" runat="server" src="" draggable="false" ondragstart="return false;"
-                        class="image-preview" />
+                    <asp:Image ID="courseImage" runat="server" draggable="false" CssClass="image-preview" />
+                    <button class="remove-image-btn" type="button" onclick="removeCourseImage()">x</button>
                 </div>
 
                 <label>Course Name</label>
@@ -292,20 +370,27 @@ ORDER BY c.CourseCreatedDate DESC;"
                     CssClass="input-box textarea-box" />
             </div>
 
-            <h1 style="font-size:25px; margin-top:20px">Student Enrollment:</h1>
+            <div style="display: flex; justify-content: space-between; margin-top:20px">
+                <h1 style="font-size:25px;">Student Enrollment:</h1>
+                <input type="text" id="searchStudent" placeholder="Search students by name..."
+                    oninput="filterStudents()" style="height:40px; " />
+            </div>
 
             <div id="studentTable">
                 <asp:Repeater ID="studentRepeater" runat="server" DataSourceID="SqlDataSource2">
                     <ItemTemplate>
-                        <asp:Label ID="hiddenStudentID" runat="server" Text='<%# Eval("UserID") %>' Visible="False">
-                        </asp:Label>
+                        <div class="student-row" style="display:contents">
+                            <asp:Label ID="hiddenStudentID" runat="server" Text='<%# Eval("UserID") %>'
+                                Visible="False">
+                            </asp:Label>
 
-                        <h1>
-                            <%# Eval("Username") %>
-                        </h1>
+                            <h1 class="student-name">
+                                <%# Eval("Username") %>
+                            </h1>
 
-                        <asp:CheckBox ID="enrollCheckBox" runat="server"
-                            Checked='<%# Convert.ToBoolean(Eval("IsEnrolled")) %>' />
+                            <asp:CheckBox ID="enrollCheckBox" runat="server"
+                                Checked='<%# Convert.ToBoolean(Eval("IsEnrolled")) %>' />
+                        </div>
                     </ItemTemplate>
                 </asp:Repeater>
             </div>
