@@ -65,7 +65,7 @@ namespace Wapping_time
                             int registrationUseriD = (int)reader["UserID"];
                             string result = reader["Result"].ToString();
                             DateTime registrationDate = (DateTime)reader["RegistrationDate"];
-                            int progress = DataServices.getProgress(registrationID);
+                            int progress = (int)reader["Progress"];
                             int courseID = (int)reader["CourseID"];
                             int courseUserID = (int)reader["CourseCreatorID"];
                             string courseName = reader["CourseName"].ToString();
@@ -315,11 +315,10 @@ namespace Wapping_time
             }
         }
 
-        private static int getProgress(int registrationid)
+        public static (int,int) getProgress(int registrationid)
         {
             int curcompletion = -1;
             int totalcompletion = -1;
-            int progress = 0;
             using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
@@ -337,11 +336,7 @@ namespace Wapping_time
                     }
                 }
             }
-            if(curcompletion != -1 && totalcompletion != -1) {
-                progress = curcompletion / totalcompletion * 100;
-            }
-            
-            return progress;
+            return (curcompletion, totalcompletion);
         }
 
         public static int getCourseCreatorByQuizID(int quizID)
