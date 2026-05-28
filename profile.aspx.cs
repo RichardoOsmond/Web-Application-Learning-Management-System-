@@ -23,6 +23,12 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
+                if (Session["RoleName"].ToString() == "Student")
+                {
+                    Student currStudent = DataServices.getStudentByUserID((int)Session["UserID"]);
+                    List<ChatMessages> chatMessages = currStudent.getChatMessages();
+                    Master.bindChatMessages(chatMessages);
+                }
                 List<Notifications> notifications = DataServices.getNotifications(Convert.ToInt32(Session["UserID"]));
                 Master.bindNotifications(notifications);
 

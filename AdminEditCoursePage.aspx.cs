@@ -48,7 +48,7 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
-                List<Notifications> notifications = DataServices.getNotifications(userID);
+                List<Notifications> notifications = DataServices.getNotifications((int)Session["UserID"]);
                 Master.bindNotifications(notifications);
 
                 selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
