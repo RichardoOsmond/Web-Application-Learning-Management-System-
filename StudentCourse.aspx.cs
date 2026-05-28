@@ -11,10 +11,17 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            int userID = (int)Session["UserID"];
-            List<Registration> registrations = DataServices.getEnrolledCourses(userID);
-            rptEnrolledCourses.DataSource = registrations;
-            rptEnrolledCourses.DataBind();
+            if (!IsPostBack)
+            {
+                int userID = (int)Session["UserID"];
+                List<Registration> registrations = DataServices.getEnrolledCourses(userID);
+                rptEnrolledCourses.DataSource = registrations;
+                rptEnrolledCourses.DataBind();
+
+                Student currStudent = DataServices.getStudentByUserID(userID);
+                Master.bindNotifications(currStudent.getNotifications());
+                Master.bindChatMessages(currStudent.getChatMessages());
+            }
         }
     }
 }

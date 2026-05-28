@@ -15,6 +15,10 @@ namespace Wapping_time
             {
                 loadStudents();
                 lblNoMessages.Visible = true;
+
+                int userID = (int)Session["UserID"];
+                List<Notifications> notifications = DataServices.getNotifications(userID);
+                Master.bindNotifications(notifications);
             }
         }
         protected void loadStudents()

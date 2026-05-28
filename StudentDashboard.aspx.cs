@@ -17,13 +17,9 @@ namespace Wapping_time
                 int userID = (int)Session["UserID"];
                 currStudent = DataServices.getStudentByUserID(userID);
                 List<Notifications> notifications = currStudent.getNotifications();
-                rptNotifications.DataSource = notifications;
-                rptNotifications.DataBind();
-                lblNoNotifications.Visible = (notifications.Count == 0);
+                Master.bindNotifications(notifications);
                 List<ChatMessages> chatMessages = currStudent.getChatMessages();
-                rptStudentChatMessages.DataSource = chatMessages;
-                rptStudentChatMessages.DataBind();
-                lblNoChatMessages.Visible = (chatMessages.Count == 0);
+                Master.bindChatMessages(chatMessages);
                 List<Registration> enrolledCourses = currStudent.getEnrolledCourses();
                 rptCourses.DataSource = enrolledCourses;
                 rptCourses.DataBind();

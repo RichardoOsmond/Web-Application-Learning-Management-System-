@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="Courses.aspx.cs" Inherits="Wapping_time.courses" %> <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<%@ MasterType VirtualPath="~/Assignment.Master" %>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_circle,draw,edit" />
     <style type="text/css">
         #globalDiv {

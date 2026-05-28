@@ -15,42 +15,6 @@ namespace Wapping_time
     {
 
         /// <summary>
-        /// rptNotifications control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptNotifications;
-
-        /// <summary>
-        /// lblNoNotifications control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoNotifications;
-
-        /// <summary>
-        /// rptStudentChatMessages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptStudentChatMessages;
-
-        /// <summary>
-        /// lblNoChatMessages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoChatMessages;
-
-        /// <summary>
         /// lblName control.
         /// </summary>
         /// <remarks>

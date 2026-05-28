@@ -5,30 +5,6 @@
     <script src='<%= ResolveUrl ("~/Scripts/StudentDashboard.js") %>'></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div id="notificationPanel" class="notification_panel">
-        <div class="notification_header">Notifications</div>
-        <asp:Repeater ID="rptNotifications" runat="server">
-            <ItemTemplate>
-                <div class="notification_box">
-                    <strong><%# Eval("Title") %></strong>
-                    <p><%# Eval("Content") %></p>
-                </div>
-            </ItemTemplate>
-        </asp:Repeater>
-        <asp:Label ID="lblNoNotifications" runat="server" Text="No Notifications" Visible="false" CssClass="notification_empty" />
-    </div>
-    <div id="chatPanel" class="student_chat_panel">
-        <div class="chat_header">Chat Messages</div>
-        <asp:Repeater ID="rptStudentChatMessages" runat="server">
-            <ItemTemplate>
-                <div class="chat_message_box">
-                    <strong class="chat_sender"><%# Eval("SenderName") %></strong>
-                    <p class="chat_content"><%# Eval("Content") %></p>
-                </div> 
-            </ItemTemplate>
-        </asp:Repeater>
-        <asp:Label ID="lblNoChatMessages" runat="server" Text="No Chat Messages Yet" Visible="false" CssClass="chat_empty" />
-    </div>
     <asp:Label class="welcome_message" ID="lblName" runat="server" Text="Welcome, username!"></asp:Label>
     <div class="course_panel">
         <button type="button" class ="carousel_button" id="prevCourse" onclick="slideCourse(-1)"><</button>

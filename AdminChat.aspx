@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="AdminChat.aspx.cs" Inherits="Wapping_time.AdminChat" %>
+<%@ MasterType VirtualPath="~/Assignment.Master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/AdminChat.css") %>" />
     <script src='<%= ResolveUrl ("~/Scripts/AdminChat.js") %>'></script>
