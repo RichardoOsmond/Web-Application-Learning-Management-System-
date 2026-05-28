@@ -88,7 +88,7 @@
                     <asp:Button ID="qEditBtn" runat="server" Text="Edit Selected Quiz" CssClass="section-btn" OnClick="varBtn_Click"/>
                     <asp:Button ID="qDeleteBtn" runat="server" Text="Delete Selected Quiz" CssClass="section-btn" OnClientClick="openQuizDeleteModal(); return false;"/>
                     <asp:Button ID="qEditOrderBtn" runat="server" Text="Edit Order" CssClass="section-btn" OnClick="varBtn_Click"/>
-                    <asp:Button ID="qReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click"/>
+                    <asp:Button ID="qReturnBtn" runat="server" Text="Return" CssClass="section-btn" OnClick="varBtn_Click" />
                 </h2>
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="QuizRepeater" runat="server" OnItemCommand="selectQuiz">                     

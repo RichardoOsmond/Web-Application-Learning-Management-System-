@@ -72,7 +72,14 @@ namespace Wapping_time
 
             if (action == "Return")
             {
-                Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
+                if (selectedLessonID > 0)
+                {
+                    Response.Redirect($"SelectedCoursePage.aspx?CourseID={selectedCourseID}");
+                }
+                else
+                {
+                    Response.Redirect($"DashboardWithAdmin.aspx");
+                }
             }
 
             switch (action)

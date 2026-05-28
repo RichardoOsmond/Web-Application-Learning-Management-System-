@@ -43,27 +43,6 @@ namespace Wapping_time
         private string roleName = "";
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (Session["RoleName"] == null)
-            //{
-            //    Session["UserID"] = 1;
-            //    Session["RoleID"] = 1;
-            //    Session["RoleName"] = "Admin";
-            //    Session["Username"] = "admin";
-            //}
-
-            //if (Session["RoleName"] == null)
-            //{
-            //    Session["UserID"] = 2;
-            //    Session["RoleID"] = 2;
-            //    Session["RoleName"] = "Student";
-            //    Session["Username"] = "student";
-            //}
-
-            //if (Request.QueryString["CourseID"] == null)
-            //{
-            //    Response.Redirect("SelectedCoursePage.aspx?CourseID=1&LessonID=1");
-            //    return;
-            //}
             if (Session["UserID"] == null)
                 Response.Redirect("login.aspx");
 
