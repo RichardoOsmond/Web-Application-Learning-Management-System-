@@ -105,7 +105,7 @@
     <Content Include="register.aspx" />
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="quiz.aspx" />
-    <Content Include="quiz.css" />
+    <Content Include="CSS\quiz.css" />
     <Content Include="Scripts\StudentDashboard.js" />
     <Content Include="setUsername.aspx" />
     <Content Include="StudentCourse.aspx" />

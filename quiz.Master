@@ -3,7 +3,7 @@
 <html>
 <head runat="server">
     <title></title>
-    <link href="quiz.css" rel="stylesheet" type="text/css" />
+    <link href="CSS/quiz.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
