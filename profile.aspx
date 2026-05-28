@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Profile" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="profile.aspx.cs" Inherits="Wapping_time.profile" %>
-
+<%@ MasterType VirtualPath="~/Assignment.Master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         /*page Background*/

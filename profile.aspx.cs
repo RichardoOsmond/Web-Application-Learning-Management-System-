@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -22,6 +23,9 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
+                List<Notifications> notifications = DataServices.getNotifications(Convert.ToInt32(Session["UserID"]));
+                Master.bindNotifications(notifications);
+
                 LoadProfile();
                 getGrades();
             }
