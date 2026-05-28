@@ -35,5 +35,9 @@ namespace Wapping_time
                 Console.WriteLine("Hi");
             }
         }
+        protected string getUserRole()
+        {
+            return Session["RoleName"] != null ? Session["RoleName"].ToString() : "";
+        }
     }
 }

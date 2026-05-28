@@ -18,9 +18,13 @@ document.addEventListener("click", function (e) {
 })
 
 function toggleChatPanel() {
-    var panel = document.getElementById("chatPanel");
-    if (panel) {
-        panel.classList.toggle("is-open");
+    if (roleName === "Student") {
+        var panel = document.getElementById("chatPanel");
+        if (panel) {
+            panel.classList.toggle("is-open");
+        }
+    } else {
+        window.location.href = "AdminChat.aspx";
     }
 }
 
