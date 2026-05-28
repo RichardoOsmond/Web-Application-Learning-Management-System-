@@ -211,5 +211,19 @@ namespace Wapping_time
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvAdminStudents;
+
+        /// <summary>
+        /// Master property.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated property.
+        /// </remarks>
+        public new Wapping_time.Assignment Master
+        {
+            get
+            {
+                return ((Wapping_time.Assignment)(base.Master));
+            }
+        }
     }
 }

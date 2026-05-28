@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -31,13 +32,21 @@ namespace Wapping_time
                 int roleID = Convert.ToInt32(Session["RoleID"]);
                 Session["QuizName"] = Request.QueryString["QuizName"];
                 LoadTitle(quizID);
+                int userID = (int)Session["UserID"];
                 if (roleID == 1)
                 {
+                    Student currStudent = DataServices.getStudentByUserID(userID);
+                    List<Notifications> notifications = currStudent.getNotifications();
+                    Master.bindNotifications(notifications);
+                    List<ChatMessages> chatMessages = currStudent.getChatMessages();
+                    Master.bindChatMessages(chatMessages);
                     pnlStudent.Visible = true;
                     LoadStudentView(quizID);
                 }
                 else
                 {
+                    List<Notifications> notifications = DataServices.getNotifications(userID);
+                    Master.bindNotifications(notifications);
                     pnlAdmin.Visible = true;
                     LoadAdminView(quizID);
                 }

@@ -46,6 +46,7 @@ namespace Wapping_time
             if (Session["UserID"] == null)
                 Response.Redirect("login.aspx");
 
+            int userID = (int)Session["UserID"];
             roleName = Session["RoleName"].ToString();
             selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
             using (SqlConnection conn = new SqlConnection(connString))
@@ -88,6 +89,8 @@ namespace Wapping_time
 
             if (!IsPostBack)
             {
+                List<Notifications> notifications = DataServices.getNotifications(userID);
+                Master.bindNotifications(notifications);
                 if (Request.QueryString["LessonID"] != null) selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
                 LoadLessons(selectedCourseID);
                 LoadContent(selectedLessonID);

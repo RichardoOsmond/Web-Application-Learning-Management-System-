@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assignment.Master" AutoEventWireup="true" CodeBehind="SelectedCoursePage.aspx.cs" Inherits="Wapping_time.CoursePage" %>
+<%@ MasterType VirtualPath="~/Assignment.Master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl ("~/CSS/SelectedCoursePage.css") %>" />
     <script src='<%= ResolveUrl ("~/Scripts/SelectedCoursePage.js") %>'></script>
