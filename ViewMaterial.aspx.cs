@@ -42,6 +42,16 @@ namespace Wapping_time
                 selectedLessonID = int.Parse(Request.QueryString["LessonID"]);
                 selectedCourseID = int.Parse(Request.QueryString["CourseID"]);
 
+                List<Notifications> notifications = DataServices.getNotifications(Convert.ToInt32(Session["UserID"]));
+                Master.bindNotifications(notifications);
+
+                if (Session["RoleName"].ToString() == "Student")
+                {
+                    Student currStudent = DataServices.getStudentByUserID(Convert.ToInt32(Session["UserID"]));
+                    List<ChatMessages> chatMessages = currStudent.getChatMessages();
+                    Master.bindChatMessages(chatMessages);
+                }
+
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     conn.Open();
