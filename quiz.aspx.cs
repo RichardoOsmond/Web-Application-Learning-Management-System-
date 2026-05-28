@@ -515,14 +515,28 @@ namespace Wapping_time
                 updateCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
                 updateCmd.ExecuteNonQuery();
             }
+            int courseIDInt = Convert.ToInt32(courseID);
+            string studentName = Session["Username"].ToString();
+            string courseName = DataServices.getCourseNamebyQuizID(quizID);
+            int registrationID = DataServices.getRegistrationIDbyUserCourseID((int)Session["UserID"], courseIDInt);
             string courseCreatorTitle = "Student Quiz Completion";
-            string courseCreatorContent = "Student StudentName has completed quiz " + Session["QuizName"] + " of course courseName";
+            string courseCreatorContent = "Student " + studentName + " has completed quiz " + Session["QuizName"] + " of " + courseName;
             DataServices.createNewNotifications(DataServices.getCourseCreatorByQuizID(quizID), courseCreatorTitle, courseCreatorContent, DateTime.Now);
             string studentTitle = "Quiz Submission";
-            string studentContent = "You have submitted your answers for quiz quizName of course courseName";
+            string studentContent = "You have submitted your answers for quiz " + Session["QuizName"] + " of " + courseName + "!";
             if(Session["UserID"] != null)
             {
                 DataServices.createNewNotifications((int)Session["UserID"], studentTitle, studentContent, DateTime.Now);
+            }
+            int progress = DataServices.getProgress(registrationID, courseIDInt);
+            if (progress == 100)
+            {
+                studentTitle = "Course Completion";
+                studentContent = "Congratulations, you have successfully completed 100% of " + courseName + "!";
+                DataServices.createNewNotifications((int)Session["UserID"], studentTitle, studentContent, DateTime.Now);
+                courseCreatorTitle = "Student Course Completion";
+                courseCreatorContent = "Student " + studentName + " has successfully completed " + courseName + ".";
+                DataServices.createNewNotifications(DataServices.getCourseCreatorByQuizID(quizID), courseCreatorTitle, courseCreatorContent, DateTime.Now);
             }
 
             Response.Redirect($"bridgePage.aspx?QuizID={quizID}&CourseID={courseID}&LessonID={lessonID}");

@@ -85,6 +85,69 @@ namespace Wapping_time
             }
             return registeredCourses;
         }
+        public static int getCourseIDbyQuizID(int quizID)
+        {
+            int courseID = 0;
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT co.CourseID FROM [QuizContent] q INNER JOIN [Content] c on q.ContentID = c.ContentID INNER JOIN [Lesson] l on c.LessonID = l.LessonID INNER JOIN [Course] co on l.CourseID = co.CourseID WHERE q.QuizID = @QuizID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@QuizID", quizID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            courseID = (int)reader["CourseID"];
+                        }
+                    }
+                }
+            }
+            return courseID;
+        }
+        public static string getCourseNamebyQuizID(int quizID)
+        {
+            string courseName = "";
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT co.CourseName FROM [QuizContent] q INNER JOIN [Content] c on q.ContentID = c.ContentID INNER JOIN [Lesson] l on c.LessonID = l.LessonID INNER JOIN [Course] co on l.CourseID = co.CourseID WHERE q.QuizID = @QuizID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@QuizID", quizID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            courseName = reader["CourseName"].ToString();
+                        }
+                    }
+                }
+            }
+            return courseName;
+        }
+        public static int getRegistrationIDbyUserCourseID(int userID, int courseID)
+        {
+            int registrationID = 0;
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string query = "SELECT RegistrationID FROM [Registration] " +
+                               "WHERE UserID = @UserID AND CourseID = @CourseID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userID);
+                    cmd.Parameters.AddWithValue("@CourseID", courseID);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        registrationID = (int)result;
+                    }
+                }
+            }
+            return registrationID;
+        }
 
         public static void createNewChatMessage(int fromUserID, int toUserID, string content, DateTime sentTime, string senderName)
         {
