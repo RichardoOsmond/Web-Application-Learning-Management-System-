@@ -11,7 +11,20 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            string roleName = Session["RoleName"].ToString();
+            chatPanel.Visible = (roleName == "Student");
+        }
+        public void bindNotifications(List<Notifications> notifications)
+        {
+            rptNotifications.DataSource = notifications;
+            rptNotifications.DataBind();
+            lblNoNotifications.Visible = (notifications == null || notifications.Count == 0);
+        }
+        public void bindChatMessages(List<ChatMessages> chatMessages)
+        {
+            rptStudentChatMessages.DataSource = chatMessages;
+            rptStudentChatMessages.DataBind();
+            lblNoChatMessages.Visible = (chatMessages == null || chatMessages.Count == 0);
         }
         protected void btnDashboard_Click(object sender, EventArgs e)
         {

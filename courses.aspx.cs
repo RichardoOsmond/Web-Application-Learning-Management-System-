@@ -15,6 +15,12 @@ namespace Wapping_time
         protected void Page_Load(object sender, EventArgs e)
         {
             UpdateFilterButtonSelection();
+            if (!IsPostBack)
+            {
+                int userID = (int)Session["UserID"];
+                List<Notifications> notifications = DataServices.getNotifications(userID);
+                Master.bindNotifications(notifications);
+            }
         }
 
         protected void SeacrhTB_TextChanged(object sender, EventArgs e)

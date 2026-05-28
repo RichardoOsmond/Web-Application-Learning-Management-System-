@@ -25,6 +25,9 @@ namespace Wapping_time
 
                 TopExtracurricularRepeater.DataBind();
                 noTopCoursesMsg.Visible = TopExtracurricularRepeater.Items.Count == 0;
+                int userID = (int)Session["UserID"];
+                List<Notifications> notifications = DataServices.getNotifications(userID);
+                Master.bindNotifications(notifications);
             }
         }
 
