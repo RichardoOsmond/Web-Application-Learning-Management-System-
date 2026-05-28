@@ -515,8 +515,16 @@ namespace Wapping_time
                 updateCmd.Parameters.AddWithValue("@QuizAttemptID", quizAttemptID);
                 updateCmd.ExecuteNonQuery();
             }
+            string courseCreatorTitle = "Student Quiz Completion";
+            string courseCreatorContent = "Student StudentName has completed quiz " + Session["QuizName"] + " of course courseName";
+            DataServices.createNewNotifications(DataServices.getCourseCreatorByQuizID(quizID), courseCreatorTitle, courseCreatorContent, DateTime.Now);
+            string studentTitle = "Quiz Submission";
+            string studentContent = "You have submitted your answers for quiz quizName of course courseName";
+            if(Session["UserID"] != null)
+            {
+                DataServices.createNewNotifications((int)Session["UserID"], studentTitle, studentContent, DateTime.Now);
+            }
 
-            
             Response.Redirect($"bridgePage.aspx?QuizID={quizID}&CourseID={courseID}&LessonID={lessonID}");
         }
 

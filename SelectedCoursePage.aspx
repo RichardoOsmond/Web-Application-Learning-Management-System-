@@ -43,7 +43,7 @@
                 <asp:Panel ID="quizPanel" runat="server" CssClass="section-panel open">
                     <asp:Repeater ID="QuizRepeater" runat="server">
     <ItemTemplate>
-        <a href='bridgePage.aspx?QuizID=<%# Eval("QuizID") %>&CourseID=<%# selectedCourseID %>&LessonID=<%# selectedLessonID %>'><%# Eval("Name") %></a>
+        <a href='bridgePage.aspx?QuizID=<%# Eval("QuizID") %>&CourseID=<%# selectedCourseID %>&LessonID=<%# selectedLessonID %>&QuizName=<%# Eval("Name") %>'><%# Eval("Name") %></a>
     </ItemTemplate>
 </asp:Repeater>
                 </asp:Panel>

@@ -29,6 +29,7 @@ namespace Wapping_time
             {
                 int quizID = Convert.ToInt32(Request.QueryString["QuizID"]);
                 int roleID = Convert.ToInt32(Session["RoleID"]);
+                Session["QuizName"] = Request.QueryString["QuizName"];
                 LoadTitle(quizID);
                 if (roleID == 1)
                 {

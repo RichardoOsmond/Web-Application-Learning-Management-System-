@@ -93,6 +93,7 @@ body {
     color: #999999;
     margin-bottom: 28px;
     margin-top: 4px;
+    font-weight:bold;
 }
 
 .quiz-field-label {

@@ -315,6 +315,58 @@ namespace Wapping_time
             }
         }
 
+        public static (int,int) getProgress(int registrationid)
+        {
+            int curcompletion = -1;
+            int totalcompletion = -1;
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                string getCurCompletionQuery = "SELECT COUNT(*) FROM QuizAttempt q WHERE q.IsPassed = 1 AND q.RegistrationID = @RegistrationID";
+                string getTotalCompletionQuery = "SELECT COUNT(*) FROM QuizAttempt q WHERE q.RegistrationID = @RegistrationID";
+
+                using(SqlCommand cmd1 = new SqlCommand(getCurCompletionQuery, conn))
+                { 
+                    using(SqlCommand cmd2 = new SqlCommand(getTotalCompletionQuery, conn))
+                    {
+                        cmd1.Parameters.AddWithValue("@RegistrationID", registrationid);
+                        cmd2.Parameters.AddWithValue("@RegistrationID", registrationid);
+                        curcompletion = (int)cmd1.ExecuteScalar();
+                        totalcompletion = (int)cmd2.ExecuteScalar();
+                    }
+                }
+            }
+            return (curcompletion, totalcompletion);
+        }
+
+        public static int getCourseCreatorByQuizID(int quizID)
+        {
+            int creatorUserID = 0;
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                conn.Open();
+                // Walk the chain: QuizContent -> Content -> Lesson -> Course
+                string query =
+                    "SELECT co.UserID " +
+                    "FROM [QuizContent] q " +
+                    "INNER JOIN [Content] c ON q.ContentID = c.ContentID " +
+                    "INNER JOIN [Lesson] l ON c.LessonID = l.LessonID " +
+                    "INNER JOIN [Course] co ON l.CourseID = co.CourseID " +
+                    "WHERE q.QuizID = @QuizID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@QuizID", quizID);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        creatorUserID = (int)result;
+                    }
+                }
+            }
+            return creatorUserID;
+        }
+
+
         public static void DeleteCourse(int courseID)
         {
             using (SqlConnection conn = new SqlConnection(conString))
