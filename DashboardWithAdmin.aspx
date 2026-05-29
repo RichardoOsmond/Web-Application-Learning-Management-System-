@@ -257,7 +257,7 @@
 
                         // If student name includes the search filter, show them, otherwise hide them.
                         if (nameText.includes(filter)) {
-                            row.style.display = 'contents';
+                            row.style.display = '';
                         } else {
                             row.style.display = 'none';
                         }

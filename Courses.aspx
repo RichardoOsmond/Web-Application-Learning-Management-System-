@@ -225,7 +225,7 @@
 
                         // If student name includes the search filter, show them, otherwise hide them.
                         if (nameText.includes(filter)) {
-                            row.style.display = 'contents';
+                            row.style.display = '';
                         } else {
                             row.style.display = 'none';
                         }
@@ -348,7 +348,7 @@ ORDER BY c.CourseCreatedDate DESC;"
                 <label>Course Image</label>
                 <span>:</span>
                 <asp:FileUpload ID="courseFileUpload" accept="image/*" runat="server"
-                    CssClass="h-createCourseBox" />
+                    CssClass="h-createCourseBox" onchange="renderImagePreview(this)" />
 
                 <div id="imagePreviewWrapper" runat="server" class="image-preview-wrapper" style="display:none;">
                     <asp:Image ID="courseImage" runat="server" draggable="false" CssClass="image-preview" />
