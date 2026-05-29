@@ -60,9 +60,11 @@
             color: white;
             width: 40px;
             height: 40px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             text-decoration: none;
         }
 
@@ -77,10 +79,12 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            display: flex;
+
             visibility: hidden;
         }
 
