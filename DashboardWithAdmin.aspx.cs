@@ -199,12 +199,12 @@ namespace Wapping_time
 
             if (courseFileUpload.HasFile)
             {
-                string folderPath = Server.MapPath("~/Images/");
+                string folderPath = Server.MapPath("~/Images/Course Icon/");
                 string extension = Path.GetExtension(courseFileUpload.FileName);
                 string newFileName = Guid.NewGuid().ToString() + extension;
                 savePath = Path.Combine(folderPath, newFileName);
 
-                imagePath = "/Images/" + newFileName;
+                imagePath = "/Images/Course Icon/" + newFileName;
             }
             else if (hdnIsImageRemoved.Value == "true")
             {
