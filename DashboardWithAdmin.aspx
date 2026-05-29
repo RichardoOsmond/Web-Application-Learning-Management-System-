@@ -37,12 +37,6 @@
             background-color: #7842F5;
         }
 
-        #topBottomDiv {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between
-        }
-
         #middleDiv {
             display: flex;
             gap: 25px;
@@ -50,6 +44,12 @@
             margin-top: 20px;
             margin-bottom: 20px;
             align-items: stretch;
+        }
+
+        #topBottomDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between
         }
 
         #bottomBottomDiv {
@@ -102,14 +102,12 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
             z-index: 9999;
 
             display: flex;
-            visibility: hidden;
+            justify-content: center;
+            align-items: center;
 
-            display: flex;
             visibility: hidden;
         }
 
@@ -118,14 +116,13 @@
             padding: 25px;
             border-radius: 20px;
             width: 70%;
-            max-height: 85vh;
-            overflow-y: auto;
+
             max-height: 85vh;
             overflow-y: auto;
         }
 
         .modal-box label {
-            font-size: 25px;
+            font-size: 25px;    
         }
 
         .form-grid {
@@ -189,7 +186,6 @@
             height: 100%;
             object-fit: contain;
             border-radius: 10px;
-            border: 1px solid #dddddd;
             border: 1px solid #dddddd;
         }
 
