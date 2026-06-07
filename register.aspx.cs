@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.SqlClient;
 using System.Web.UI;
 
@@ -10,15 +10,13 @@ namespace Wapping_time
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack && Session["UserID"] != null)
-                Response.Redirect("StudentDashboard.aspx");
         }
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
             if (!Page.IsValid) return;
 
-            string email = txtEmail.Text.Trim();
+            string email    = txtEmail.Text.Trim();
             string password = txtPassword.Text.Trim();
 
             bool success = ExecuteUserRegistration(email, password);
@@ -49,7 +47,6 @@ namespace Wapping_time
                         }
                     }
 
-                    //enter getdate
                     string insertSql = @"
                         INSERT INTO [User] (RoleID, Username, Password, Email, [Last Login], [Last Logout])
                         VALUES (@RoleID, @Username, @Password, @Email, GETDATE(), GETDATE());
@@ -57,14 +54,14 @@ namespace Wapping_time
 
                     using (SqlCommand cmd = new SqlCommand(insertSql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@RoleID", 1); // 1 = Student Role
+                        cmd.Parameters.AddWithValue("@RoleID",   1); // 1 = Student Role
                         cmd.Parameters.AddWithValue("@Username", "");
                         cmd.Parameters.AddWithValue("@Password", password);
-                        cmd.Parameters.AddWithValue("@Email", email);
+                        cmd.Parameters.AddWithValue("@Email",    email);
 
                         object newId = cmd.ExecuteScalar();
                         Session["UserID"] = Convert.ToInt32(newId);
-                        Session["Email"] = email;
+                        Session["Email"]  = email;
                     }
                 }
                 return true;
@@ -78,7 +75,7 @@ namespace Wapping_time
 
         private void ShowError(string message)
         {
-            lblMessage.Text = message;
+            lblMessage.Text    = message;
             lblMessage.Visible = true;
         }
     }
