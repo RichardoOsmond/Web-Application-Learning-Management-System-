@@ -57,7 +57,7 @@ namespace Wapping_time
 
                     using (SqlCommand cmd = new SqlCommand(insertSql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@RoleID", 2); // 2 = Student berdasarkan urutan ERD
+                        cmd.Parameters.AddWithValue("@RoleID", 1); // 1 = Student Role
                         cmd.Parameters.AddWithValue("@Username", "");
                         cmd.Parameters.AddWithValue("@Password", password);
                         cmd.Parameters.AddWithValue("@Email", email);
