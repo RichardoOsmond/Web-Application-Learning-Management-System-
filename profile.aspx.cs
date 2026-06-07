@@ -201,7 +201,7 @@ namespace Wapping_time
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
-                    string sql = "UPDATE [User] SET About Me = @About WHERE UserID = @UserID";
+                    string sql = "UPDATE [User] SET [About Me] = @About WHERE UserID = @UserID";
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@About", about);
