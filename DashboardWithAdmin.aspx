@@ -310,7 +310,7 @@
                                     style="width: 120px; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     <%# Eval("CourseName") %>
                                 </span>
-                                <div style="flex-grow: 1; height: 12px; background-color: #F1EDF7; border-radius: 6px; overflow: hidden; position: relative;">
+                                <div style="flex-grow: 1; height: 12px; background-color: #F1EDF7; border-radius: 6px; overflow: hidden;">
                                     <div
                                         style='<%# "width: " + GetPercentage(Eval("EnrollmentCount")) + "%; background-color: #7842F5; height: 100%; border-radius: 6px;" %>'>
                                     </div>
