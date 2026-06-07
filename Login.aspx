@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Login" Language="C#" AutoEventWireup="true" CodeBehind="login.aspx.cs" Inherits="Wapping_time.login" %>
+<%@ Page Title="Login" Language="C#" AutoEventWireup="true" CodeBehind="login.aspx.cs" Inherits="Wapping_time.login" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -24,8 +24,25 @@
 
         .form-row { display: flex; align-items: center; margin-bottom: 14px; gap: 12px; }
         .form-row label { width: 90px; font-size: 16px; color: #321075; flex-shrink: 0; text-align: right; font-weight: bold; }
-        .form-row input[type="email"], .form-row input[type="password"] { flex: 1; padding: 12px 15px; border: 2px solid #b39ddb; border-radius: 8px; font-size: 14px; background: white; transition: border 0.3s; }
+        .form-row input[type="email"],
+        .form-row input[type="password"],
+        .form-row input[type="text"] { flex: 1; padding: 12px 15px; border: 2px solid #b39ddb; border-radius: 8px; font-size: 14px; background: white; transition: border 0.3s; }
         .form-row input:focus { border-color: #7248C8; outline: none; }
+
+        /* Password wrapper with eye icon */
+        .password-wrapper { flex: 1; position: relative; display: flex; align-items: center; }
+        .password-wrapper input { width: 100%; padding: 12px 42px 12px 15px; border: 2px solid #b39ddb; border-radius: 8px; font-size: 14px; background: white; transition: border 0.3s; }
+        .password-wrapper input:focus { border-color: #7248C8; outline: none; }
+        .toggle-eye {
+            position: absolute;
+            right: 12px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 18px;
+            color: #7248C8;
+            line-height: 1;
+        }
+        .toggle-eye:hover { color: #321075; }
 
         .validator-row { margin-left: 102px; margin-top: -8px; margin-bottom: 6px; }
 
@@ -62,7 +79,10 @@
 
                 <div class="form-row">
                     <label>Password:</label>
-                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" placeholder="Enter your password" />
+                    <div class="password-wrapper">
+                        <asp:TextBox ID="txtPassword" runat="server" placeholder="Enter your password" />
+                        <span class="toggle-eye" id="eyeIcon" onclick="togglePassword()">&#128065;</span>
+                    </div>
                 </div>
                 <div class="validator-row">
                     <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" ErrorMessage="Password is required." ForeColor="Red" Display="Dynamic" Font-Size="12px" />
@@ -78,5 +98,29 @@
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    //set type="password" when page is load
+    window.onload = function () {
+        var pwdInput = document.getElementById('<%= txtPassword.ClientID %>');
+        if (pwdInput) {
+            pwdInput.setAttribute('type', 'password');
+        }
+    };
+
+    function togglePassword() {
+        var pwdInput = document.getElementById('<%= txtPassword.ClientID %>');
+        var eyeIcon  = document.getElementById('eyeIcon');
+        if (!pwdInput) return;
+
+        if (pwdInput.getAttribute('type') === 'password') {
+            pwdInput.setAttribute('type', 'text');
+            eyeIcon.innerHTML = '&#128064;'; //eye open
+        } else {
+            pwdInput.setAttribute('type', 'password');
+            eyeIcon.innerHTML = '&#128065;'; //eye close
+        }
+    }
+</script>
 </body>
 </html>
