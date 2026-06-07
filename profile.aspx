@@ -253,7 +253,7 @@
 <div class="profile-bg">
     <div class="profile-card">
 
-        <a href='<%= Session["RoleName"].ToString() == "Admin" ? "DashboardWithAdmin.aspx" : "StudentDashboard.aspx" %>' class="btn-back">&#8592;</a>
+        <a href='<%= Session["RoleName"].ToString() == "Student" ? "StudentDashboard.aspx" : "DashboardWithAdmin.aspx" %>' class="btn-back">&#8592;</a>
 
 
         <div class="profile-top">
