@@ -162,11 +162,27 @@
         }
 
         #studentTable {
-            display: grid;
-            grid-template-columns: 1fr 100px;
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             margin-top: 20px;
             margin-left: 10px;
+        }
+
+        .student-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .student-name {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .student-row input[type="checkbox"] {
+            justify-self: end;
         }
     </style>
     <script type="text/javascript">
@@ -383,7 +399,7 @@ ORDER BY c.CourseCreatedDate DESC;"
             <div id="studentTable">
                 <asp:Repeater ID="studentRepeater" runat="server" DataSourceID="SqlDataSource2">
                     <ItemTemplate>
-                        <div class="student-row" style="display:contents">
+                        <div class="student-row">
                             <asp:Label ID="hiddenStudentID" runat="server" Text='<%# Eval("UserID") %>'
                                 Visible="False">
                             </asp:Label>
