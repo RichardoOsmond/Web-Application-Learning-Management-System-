@@ -26,6 +26,7 @@ namespace Wapping_time
             if (success)
             {
                 Session["Username"] = username;
+                Session["RoleName"] = "Student";
                 Response.Redirect("StudentDashboard.aspx");
             }
         }
