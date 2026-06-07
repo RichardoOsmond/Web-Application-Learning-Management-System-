@@ -11,7 +11,7 @@ namespace Wapping_time
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string roleName = Session["RoleName"].ToString();
+            string roleName = Session["RoleName"] != null ? Session["RoleName"].ToString() : "";
             chatPanel.Visible = (roleName == "Student");
         }
         public void bindNotifications(List<Notifications> notifications)
