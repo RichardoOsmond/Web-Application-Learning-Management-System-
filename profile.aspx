@@ -263,7 +263,7 @@
             <div class="user-info">
                 <div class="fullname">
                     <asp:Literal ID="litName" runat="server" Text="User" />
-                    <span class="badge-student">Student</span>
+                    <span class="badge-role"><%= Session["RoleName"] != null ? Session["RoleName"].ToString() : "Student" %></span>
                 </div>
                 <div class="user-email">
                     <asp:Literal ID="litEmail" runat="server" Text="" />
